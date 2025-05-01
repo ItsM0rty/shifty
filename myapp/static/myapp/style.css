@@ -1,7 +1,108 @@
+/* styles.css */
+
+/* Color scheme */
+:root {
+    --primary: #287094;
+    --accent: #D4D4Ce;
+    --light: #F6F6F6;
+    --dark: #023246;
+    --hover: #1b4e65;
+}
+
+/* General styles */
 body {
-    background-color: lightblue;
-    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--light);
+    color: var(--dark);
 }
-h1 {
-    color: darkblue;
+
+/* Sticky Navbar */
+.navbar {
+    background-color: var(--dark);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
+
+.navbar-container {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--accent);
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+    color: var(--light);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--primary);
+}
+
+/* Hero Section */
+.hero {
+    background-color: var(--primary);
+    color: var(--light);
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero-text h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero-text p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.cta-button {
+    padding: 0.75rem 1.5rem;
+    background-color: var(--accent);
+    color: var(--dark);
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: var(--hover);
+    color: white;
+}
+
+
+.logo img {
+    height: 120px;        
+    width: auto;
+    display: block;
+  }

@@ -1,0 +1,16 @@
+{% load static %}
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <a href="{% url 'home' %}" class="logo">
+            <img src="{% static 'myapp/images/logo.png' %}" alt="Shifty Logo">
+          </a>
+              <ul class="nav-links">
+            <li><a href="">Home</a></li>
+            <li><a href="">About Us</a></li>
+            <li><a href="">Contact</a></li>
+            <li><a href="">Sales</a></li>
+            <li><a href="">Login</a></li>
+        </ul>
+    </div>
+</nav>

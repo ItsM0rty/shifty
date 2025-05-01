@@ -1,5 +1,7 @@
-<!DOCTYPE html>
+{% extends 'myapp/base.html' %}
 {% load static %}
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,8 +10,15 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
-    <h1>Welcome to My App!</h1>
-    <p>This is the homepage.</p>
+    {% block content %}
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Shifty Solutions</h1>
+            <p>Creative solutions for your business.</p>
+        </div>
+    </section>
+    {% endblock %}
+
     <script src="{% static 'script.js' %}"></script>
 </body>
 </html>

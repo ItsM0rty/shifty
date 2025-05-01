@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Shifty Solutions{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'myapp/style.css' %}">
+</head>
+<body>
+
+        <!-- .\venv\Scripts\Activate -->
+        <!-- python manage.py runserver -->
+
+        {% include 'myapp\navbar.html' %}
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
+    <script src="{% static 'script.js' %}"></script>
+</body>
+</html>
