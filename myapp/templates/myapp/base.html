@@ -1,21 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Shifty Solutions{% endblock %}</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'myapp/style.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}Shifty Solutions{% endblock %}</title>
+  {% load static %}
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap" rel="stylesheet">
+  
+  <!-- Icons & Styles -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'myapp/style.css' %}">
+  <link rel="icon" href="{% static 'myapp/images/favicon.png' %}" type="image/png">
+  {% block extra_head %}{% endblock %}
 </head>
 <body>
 
-        <!-- .\venv\Scripts\Activate -->
-        <!-- python manage.py runserver -->
+  <!-- Background Wrapper -->
+  <div class="site-wrapper">
+    {% include 'myapp/navbar.html' %}
 
-        {% include 'myapp\navbar.html' %}
-        <main>
-            {% block content %}{% endblock %}
-        </main>
+    <main class="content-area">
+      {% block content %}{% endblock %}
+    </main>
 
-    <script src="{% static 'script.js' %}"></script>
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <img src="{% static 'myapp/images/logo.png' %}" alt="Shifty Solutions" onerror="this.src='https://via.placeholder.com/150x40?text=Shifty+Solutions'">
+            <p>Simplifying shift scheduling for coffee shops everywhere.</p>
+          </div>
+          <div class="footer-links">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="/#features">Features</a></li>
+              <li><a href="/#pricing">Pricing</a></li>
+              <li><a href="/about/">About Us</a></li>
+              <li><a href="/#contact">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-links">
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="#">Documentation</a></li>
+              <li><a href="#">Support Center</a></li>
+              <li><a href="#">Blog</a></li>
+              <li><a href="#">FAQ</a></li>
+            </ul>
+          </div>
+          <div class="footer-contact">
+            <h4>Contact Us</h4>
+            <p><i class="fas fa-envelope"></i> hello@shiftysolutions.com</p>
+            <p><i class="fas fa-phone"></i> (555) 123-4567</p>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; {% now "Y" %} Shifty Solutions. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="{% static 'myapp/js/script.js' %}"></script>
+
+  {% block extra_body_scripts %}{% endblock %}
 </body>
 </html>

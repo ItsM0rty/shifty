@@ -1,24 +1,235 @@
 {% extends 'myapp/base.html' %}
 {% load static %}
-<!DOCTYPE html>
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My App</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-</head>
-<body>
-    {% block content %}
-    <section class="hero">
-        <div class="hero-text">
-            <h1>Shifty Solutions</h1>
-            <p>Creative solutions for your business.</p>
+{% block title %}Home - Shifty Solutions{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section id="home" class="hero">
+  <div class="container">
+    <h1>Simplified Shift Scheduling</h1>
+    <p class="subtitle">Automate your coffee shop's staff scheduling with our intuitive platform</p>
+    <div class="btn-wrapper">
+      <a href="#features" class="btn btn-primary">See Features</a>
+      <a href="#contact" class="btn btn-secondary">Get Started</a>
+    </div>
+    <div class="hero-image">
+      <img src="{% static 'myapp/images/scheduler-preview.png' %}" alt="Shifty Solutions Dashboard" onerror="this.src='https://via.placeholder.com/600x350?text=Scheduler+Preview'">
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="features">
+  <div class="container">
+    <h2>Powerful Scheduling Features</h2>
+    <p class="section-intro">Save time and reduce conflicts with our easy-to-use platform</p>
+    
+    <div class="feature-grid">
+      <div class="feature-item">
+        <div class="feature-icon">
+          <i class="fas fa-calendar-check"></i>
         </div>
-    </section>
-    {% endblock %}
+        <h3>Automated Scheduling</h3>
+        <p>Our system creates optimal schedules based on your staff availability and preferences.</p>
+      </div>
+    </div>
+    
+      
+      <div class="feature-item">
+        <div class="feature-icon">
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+        <h3>Mobile Notifications</h3>
+        <p>Staff receive instant alerts about new schedules and shift changes.</p>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">
+          <i class="fas fa-exchange-alt"></i>
+        </div>
+        <h3>Easy Shift Swaps</h3>
+        <p>Employees can request and approve shift swaps with manager oversight.</p>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3>Labor Analytics</h3>
+        <p>Track labor costs and optimize staffing levels with powerful insights.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <script src="{% static 'script.js' %}"></script>
-</body>
-</html>
+<!-- TESTIMONIAL -->
+<section id="testimonial" class="testimonial">
+  <div class="container">
+    <div class="testimonial-content">
+      <div class="quote-icon">❝</div>
+      <blockquote>
+        "Shifty Solutions has transformed how we manage our barista schedules. What used to take hours now takes minutes, and our staff love the flexibility."
+      </blockquote>
+      <div class="testimonial-author">
+        <div class="author-image">
+          <img src="{% static 'myapp/images/testimonial.jpg' %}" alt="Manager" onerror="this.src='https://via.placeholder.com/60x60?text=M'">
+        </div>
+        <div class="author-details">
+          <strong>Emma Rodriguez</strong>
+          <span>Manager, Daily Grind Coffee</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works" class="how-it-works">
+  <div class="container">
+    <h2>How It Works</h2>
+    <div class="steps-container">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Setup Your Team</h3>
+        <p>Add your staff members and their availability preferences</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Define Shifts</h3>
+        <p>Create your standard shifts and staffing requirements</p>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Generate Schedule</h3>
+        <p>Let our system create optimized schedules automatically</p>
+      </div>
+      <div class="step">
+        <div class="step-number">4</div>
+        <h3>Share & Adjust</h3>
+        <p>Publish schedules and make changes as needed</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="pricing">
+  <div class="container">
+    <h2>Simple, Transparent Pricing</h2>
+    <p class="section-intro">Choose the plan that fits your coffee shop's needs</p>
+    
+    <div class="pricing-grid">
+      <div class="pricing-item">
+        <div class="pricing-header">
+          <h3>Starter</h3>
+          <div class="price">$29<span>/month</span></div>
+        </div>
+        <div class="pricing-features">
+          <ul>
+            <li>Up to 10 employees</li>
+            <li>Basic scheduling</li>
+            <li>Email notifications</li>
+            <li>30-day history</li>
+          </ul>
+        </div>
+        <div class="pricing-footer">
+          <a href="#contact" class="btn btn-primary">Get Started</a>
+        </div>
+      </div>
+      
+      <div class="pricing-item featured">
+        <div class="pricing-badge">Most Popular</div>
+        <div class="pricing-header">
+          <h3>Professional</h3>
+          <div class="price">$59<span>/month</span></div>
+        </div>
+        <div class="pricing-features">
+          <ul>
+            <li>Up to 25 employees</li>
+            <li>Advanced scheduling</li>
+            <li>SMS notifications</li>
+            <li>Shift swapping</li>
+            <li>6-month history</li>
+          </ul>
+        </div>
+        <div class="pricing-footer">
+          <a href="#contact" class="btn btn-primary">Get Started</a>
+        </div>
+      </div>
+      
+      <div class="pricing-item">
+        <div class="pricing-header">
+          <h3>Enterprise</h3>
+          <div class="price">$99<span>/month</span></div>
+        </div>
+        <div class="pricing-features">
+          <ul>
+            <li>Unlimited employees</li>
+            <li>Multiple locations</li>
+            <li>Labor forecasting</li>
+            <li>API access</li>
+            <li>Unlimited history</li>
+          </ul>
+        </div>
+        <div class="pricing-footer">
+          <a href="#contact" class="btn btn-primary">Get Started</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h2>Ready to simplify your scheduling?</h2>
+        <p>Get in touch with our team to start your free trial or schedule a demo.</p>
+        <div class="contact-methods">
+          <div class="contact-method">
+            <i class="fas fa-envelope"></i>
+            <span>hello@shiftysolutions.com</span>
+          </div>
+          <div class="contact-method">
+            <i class="fas fa-phone"></i>
+            <span>(555) 123-4567</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="contact-form">
+        <form>
+          <div class="form-group">
+            <input type="text" placeholder="Your Name" required>
+          </div>
+          <div class="form-group">
+            <input type="email" placeholder="Your Email" required>
+          </div>
+          <div class="form-group">
+            <select>
+              <option value="" disabled selected>Business Size</option>
+              <option value="small">Small (1-10 employees)</option>
+              <option value="medium">Medium (11-25 employees)</option>
+              <option value="large">Large (26+ employees)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <textarea placeholder="How can we help you?" rows="4" required></textarea>
+          </div>
+          <div class="form-submit">
+            <button type="submit" class="btn btn-primary">Send Message</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_body_scripts %}
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+{% endblock %}
