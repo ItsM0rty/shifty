@@ -15,10 +15,12 @@
       <a href="#contact" class="btn btn-secondary">Get Started</a>
     </div>
     <div class="hero-image">
-      <img src="{% static 'myapp/images/scheduler-preview.png' %}" alt="Shifty Solutions Dashboard" onerror="this.src='https://via.placeholder.com/600x350?text=Scheduler+Preview'">
+      <!-- Change the image source to a reliable placeholder -->
+      <img src="https://samanthabrandon.com/wp-content/uploads/2024/04/Motion-AI-Calendar-View.png" alt="Shifty Solutions Dashboard">
     </div>
   </div>
 </section>
+
 
 <!-- FEATURES -->
 <section id="features" class="features">
@@ -34,8 +36,6 @@
         <h3>Automated Scheduling</h3>
         <p>Our system creates optimal schedules based on your staff availability and preferences.</p>
       </div>
-    </div>
-    
       
       <div class="feature-item">
         <div class="feature-icon">
@@ -74,7 +74,7 @@
       </blockquote>
       <div class="testimonial-author">
         <div class="author-image">
-          <img src="{% static 'myapp/images/testimonial.jpg' %}" alt="Manager" onerror="this.src='https://via.placeholder.com/60x60?text=M'">
+          <img src="https://pbs.twimg.com/profile_images/1096227324884910080/3FN117n3_400x400.jpg" alt="Manager">
         </div>
         <div class="author-details">
           <strong>Emma Rodriguez</strong>
@@ -230,6 +230,6 @@
 
 {% endblock %}
 
-{% block extra_body_scripts %}
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
 {% endblock %}

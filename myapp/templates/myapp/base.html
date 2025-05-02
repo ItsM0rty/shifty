@@ -14,7 +14,8 @@
   <!-- Icons & Styles -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="{% static 'myapp/style.css' %}">
-  <link rel="icon" href="{% static 'myapp/images/favicon.png' %}" type="image/png">
+  <link rel="icon" href="{% static 'myapp/images/logo-no-text.png' %}" type="image/png">
+  <link rel="apple-touch-icon" href="{% static 'myapp/images/logo-no-text.png' %}">
   {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -74,9 +75,44 @@
     </footer>
   </div>
 
-  <!-- Scripts -->
-  <script src="{% static 'myapp/js/script.js' %}"></script>
+<!-- Scripts -->
+<script src="{% static 'myapp/js/script.js' %}"></script>
 
-  {% block extra_body_scripts %}{% endblock %}
+<!-- Image error handling -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Set a timeout to check for any loading indicators after 5 seconds
+    setTimeout(function() {
+      // Remove any infinite loading indicators that might be stuck
+      var loadingIndicators = document.querySelectorAll('.loading-indicator');
+      loadingIndicators.forEach(function(indicator) {
+        indicator.remove();
+      });
+      
+      // Make sure all images have proper fallbacks
+      var images = document.querySelectorAll('img');
+      images.forEach(function(img) {
+        img.onerror = function() {
+          // Default placeholder based on image size
+          var width = this.getAttribute('width') || 300;
+          var height = this.getAttribute('height') || 200;
+          var altText = this.getAttribute('alt') || 'Image';
+          this.src = 'https://via.placeholder.com/' + width + 'x' + height + '?text=' + altText.replace(/ /g, '+');
+        };
+        
+        // Force reload images that might be stuck
+        if (img.complete && (img.naturalWidth === 0 || img.naturalHeight === 0)) {
+          var currentSrc = img.src;
+          img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; // Empty image
+          setTimeout(function() { img.src = currentSrc; }, 10); // Reload original after a brief delay
+        }
+      });
+    }, 5000);
+  });
+</script>
+
+{% block extra_js %}{% endblock %}
+{% block extra_body_scripts %}{% endblock %}
 </body>
 </html>
+
