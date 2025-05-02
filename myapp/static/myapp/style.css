@@ -40,6 +40,7 @@
   
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 80px;
   }
   
   body {
@@ -140,9 +141,13 @@
     padding: 0;
   }
   
-  .logo img {
-    height: 90px;
-  }
+.logo img {
+  height: 120px; 
+  width: auto; 
+  margin-top: -15px; 
+  margin-bottom: -15px; 
+}
+
   
   .navbar-menu ul {
     list-style: none;
@@ -819,7 +824,7 @@
   }
   
   .footer-brand img {
-    height: 32px;
+    height: 160px;
     margin-bottom: 1rem;
   }
   
@@ -1035,3 +1040,126 @@
     }
   }
   
+
+
+.how-it-works {
+  padding: 5rem 0; /* Increased vertical padding */
+  margin-top: 2rem; /* Extra space from previous section */
+  position: relative;
+}
+
+.how-it-works::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background: white;
+  opacity: 0.4;
+}
+
+
+/* Step container layout */
+.steps-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+/* Individual step styling */
+.step {
+  background: var(--clr-surface);
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  border: 1px solid var(--clr-border);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.step:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Step number styling */
+.step-number {
+    /* Gradient from your blue (#5B6BFF) to purple (#8B6BFF) */
+    background: linear-gradient(135deg, #5B6BFF 0%, #8B6BFF 100%);
+    color: white !important; /* White text for contrast */
+    width: 50px;
+    height: 50px;
+    border-radius: 50%; /* Circular shape */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 8px rgba(91, 107, 255, 0.3); /* Subtle glow */
+}
+
+
+
+
+
+.step h3 {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.step p {
+  position: relative;
+  z-index: 1;
+  color: var(--clr-text-secondary);
+}
+
+/* Optional: Add connecting lines between steps */
+@media (min-width: 768px) {
+  .steps-container {
+      position: relative;
+  }
+  
+  .steps-container::before {
+      content: "";
+      position: absolute;
+      top: 50px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--clr-border);
+      z-index: 0;
+  }
+  
+  .step {
+      z-index: 1;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .how-it-works {
+      padding: 3rem 0;
+  }
+  
+  .steps-container {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+  }
+  
+  .step {
+      padding: 1.5rem;
+  }
+}
+@media (max-width: 768px) {
+  .step-number {
+      width: 32px;
+      height: 32px;
+      font-size: 1rem;
+  }
+}
