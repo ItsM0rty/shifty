@@ -14,3 +14,7 @@ def sales_view(request):
 
 def login_view(request):
     return render(request, 'myapp/login.html', {})
+
+# Add this new function to handle signups
+def signup_view(request):
+    return render(request, 'myapp/signup.html', {})
