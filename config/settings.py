@@ -129,3 +129,26 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'    # Add this line
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Database Configuration
+# ---------------------
+# LOCAL DATABASE SETUP
+# This configuration uses SQLite for local development
+# When migrating to cloud storage, you'll replace this section
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',  # This creates a file in your project directory
+        
+        # CLOUD MIGRATION NOTE:
+        # When moving to a cloud database (like PostgreSQL on AWS RDS, Google Cloud SQL, etc.)
+        # You'll replace the above settings with connection parameters like:
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'your_db_name',
+        # 'USER': 'your_db_user',
+        # 'PASSWORD': 'your_db_password',
+        # 'HOST': 'your-db-host.cloud-provider.com',
+        # 'PORT': '5432',
+    }
+}
