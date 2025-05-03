@@ -38,8 +38,8 @@ def contact_view(request):
 def sales_view(request):
     return render(request, 'myapp/sales.html', {})
 
-# def login_view(request):
-#     return render(request, 'myapp/login.html', {})
+def dashboard(request):
+    return render(request, 'myapp/dashboard.html')
 
 # Add this new function to handle signups
 def signup_view(request):
