@@ -69,7 +69,7 @@ TEMPLATES = [
 
 # Add these lines at the bottom of the file
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']  # Add this line
+STATICFILES_DIRS = [BASE_DIR / 'myapp/static']  # Add this line
 STATIC_ROOT = BASE_DIR / 'staticfiles'    # Add this line
 
 WSGI_APPLICATION = 'config.wsgi.application'
@@ -104,6 +104,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Add this line right here
+AUTH_USER_MODEL = 'myapp.User'  # Tell Django to use your custom User model
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
@@ -116,13 +118,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']  # Add this line
-STATIC_ROOT = BASE_DIR / 'staticfiles'    # Add this line
 
 
 # Default primary key field type

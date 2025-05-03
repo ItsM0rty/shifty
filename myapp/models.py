@@ -1,58 +1,37 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.utils import timezone
-
-# User Model
-# ----------
-# This extends Django's built-in user model with additional fields
-# This approach works well for both local and cloud databases
 
 class User(AbstractUser):
     # Basic user information
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     company_code = models.CharField(max_length=50, blank=True, null=True)
     
-    # Additional fields you might need
+    # Additional fields
     is_manager = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
     
-    # CLOUD MIGRATION NOTE:
-    # This model structure will work the same in cloud databases
-    # No changes needed to the model when migrating
-
+    # Fix for the reverse accessor clash
+    groups = models.ManyToManyField(
+        Group,
+        blank=True,
+        related_name="custom_user_groups",  # Changed from default
+        related_query_name="custom_user",
+        verbose_name='groups',
+        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.'
+    )
+    user_permissions = models.ManyToManyField(
+        Permission,
+        blank=True,
+        related_name="custom_user_permissions",  # Changed from default
+        related_query_name="custom_user",
+        verbose_name='user permissions',
+        help_text='Specific permissions for this user.',
+    )
+    
     def __str__(self):
         return self.username
 
-# Shift Model
-# -----------
-# For storing shift information
-class Shift(models.Model):
-    # Relationship to user
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shifts')
-    
-    # Shift details
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
-    title = models.CharField(max_length=100)
-    description = models.TextField(blank=True, null=True)
-    
-    # Status options
-    STATUS_CHOICES = [
-        ('scheduled', 'Scheduled'),
-        ('completed', 'Completed'),
-        ('missed', 'Missed'),
-        ('swapped', 'Swapped'),
-    ]
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='scheduled')
-    
-    # CLOUD MIGRATION NOTE:
-    # Time fields work the same in cloud databases
-    # For high-volume applications, you might want to add database indexes
-    # class Meta:
-    #     indexes = [models.Index(fields=['start_time', 'user'])]
-
-    def __str__(self):
-        return f"{self.user.username}: {self.title} ({self.start_time.strftime('%Y-%m-%d %H:%M')})"
 
 # Company Model
 # -------------
