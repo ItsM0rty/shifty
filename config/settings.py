@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
+import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -119,31 +120,29 @@ USE_I18N = True
 USE_TZ = True
 
 
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 
 # Database Configuration
 # ---------------------
-# LOCAL DATABASE SETUP
-# This configuration uses SQLite for local development
-# When migrating to cloud storage, you'll replace this section
+# For development, we'll use SQLite
+# For production, we'll use PostgreSQL on a cloud provider
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',  # This creates a file in your project directory
-        
-        # CLOUD MIGRATION NOTE:
-        # When moving to a cloud database (like PostgreSQL on AWS RDS, Google Cloud SQL, etc.)
-        # You'll replace the above settings with connection parameters like:
-        # 'ENGINE': 'django.db.backends.postgresql',
-        # 'NAME': 'your_db_name',
-        # 'USER': 'your_db_user',
-        # 'PASSWORD': 'your_db_password',
-        # 'HOST': 'your-db-host.cloud-provider.com',
-        # 'PORT': '5432',
+
+# Check if we're running on a cloud platform (like Heroku, Render, etc.)
+if 'DATABASE_URL' in os.environ:
+    # Use the cloud database
+    DATABASES = {
+        'default': dj_database_url.config(
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
     }
-}
+else:
+    # Use SQLite for local development
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
