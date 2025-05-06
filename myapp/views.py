@@ -7,7 +7,7 @@ def home(request):
     """
     Home page view.
     """
-    return render(request, 'myapp/home.html')
+    return render(request, 'myapp/index.html')
 
 def about_view(request):
     """
