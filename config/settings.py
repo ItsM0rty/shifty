@@ -106,6 +106,12 @@ AUTH_PASSWORD_VALIDATORS = [
 # Add this line right here
 AUTH_USER_MODEL = 'myapp.User'  # Tell Django to use your custom User model
 
+# Authentication settings
+LOGIN_REDIRECT_URL = '/dashboard/'  # Where to send users after login
+LOGOUT_REDIRECT_URL = '/'  # Where to send users after logout
+LOGIN_URL = '/login/'  # Where to send users if they need to log in
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
