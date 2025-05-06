@@ -43,7 +43,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add this line
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -71,8 +71,8 @@ TEMPLATES = [
 
 # Add these lines at the bottom of the file
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'myapp/static']  # Add this line
-STATIC_ROOT = BASE_DIR / 'staticfiles'    # Add this line
+STATICFILES_DIRS = [BASE_DIR / 'myapp/static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
