@@ -102,6 +102,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+#Trust this domain! Make sure that the application doesn't redirect to 403 forbidden whenever a user interacts in the website.
+CSRF_TRUSTED_ORIGINS = ['https://coffee-shop-scheduler.fly.dev']
 
 # Add this line right here
 AUTH_USER_MODEL = 'myapp.User'  # Tell Django to use your custom User model
