@@ -15,3 +15,11 @@ urlpatterns = [
     path('logout/', views.user_logout, name='logout'),
 
 ]
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('myapp.urls')),
+]

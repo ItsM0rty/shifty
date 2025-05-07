@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+import logging
 
 def home(request):
     """
@@ -27,27 +28,38 @@ def sales_view(request):
     """
     return render(request, 'myapp/sales.html')
 
-def user_login(request):
-    """
-    Handle user login.
-    """
+logger = logging.getLogger(__name__)
+
+def login_view(request):
+    # Add debug logging to see what's happening
+    logger.debug("Login view accessed")
+    
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        remember_me = request.POST.get('remember_me')
         
+        logger.debug(f"Login attempt with username: {username}")
+        
+        # Print the credentials (only in development!)
+        print(f"Login attempt - Username: {username}, Password: {password}")
+        
+        # Try to authenticate
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
+            # Authentication successful
+            logger.debug(f"Authentication successful for {username}")
             login(request, user)
-            if not remember_me:
-                # Session expires when browser closes
-                request.session.set_expiry(0)
+            logger.debug("User logged in, redirecting to dashboard")
             messages.success(request, f"Welcome back, {user.username}!")
-            return redirect('myapp:dashboard')
+            return redirect('myapp:dashboard')  # Make sure this URL name exists
         else:
-            messages.error(request, "Invalid username or password.")
+            # Authentication failed
+            logger.debug(f"Authentication failed for {username}")
+            messages.error(request, "Invalid username or password. Please try again.")
+            return render(request, 'myapp/login.html', {'username': username})
     
+    # GET request - just show the login form
     return render(request, 'myapp/login.html')
 
 @login_required
