@@ -119,9 +119,9 @@
 
 {% if messages %}
 <div class="alert alert-danger">
-    {% for message in messages %}
-        {{ message }}
-    {% endfor %}
+  {% for message in messages %}
+  {{ message }}
+  {% endfor %}
 </div>
 {% endif %}
 
@@ -129,8 +129,18 @@
 {% block content %}
 <section class="auth-section">
   <div class="auth-container">
+    <!-- Display messages inside the content block -->
+    {% if messages %}
+    <div class="alert alert-danger">
+      {% for message in messages %}
+      {{ message }}
+      {% endfor %}
+    </div>
+    {% endif %}
+
     <div class="auth-illustration">
-      <img src="{% static 'myapp/images/login-illustration.svg' %}" alt="Login"onerror="this.src='{% static 'myapp/images/error.png' %}'">
+      <img src="{% static 'myapp/images/login-illustration.svg' %}" alt="Login"
+        onerror="this.src='{% static 'myapp/images/error.png' %}'">
       <h2>Welcome Back!</h2>
       <p>Streamline your coffee shop's shift management</p>
     </div>
@@ -140,30 +150,33 @@
 
       <form method="POST" class="auth-form-container" action="{% url 'myapp:login' %}">
         {% csrf_token %}
-        
-        <div class="form-group">
-            <label for="username">Username</label>
-            <div class="input-with-icon">
-                <i class="fas fa-user input-icon"></i>  <!-- Changed from envelope to user icon -->
-                <input type="text" id="username" name="username" required placeholder="Username" value="{{ username|default:'' }}">
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label for="password">Password</label>
-            <div class="input-with-icon">
-                <i class="fas fa-lock input-icon"></i>
-                <input type="password" id="password" name="password" required placeholder="••••••••">
-            </div>
-        </div>
-        
-        <button type="submit" class="btn btn-primary auth-btn">
-            <span>Login</span>
-            <i class="fas fa-arrow-right"></i>
-        </button>
-    </form>
 
-    
+        <div class="form-group">
+          <label for="username">Email</label>
+          <div class="input-with-icon">
+            <i class="fas fa-envelope input-icon"></i>
+            <input type="email" id="username" name="username" required placeholder="hello@shiftysolutions.com"
+              value="{{ username|default:'' }}">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-with-icon">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" id="password" name="password" required placeholder="••••••••">
+            <span class="toggle-password"
+              style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%);"><i
+                class="fas fa-eye"></i></span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary auth-btn">
+          <span>Login</span>
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </form>
+
       <div class="auth-footer">
         <p>Don't have an account? <a href="/signup/">Sign up</a></p>
       </div>
@@ -171,6 +184,7 @@
   </div>
 </section>
 {% endblock %}
+
 
 {% block extra_js %}
 <script>

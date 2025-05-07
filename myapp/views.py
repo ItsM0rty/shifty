@@ -36,20 +36,17 @@ def sales_view(request):
 
 logger = logging.getLogger(__name__)
 
+
 def login_view(request):
-    # Add debug logging to see what's happening
     logger.debug("Login view accessed")
     
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         
-        logger.debug(f"Login attempt with username: {username}")
+        logger.debug(f"Login attempt with email: {username}")
         
-        # Print the credentials (only in development!)
-        print(f"Login attempt - Username: {username}, Password: {password}")
-        
-        # Try to authenticate
+        # Try to authenticate with email
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
@@ -57,16 +54,17 @@ def login_view(request):
             logger.debug(f"Authentication successful for {username}")
             login(request, user)
             logger.debug("User logged in, redirecting to dashboard")
-            messages.success(request, f"Welcome back, {user.username}!")
-            return redirect('myapp:dashboard')  # Make sure this URL name exists
+            messages.success(request, f"Welcome back, {user.email}!")
+            return redirect('myapp:dashboard')
         else:
             # Authentication failed
             logger.debug(f"Authentication failed for {username}")
-            messages.error(request, "Invalid username or password. Please try again.")
+            messages.error(request, "Invalid email or password. Please try again.")
             return render(request, 'myapp/login.html', {'username': username})
     
     # GET request - just show the login form
     return render(request, 'myapp/login.html')
+
 
 @login_required
 def dashboard(request):
