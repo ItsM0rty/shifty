@@ -3,6 +3,8 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import logging
+from django.http import HttpResponse
+from myapp.models import User
 
 def home(request):
     """
@@ -15,6 +17,10 @@ def about_view(request):
     About page view.
     """
     return render(request, 'myapp/about.html')
+
+def test_db(request):
+    users = User.objects.all()
+    return HttpResponse(f"Found {users.count()} users in the database.")
 
 def contact_view(request):
     """
