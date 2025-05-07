@@ -17,4 +17,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Run the application
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8080"]
+CMD ["bash", "-c", "gunicorn config.wsgi:application --workers ${WEB_CONCURRENCY:-1} --bind 0.0.0.0:8080"]
