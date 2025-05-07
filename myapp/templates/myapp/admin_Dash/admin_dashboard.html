@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard</title>
+    <link rel="stylesheet" href="admin_dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="admin_dashboard.js"></script>
+
+
+
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <h1>Manager Dashboard</h1>
+            <div class="header-actions">
+                <a href="#" class="btn btn-danger">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Logout
+                </a>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <!-- Sidebar -->
+            <aside class="dashboard-sidebar">
+                <div class="sidebar-header">
+                    <img src="/api/placeholder/100/100" alt="Manager Avatar">
+                    <div>
+                        <h2>Charles Freidein</h2>
+                        <p>Store Manager</p>
+                    </div>
+                </div>
+                <nav>
+                    <ul>
+                        <li>
+                            <a href="#" class="nav-link active" data-section="dashboard">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link" data-section="schedule">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                Schedule
+                            </a>
+                        </li>
+                        
+                                                <li>
+                            <a href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                Team
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                                Reports
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                                    <polyline points="13 2 13 9 20 9"></polyline>
+                                </svg>
+                                Time Off Requests
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                                </svg>
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="dashboard-main">
+                <!-- Dashboard Content (shown by default) -->
+                <div id="dashboard-section" class="content-section active">
+                    <div class="main-header">
+                        <h2>Store Management</h2>
+                    </div>
+            
+                    <div class="stats-cards">
+                        <!-- Dashboard stats cards -->
+                        <div class="card">
+                            <h3>Active Employees</h3>
+                            <p>14</p>
+                            <div class="trend">
+                                <i class="fas fa-arrow-up"></i>
+                                +2 from last month
+                            </div>
+                        </div>
+            
+                    <div class="card">
+                        <h3>Pending Approvals</h3>
+                        <p>3</p>
+                        <div class="trend" style="color: var(--accent-color);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                            Requires attention
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>Time Off Requests</h3>
+                        <p>5</p>
+                        <div class="trend" style="color: var(--accent-color);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            Pending review
+                        </div>
+                    </div>
+                    </div>
+            
+                    <div class="tab-navigation">
+                    <button class="tab-btn active" data-tab="newSignups">New Signups</button>
+                    <button class="tab-btn" data-tab="conflictManager">Conflict Manager</button>
+                    </div>
+            
+                <!-- Tab Content -->
+                <div id="newSignups" class="tab-content active">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Join Code</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>John Cena</td>
+                                <td>cantseeme@shiftysolutions.com</td>
+                                <td><span class="join-code">BTF-453</span></td>
+                                <td>Barista</td>
+                                <td><span class="badge badge-pending">Pending</span></td>
+                                <td class="actions">
+                                    <button class="btn btn-success btn-sm approve-btn" data-id="1">Approve</button>
+                                    <button class="btn btn-danger btn-sm reject-btn" data-id="1">Reject</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Ryan Reynolds</td>
+                                <td>breadpool@shiftysolutions.com</td>
+                                <td><span class="join-code">KLM-821</span></td>
+                                <td>Baker</td>
+                                <td><span class="badge badge-pending">Pending</span></td>
+                                <td class="actions">
+                                    <button class="btn btn-success btn-sm approve-btn" data-id="2">Approve</button>
+                                    <button class="btn btn-danger btn-sm reject-btn" data-id="2">Reject</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Cook Pu</td>
+                                <td>misspu@shiftysolutions.com</td>
+                                <td><span class="join-code">NPQ-762</span></td>
+                                <td>Barista</td>
+                                <td><span class="badge badge-pending">Pending</span></td>
+                                <td class="actions">
+                                    <button class="btn btn-success btn-sm approve-btn" data-id="3">Approve</button>
+                                    <button class="btn btn-danger btn-sm reject-btn" data-id="3">Reject</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            
+            
+            
+            
+            
+                <div id="conflictManager" class="tab-content">
+                    <div class="conflict-toolbar" style="margin-bottom: 20px; display: flex; justify-content: space-between;">
+                        <h3>Shift Conflicts</h3>
+                        <div class="toolbar-actions">
+                            <button class="btn btn-primary" id="openAddConflictModal">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="16"></line>
+                                    <line x1="8" y1="12" x2="16" y2="12"></line>
+                                </svg>
+                                Add Conflict
+                            </button>
+                        </div>
+                    </div>
+            
+                    <div class="conflict-list">
+                        <div class="conflict-card">
+                            <div class="conflict-employees">
+                                <div class="employee-badge">
+                                    <img src="/api/placeholder/50/50" alt="Alex Johnson">
+                                    <span>Alex Johnson</span>
+                                </div>
+                                <span class="vs-badge">VS</span>
+                                <div class="employee-badge">
+                                    <img src="/api/placeholder/50/50" alt="Sarah Wilson">
+                                    <span>Sarah Wilson</span>
+                                </div>
+                            </div>
+                            <div class="conflict-actions">
+                                <button class="btn btn-secondary btn-sm edit-conflict" data-conflict-id="1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                    Edit
+                                </button>
+                                <button class="btn btn-danger btn-sm remove-conflict" data-conflict-id="1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
+                        <div class="conflict-card">
+                            <div class="conflict-employees">
+                                <div class="employee-badge">
+                                    <img src="/api/placeholder/50/50" alt="Jamie Smith">
+                                    <span>Jamie Smith</span>
+                                </div>
+                                <span class="vs-badge">VS</span>
+                                <div class="employee-badge">
+                                    <img src="/api/placeholder/50/50" alt="Mike Chen">
+                                    <span>Mike Chen</span>
+                                </div>
+                            </div>
+                            <div class="conflict-actions">
+                                <button class="btn btn-secondary btn-sm edit-conflict" data-conflict-id="2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                    Edit
+                                </button>
+                                <button class="btn btn-danger btn-sm remove-conflict" data-conflict-id="2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            
+                <!-- Schedule Content -->
+                <div id="schedule-section" class="content-section">
+                    <!-- Tab Navigation for Schedule -->
+                    <div class="tab-navigation">
+                        <button class="tab-btn active" data-tab="shiftManagement">Shift Management</button>
+                        <button class="tab-btn" data-tab="scheduleGenerator">Schedule Generator</button>
+                    </div>
+            
+                    <!-- Tab Content -->
+                    <div id="shiftManagement" class="tab-content">
+                        <div class="calendar-toolbar">
+                            <div class="calendar-title">
+                                <h3>Week of May 5-11, 2025</h3>
+                            </div>
+                            <div class="toolbar-actions">
+                                <button class="btn btn-secondary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-lineJoin="round">
+            
+            
+                                        <polyline points="15 18 9 12 15 6"></polyline>
+                                    </svg>
+                                    Previous Week
+                                </button>
+                                <button class="btn btn-secondary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
+                                    Next Week
+                                </button>
+                                <button class="btn btn-primary" id="openAssignShiftModal">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                                    </svg>
+                                    Assign Shift
+                                </button>
+                            </div>
+                        </div>
+            
+                        <div class="shift-calendar">
+                            <div class="calendar-header">
+                                <div class="employee">Employee</div>
+                                <div class="time-slot">Monday</div>
+                                <div class="time-slot">Tuesday</div>
+                                <div class="time-slot">Wednesday</div>
+                                <div class="time-slot">Thursday</div>
+                                <div class="time-slot">Friday</div>
+                                <div class="time-slot">Saturday</div>
+                                <div class="time-slot">Sunday</div>
+                            </div>
+                            <div class="calendar-row">
+                                <div class="employee-name">Alex Johnson</div>
+                                <div class="shift-slot" data-employee="Alex Johnson" data-day="Monday"></div>
+                                <div class="shift-slot assigned" data-employee="Alex Johnson" data-day="Tuesday">
+                                    <div class="shift-info">9AM-5PM</div>
+                                </div>
+                                <div class="shift-slot assigned" data-employee="Alex Johnson" data-day="Wednesday">
+                                    <div class="shift-info">9AM-5PM</div>
+                                </div>
+                                <div class="shift-slot" data-employee="Alex Johnson" data-day="Thursday"></div>
+                                <div class="shift-slot assigned" data-employee="Alex Johnson" data-day="Friday">
+                                    <div class="shift-info">12PM-8PM</div>
+                                </div>
+                                <div class="shift-slot" data-employee="Alex Johnson" data-day="Saturday"></div>
+                                <div class="shift-slot" data-employee="Alex Johnson" data-day="Sunday"></div>
+                            </div>
+                            <div class="calendar-row">
+                                <div class="employee-name">Jamie Smith</div>
+                                <div class="shift-slot assigned" data-employee="Jamie Smith" data-day="Monday">
+                                    <div class="shift-info">12PM-8PM</div>
+                                </div>
+                                <div class="shift-slot" data-employee="Jamie Smith" data-day="Tuesday"></div>
+                                <div class="shift-slot" data-employee="Jamie Smith" data-day="Wednesday"></div>
+                                <div class="shift-slot assigned" data-employee="Jamie Smith" data-day="Thursday">
+                                    <div class="shift-info">9AM-5PM</div>
+                                </div>
+                                <div class="shift-slot assigned" data-employee="Jamie Smith" data-day="Friday">
+                                    <div class="shift-info">9AM-5PM</div>
+                                </div>
+                                <div class="shift-slot assigned" data-employee="Jamie Smith" data-day="Saturday">
+                                    <div class="shift-info">10AM-6PM</div>
+                                </div>
+                                <div class="shift-slot" data-employee="Jamie Smith" data-day="Sunday"></div>
+                            </div>
+                            <div class="calendar-row">
+                                <div class="employee-name">Sarah Wilson</div>
+                                <div class="shift-slot assigned" data-employee="Sarah Wilson" data-day="Monday">
+                                    <div class="shift-info">9AM-5PM</div>
+                                </div>
+                                <div class="shift-slot assigned" data-employee="Sarah Wilson" data-day="Tuesday">
+                                    <div class="shift-info">12PM-8PM</div>
+                                </div>
+                                <div class="shift-slot" data-employee="Sarah Wilson" data-day="Wednesday"></div>
+                                <div class="shift-slot" data-employee="Sarah Wilson" data-day="Thursday"></div>
+                                <div class="shift-slot" data-employee="Sarah Wilson" data-day="Friday"></div>
+                                <div class="shift-slot assigned" data-employee="Sarah Wilson" data-day="Saturday">
+                                    <div class="shift-info">2PM-10PM</div>
+                                </div>
+                                <div class="shift-slot assigned" data-employee="Sarah Wilson" data-day="Sunday">
+                                    <div class="shift-info">12PM-8PM</div>
+                                </div>
+                            </div>
+                            <div class="calendar-row">
+                                <div class="employee-name">Mike Chen</div>
+                                <div class="shift-slot" data-employee="Mike Chen" data-day="Monday"></div>
+                                <div class="shift-slot" data-employee="Mike Chen" data-day="Tuesday"></div>
+                                <div class="shift-slot assigned" data-employee="Mike Chen" data-day="Wednesday">
+                                    <div class="shift-info">12PM-8PM</div>
+                                </div>
+                                <div class="shift-slot assigned" data-employee="Mike Chen" data-day="Thursday">
+                                    <div class="shift-info">12PM-8PM</div>
+                                </div>
+                                <div class="shift-slot" data-employee="Mike Chen" data-day="Friday"></div>
+                                <div class="shift-slot assigned" data-employee="Mike Chen" data-day="Saturday">
+                                    <div class="shift-info">9AM-5PM</div>
+                                </div>
+                                <div class="shift-slot assigned" data-employee="Mike Chen" data-day="Sunday">
+                                    <div class="shift-info">9AM-5PM</div>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="calendar-footer" style="margin-top: 20px; text-align: right;">
+                            <button class="btn btn-success" id="saveShifts">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                                    <polyline points="7 3 7 8 15 8"></polyline>
+                                </svg>
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+            
+                    <div id="scheduleGenerator" class="tab-content">
+                        <div class="schedule-toolbar" style="margin-bottom: 20px; display: flex; justify-content: space-between;">
+                            <h3>Auto-Generated Schedule</h3>
+                            <div class="toolbar-actions">
+                                <button class="btn btn-primary" id="generateSchedule">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                                    </svg>
+                                    Generate New Schedule
+                                </button>
+                                <button class="btn btn-secondary" id="editGeneratedSchedule">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                    Edit Schedule
+                                </button>
+                            </div>
+                        </div>
+            
+                        <div class="shift-calendar">
+                            <div class="calendar-header">
+                                <div class="employee">Employee</div>
+                                <div class="time-slot">Monday</div>
+                                <div class="time-slot">Tuesday</div>
+                                <div class="time-slot">Wednesday</div>
+                                <div class="time-slot">Thursday</div>
+                                <div class="time-slot">Friday</div>
+                                <div class="time-slot">Saturday</div>
+                                <div class="time-slot">Sunday</div>
+                            </div>
+                            <div class="calendar-row">
+                                <div class="employee-name">Alex Johnson</div>
+                                <div class="shift-slot" data-employee="Alex Johnson" data-day="Monday"></div>
+                                <div class="shift-slot assigned" data-employee="Alex Johnson" data-day="Tuesday">
+                                    <div class="shift-info">9AM-5PM</div>
+                                </div>
+                                <div class="shift-slot assigned" data-employee="Alex Johnson" data-day="Wednesday">
+                                    <div class="shift-info">9AM-5PM</div>
+                                </div>
+                                <div class="shift-slot" data-employee="Alex Johnson" data-day="Thursday"></div>
+                                <div class="shift-slot assigned" data-employee="Alex Johnson" data-day="Friday">
+                                    <div class="shift-info">10AM-6PM</div>
+                                </div>
+                                <div class="shift-slot" data-employee="Alex Johnson" data-day="Saturday"></div>
+                                <div class="shift-slot" data-employee="Alex Johnson" data-day="Sunday"></div>
+                            </div>
+                            <div class="calendar-row">
+                                <div class="employee-name">Jamie Smith</div>
+                                <div class="shift-slot assigned" data-employee="Jamie Smith" data-day="Monday">
+                                    <div class="shift-info">12PM-8PM</div>
+                                </div>
+                                <div class="shift-slot" data-employee="Jamie Smith" data-day="Tuesday"></div>
+                                <div class="shift-slot" data-employee="Jamie Smith" data-day="Wednesday"></div>
+                                <div class="shift-slot assigned" data-employee="Jamie Smith" data-day="Thursday">
+                                    <div class="shift-info">9AM-5PM</div>
+                                </div>
+                                <div class="shift-slot assigned" data-employee="Jamie Smith" data-day="Friday">
+                                    <div class="shift-info">9AM-5PM</div>
+                                </div>
+                                <div class="shift-slot assigned" data-employee="Jamie Smith" data-day="Saturday">
+                                    <div class="shift-info">10AM-6PM</div>
+                                </div>
+                                <div class="shift-slot" data-employee="Jamie Smith" data-day="Sunday"></div>
+                            </div>
+                            <div class="calendar-row">
+                                <div class="employee-name">Sarah Wilson</div>
+                                <div class="shift-slot assigned" data-employee="Sarah Wilson" data-day="Monday">
+                                    <div class="shift-info">9AM-5PM</div>
+                                </div>
+                                <div class="shift-slot assigned" data-employee="Sarah Wilson" data-day="Tuesday">
+                                    <div class="shift-info">12PM-8PM</div>
+                                </div>
+                                <div class="shift-slot" data-employee="Sarah Wilson" data-day="Wednesday"></div>
+                                <div class="shift-slot" data-employee="Sarah Wilson" data-day="Thursday"></div>
+                                <div class="shift-slot" data-employee="Sarah Wilson" data-day="Friday"></div>
+                                <div class="shift-slot assigned" data-employee="Sarah Wilson" data-day="Saturday">
+                                    <div class="shift-info">12PM-8PM</div>
+                                </div>
+                                <div class="shift-slot assigned" data-employee="Sarah Wilson" data-day="Sunday">
+                                    <div class="shift-info">12PM-8PM</div>
+                                </div>
+                            </div>
+                            <div class="calendar-row">
+                                <div class="employee-name">Mike Chen</div>
+                                <div class="shift-slot" data-employee="Mike Chen" data-day="Monday"></div>
+                                <div class="shift-slot" data-employee="Mike Chen" data-day="Tuesday"></div>
+                                <div class="shift-slot assigned" data-employee="Mike Chen" data-day="Wednesday">
+                                    <div class="shift-info">12PM-8PM</div>
+                                </div>
+                                <div class="shift-slot assigned" data-employee="Mike Chen" data-day="Thursday">
+                                    <div class="shift-info">12PM-8PM</div>
+                                </div>
+                                <div class="shift-slot" data-employee="Mike Chen" data-day="Friday"></div>
+                                <div class="shift-slot assigned" data-employee="Mike Chen" data-day="Saturday">
+                                    <div class="shift-info">2PM-10PM</div>
+                                </div>
+                                <div class="shift-slot assigned" data-employee="Mike Chen" data-day="Sunday">
+                                    <div class="shift-info">9AM-5PM</div>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="calendar-footer" style="margin-top: 20px; text-align: right;">
+                            <button class="btn btn-success" id="applyGeneratedSchedule">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Apply Schedule
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+        </div>
+
+
+
+
+        <footer class="footer">
+            <p>&copy; 2025 Shifty Solutions. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay hidden" id="assignShiftModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Assign Shift</h3>
+                <button class="close-modal" data-modal-target="assignShiftModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="assignShiftForm">
+                    <div class="form-group">
+                        <label for="shiftEmployee">Employee</label>
+                        <select class="form-control" id="shiftEmployee">
+                            <option value="">Select Employee</option>
+                            <option value="Alex Johnson">Alex Johnson</option>
+                            <option value="Jamie Smith">Jamie Smith</option>
+                            <option value="Sarah Wilson">Sarah Wilson</option>
+                            <option value="Mike Chen">Mike Chen</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="shiftDay">Day</label>
+                        <select class="form-control" id="shiftDay">
+                            <option value="">Select Day</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="shiftStartTime">Start Time</label>
+                        <select class="form-control" id="shiftStartTime">
+                            <option value="">Select Start Time</option>
+                            <option value="9AM">9:00 AM</option>
+                            <option value="10AM">10:00 AM</option>
+                            <option value="11AM">11:00 AM</option>
+                            <option value="12PM">12:00 PM</option>
+                            <option value="1PM">1:00 PM</option>
+                            <option value="2PM">2:00 PM</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="shiftEndTime">End Time</label>
+                        <select class="form-control" id="shiftEndTime">
+                            <option value="">Select End Time</option>
+                            <option value="5PM">5:00 PM</option>
+                            <option value="6PM">6:00 PM</option>
+                            <option value="7PM">7:00 PM</option>
+                            <option value="8PM">8:00 PM</option>
+                            <option value="9PM">9:00 PM</option>
+                            <option value="10PM">10:00 PM</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-modal-target="assignShiftModal">Cancel</button>
+                <button class="btn btn-primary" id="confirmAssignShift">Assign</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="addConflictModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add Employee Conflict</h3>
+                <button class="close-modal" data-modal-target="addConflictModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addConflictForm">
+                    <div class="employee-select-container">
+                        <div class="employee-select">
+                            <div class="form-group">
+                                <label for="conflictEmployee1">Employee 1</label>
+                                <select class="form-control" id="conflictEmployee1">
+                                    <option value="">Select Employee</option>
+                                    <option value="Alex Johnson">Alex Johnson</option>
+                                    <option value="Jamie Smith">Jamie Smith</option>
+                                    <option value="Sarah Wilson">Sarah Wilson</option>
+                                    <option value="Mike Chen">Mike Chen</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="vs-badge">VS</div>
+                        <div class="employee-select">
+                            <div class="form-group">
+                                <label for="conflictEmployee2">Employee 2</label>
+                                <select class="form-control" id="conflictEmployee2">
+                                    <option value="">Select Employee</option>
+                                    <option value="Alex Johnson">Alex Johnson</option>
+                                    <option value="Jamie Smith">Jamie Smith</option>
+                                    <option value="Sarah Wilson">Sarah Wilson</option>
+                                    <option value="Mike Chen">Mike Chen</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="conflictSeverity">Conflict Severity</label>
+                        <select class="form-control" id="conflictSeverity">
+                            <option value="low">Low - Prefer not to work together</option>
+                            <option value="medium">Medium - Should not work together</option>
+                            <option value="high">High - Cannot work together</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="conflictNotes">Notes</label>
+                        <textarea class="form-control" id="conflictNotes" rows="3" placeholder="Add any additional notes about this conflict..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-modal-target="addConflictModal">Cancel</button>
+                <button class="btn btn-primary" id="confirmAddConflict">Add Conflict</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="editConflictModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Edit Employee Conflict</h3>
+                <button class="close-modal" data-modal-target="editConflictModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editConflictForm">
+                    <input type="hidden" id="editConflictId">
+                    <div class="employee-select-container">
+                        <div class="employee-select">
+                            <div class="form-group">
+                                <label for="editConflictEmployee1">Employee 1</label>
+                                <select class="form-control" id="editConflictEmployee1">
+                                    <option value="">Select Employee</option>
+                                    <option value="Alex Johnson">Alex Johnson</option>
+                                    <option value="Jamie Smith">Jamie Smith</option>
+                                    <option value="Sarah Wilson">Sarah Wilson</option>
+                                    <option value="Mike Chen">Mike Chen</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="vs-badge">VS</div>
+                        <div class="employee-select">
+                            <div class="form-group">
+                                <label for="editConflictEmployee2">Employee 2</label>
+                                <select class="form-control" id="editConflictEmployee2">
+                                    <option value="">Select Employee</option>
+                                    <option value="Alex Johnson">Alex Johnson</option>
+                                    <option value="Jamie Smith">Jamie Smith</option>
+                                    <option value="Sarah Wilson">Sarah Wilson</option>
+                                    <option value="Mike Chen">Mike Chen</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editConflictSeverity">Conflict Severity</label>
+                        <select class="form-control" id="editConflictSeverity">
+                            <option value="low">Low - Prefer not to work together</option>
+                            <option value="medium">Medium - Should not work together</option>
+                            <option value="high">High - Cannot work together</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editConflictNotes">Notes</label>
+                        <textarea class="form-control" id="editConflictNotes" rows="3" placeholder="Add any additional notes about this conflict..."></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-modal-target="editConflictModal">Cancel</button>
+                        <button class="btn btn-primary" id="confirmEditConflict">Save Changes</button>
+                    </div>
+                    
+                </form>
+            </div>
+            
+                <!-- New Signups Table Section -->
+                <div class="section-container">
+                  <div class="section-header">
+                    <h2>Pending Shift Signups</h2>
+                  </div>
+                  <div class="conflict-list">
+                    <div class="conflict-card">
+                      <div class="conflict-info">
+                        <div class="employee-name">James Miller</div>
+                        <div class="conflict-details">
+                          <span class="label">Requested Shift:</span>
+                          <span class="value">Tuesday (Morning)</span>
+                        </div>
+                        <div class="conflict-details">
+                          <span class="label">Submitted:</span>
+                          <span class="value">May 5, 2025</span>
+                        </div>
+                      </div>
+                      <div class="conflict-actions">
+                        <button class="btn btn-primary approve-signup" data-user-id="4">Approve</button>
+                        <button class="btn btn-danger reject-signup" data-user-id="4">Reject</button>
+                      </div>
+                    </div>
+                    <div class="conflict-card">
+                      <div class="conflict-info">
+                        <div class="employee-name">Emily Chen</div>
+                        <div class="conflict-details">
+                          <span class="label">Requested Shift:</span>
+                          <span class="value">Wednesday (Evening)</span>
+                        </div>
+                        <div class="conflict-details">
+                          <span class="label">Submitted:</span>
+                          <span class="value">May 6, 2025</span>
+                        </div>
+                      </div>
+                      <div class="conflict-actions">
+                        <button class="btn btn-primary approve-signup" data-user-id="7">Approve</button>
+                        <button class="btn btn-danger reject-signup" data-user-id="7">Reject</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Signup Confirmation Modal -->
+                <div class="modal-overlay hidden" id="signupConfirmModal">
+                  <div class="modal">
+                    <div class="modal-header">
+                      <h3>Confirm Signup Decision</h3>
+                      <button class="close-modal" data-modal-target="signupConfirmModal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Are you sure you want to <span id="signupAction"></span> this shift signup request?</p>
+                      <input type="hidden" id="signupUserId" value="" />
+                      <input type="hidden" id="signupDecision" value="" />
+                    </div>
+                    <div class="modal-footer">
+                      <button class="btn btn-secondary close-modal" data-modal-target="signupConfirmModal">Cancel</button>
+                      <button class="btn btn-primary" id="confirmSignupDecision">Confirm</button>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Conflict Warning Modal -->
+                <div class="modal-overlay hidden" id="conflictWarningModal">
+                  <div class="modal">
+                    <div class="modal-header">
+                      <h3>Schedule Conflict Warning</h3>
+                      <button class="close-modal" data-modal-target="conflictWarningModal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                      <p class="warning-text">This employee has a registered conflict during this time slot.</p>
+                      <div id="conflictDetails" class="conflict-details">
+                        <span class="label">Conflict Type:</span>
+                        <span class="value" id="conflictType"></span>
+                        <span class="label">Date Submitted:</span>
+                        <span class="value" id="conflictDate"></span>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button class="btn btn-secondary close-modal" data-modal-target="conflictWarningModal">Cancel</button>
+                      <button class="btn btn-danger" id="overrideConflict">Override Conflict</button>
+                    </div>
+                  </div>
+                </div>
+                
+                
+
+
+<!-- Signup Confirmation Modal -->
+<div class="modal-overlay hidden" id="signupConfirmModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Confirm Signup Decision</h3>
+        <button class="close-modal" data-modal-target="signupConfirmModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to <span id="signupAction"></span> this shift signup request?</p>
+        <input type="hidden" id="signupUserId" value="" />
+        <input type="hidden" id="signupDecision" value="" />
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary close-modal" data-modal-target="signupConfirmModal">Cancel</button>
+        <button class="btn btn-primary" id="confirmSignupDecision">Confirm</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Conflict Warning Modal -->
+  <div class="modal-overlay hidden" id="conflictWarningModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Schedule Conflict Warning</h3>
+        <button class="close-modal" data-modal-target="conflictWarningModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="warning-text">This employee has a registered conflict during this time slot.</p>
+        <div id="conflictDetails" class="conflict-details">
+          <span class="label">Conflict Type:</span>
+          <span class="value" id="conflictType"></span>
+          <span class="label">Date Submitted:</span>
+          <span class="value" id="conflictDate"></span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary close-modal" data-modal-target="conflictWarningModal">Cancel</button>
+        <button class="btn btn-danger" id="overrideConflict">Override Conflict</button>
+      </div>
+    </div>
+  </div>
+  
+                
