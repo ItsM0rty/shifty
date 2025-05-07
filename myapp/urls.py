@@ -1,7 +1,8 @@
-from django.urls import path, include
-from . import views 
+# myapp/urls.py
+from django.urls import path
+from . import views
 
-app_name = 'myapp' 
+app_name = 'myapp'
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -13,13 +14,4 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('signup/', views.signup_view, name='signup'),
     path('logout/', views.user_logout, name='logout'),
-
-]
-
-from django.contrib import admin
-from django.urls import path, include
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('myapp.urls')),
 ]
