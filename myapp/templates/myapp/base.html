@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="{% static 'myapp/style.css' %}">
   <link rel="icon" href="{% static 'myapp/images/logo-no-text.png' %}" type="image/png">
+  <link rel="shortcut icon" href="{% static 'myapp/images/logo-no-text.png' %}" type="image/png">
   <link rel="apple-touch-icon" href="{% static 'myapp/images/logo-no-text.png' %}">
   {% block extra_head %}{% endblock %}
 </head>
@@ -76,7 +77,7 @@
   </div>
 
 <!-- Scripts -->
-<script src="{% static 'myapp/js/script.js' %}"></script>
+<script src="{% static 'myapp/script.js' %}"></script>
 
 <!-- Image error handling -->
 <script>
@@ -115,4 +116,3 @@
 {% block extra_body_scripts %}{% endblock %}
 </body>
 </html>
-
