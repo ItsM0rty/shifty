@@ -9,21 +9,21 @@ from myapp.models import User
 def create_users():
     users = [
         {
-            "username": "employee1",
+            "email": "employee1@example.com",
             "password": "password123",
             "is_manager": False,
             "is_superuser": False,
             "is_staff": False,
         },
         {
-            "username": "manager1",
+            "email": "manager1@example.com",
             "password": "password123",
             "is_manager": True,
             "is_superuser": False,
             "is_staff": False,
         },
         {
-            "username": "admin",
+            "email": "admin@example.com",
             "password": "adminpass",
             "is_manager": False,
             "is_superuser": True,
@@ -32,18 +32,18 @@ def create_users():
     ]
 
     for user_data in users:
-        if not User.objects.filter(username=user_data["username"]).exists():
+        if not User.objects.filter(email=user_data["email"]).exists():
             user = User.objects.create_user(
-                username=user_data["username"],
+                email=user_data["email"],
                 password=user_data["password"],
             )
             user.is_manager = user_data["is_manager"]
             user.is_superuser = user_data["is_superuser"]
             user.is_staff = user_data["is_staff"]
             user.save()
-            print(f"Created user: {user.username}")
+            print(f"Created user: {user.email}")
         else:
-            print(f"User {user_data['username']} already exists.")
+            print(f"User {user_data['email']} already exists.")
 
 if __name__ == "__main__":
     create_users()
