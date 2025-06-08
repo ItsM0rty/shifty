@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-$g=%qi+p)2co+yjha0lfme@8e)=g_@vstf-*rj!80w55ce-rxz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'RENDER' not in os.environ
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.fly.dev']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com', 'shifty-1t22.onrender.com']
 
 
 # Application definition
@@ -103,7 +103,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 #Trust this domain! Make sure that the application doesn't redirect to 403 forbidden whenever a user interacts in the website.
-CSRF_TRUSTED_ORIGINS = ['https://coffee-shop-scheduler.fly.dev']
+CSRF_TRUSTED_ORIGINS = ['https://shifty-1t22.onrender.com']
 
 # Add this line right here
 AUTH_USER_MODEL = 'myapp.User'  # Tell Django to use your custom User model
