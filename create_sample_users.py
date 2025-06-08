@@ -10,6 +10,7 @@ def create_users():
     users = [
         {
             "email": "employee1@example.com",
+            "username": "employee1",
             "password": "password123",
             "is_manager": False,
             "is_superuser": False,
@@ -17,6 +18,7 @@ def create_users():
         },
         {
             "email": "manager1@example.com",
+            "username": "manager1",
             "password": "password123",
             "is_manager": True,
             "is_superuser": False,
@@ -24,6 +26,7 @@ def create_users():
         },
         {
             "email": "admin@example.com",
+            "username": "admin",
             "password": "adminpass",
             "is_manager": False,
             "is_superuser": True,
@@ -34,6 +37,7 @@ def create_users():
     for user_data in users:
         if not User.objects.filter(email=user_data["email"]).exists():
             user = User.objects.create_user(
+                username=user_data["username"],
                 email=user_data["email"],
                 password=user_data["password"],
             )
