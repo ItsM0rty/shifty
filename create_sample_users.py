@@ -35,7 +35,7 @@ def create_users():
     ]
 
     for user_data in users:
-        if not User.objects.filter(email=user_data["email"]).exists():
+        if not User.objects.filter(username=user_data["username"]).exists():
             user = User.objects.create_user(
                 username=user_data["username"],
                 email=user_data["email"],
@@ -44,8 +44,11 @@ def create_users():
             user.is_manager = user_data["is_manager"]
             user.is_superuser = user_data["is_superuser"]
             user.is_staff = user_data["is_staff"]
-            user.save()
-            print(f"Created user: {user.email}")
+            try:
+                user.save()
+                print(f"Created user: {user.email}")
+            except Exception as e:
+                print(f"Skipping creation for {user_data['email']}: {e}")
         else:
             print(f"User {user_data['email']} already exists.")
 
