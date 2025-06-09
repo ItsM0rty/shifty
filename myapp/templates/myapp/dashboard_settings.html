@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings Component</title>
+    <style>
+        /* Settings Section Styles */
+        .settings-section {
+            display: none;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .settings-section.active {
+            display: block;
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e6ed;
+        }
+
+        .settings-header h2 {
+            color: #2c3e50;
+            font-size: 28px;
+            margin: 0;
+        }
+
+        .settings-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 5px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .settings-tab {
+            flex: 1;
+            padding: 12px 20px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #6c757d;
+        }
+
+        .settings-tab.active {
+            background: #007bff;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0,123,255,0.3);
+        }
+
+        .settings-tab:hover:not(.active) {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        .settings-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .settings-tab-content {
+            display: none;
+        }
+
+        .settings-tab-content.active {
+            display: block;
+        }
+
+        /* Form Styles */
+        .settings-form-group {
+            margin-bottom: 25px;
+        }
+
+        .settings-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .settings-form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e6ed;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .settings-form-control:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+
+        .settings-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .settings-form-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .settings-form-section h4 {
+            margin: 0 0 15px 0;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        /* Switch Toggle */
+        .settings-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .settings-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .settings-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.3s;
+            border-radius: 24px;
+        }
+
+        .settings-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .settings-slider {
+            background-color: #007bff;
+        }
+
+        input:checked + .settings-slider:before {
+            transform: translateX(26px);
+        }
+
+        .settings-switch-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e6ed;
+        }
+
+        .settings-switch-group:last-child {
+            border-bottom: none;
+        }
+
+        .settings-switch-label {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .settings-switch-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+
+        .settings-switch-desc {
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        /* Button Styles */
+        .settings-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .settings-btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .settings-btn-primary:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+        }
+
+        .settings-btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .settings-btn-secondary:hover {
+            background: #545b62;
+        }
+
+        .settings-btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .settings-btn-danger:hover {
+            background: #c82333;
+        }
+
+        .settings-btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .settings-btn-success:hover {
+            background: #218838;
+        }
+
+        .settings-btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* Profile Picture Upload */
+        .profile-upload {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #e0e6ed;
+        }
+
+        .upload-controls {
+            flex: 1;
+        }
+
+        .upload-controls h5 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+        }
+
+        .upload-controls p {
+            margin: 0 0 15px 0;
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        /* Color Theme Picker */
+        .theme-picker {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .theme-option {
+            padding: 15px;
+            border: 2px solid #e0e6ed;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .theme-option.selected {
+            border-color: #007bff;
+            background: #f0f8ff;
+        }
+
+        .theme-preview {
+            width: 100%;
+            height: 40px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+        }
+
+        .theme-preview.light {
+            background: linear-gradient(90deg, #ffffff 50%, #f8f9fa 50%);
+        }
+
+        .theme-preview.dark {
+            background: linear-gradient(90deg, #2c3e50 50%, #34495e 50%);
+        }
+
+        .theme-preview.blue {
+            background: linear-gradient(90deg, #007bff 50%, #0056b3 50%);
+        }
+
+        /* Success/Error Messages */
+        .settings-alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .settings-alert.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .settings-alert.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .settings-alert.show {
+            display: block;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #007bff;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+            display: none;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .settings-form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .settings-tabs {
+                flex-direction: column;
+            }
+
+            .theme-picker {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-upload {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Settings Section -->
+    <div id="settings-section" class="content-section settings-section active">
+        <div class="settings-header">
+            <h2>Settings</h2>
+        </div>
+
+        <!-- Settings Tabs -->
+        <div class="settings-tabs">
+            <button class="settings-tab active" data-tab="profile">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                Profile
+            </button>
+            <button class="settings-tab" data-tab="preferences">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                Preferences
+            </button>
+            <button class="settings-tab" data-tab="notifications">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                Notifications
+            </button>
+            <button class="settings-tab" data-tab="security">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                Security
+            </button>
+        </div>
+
+        <!-- Settings Content -->
+        <div class="settings-content">
+            <!-- Alert Messages -->
+            <div id="settings-alert" class="settings-alert">
+                <span id="settings-alert-message"></span>
+            </div>
+
+            <!-- Profile Tab -->
+            <div id="profile-tab" class="settings-tab-content active">
+                <h3>Profile Information</h3>
+                
+                <div class="profile-upload">
+                    <img id="profile-avatar" class="profile-avatar" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iNDAiIGZpbGw9IiNmOGY5ZmEiLz4KPHN2ZyB4PSIyMCIgeT0iMjAiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM2Yzc1N2QiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Ik0yMCAyMXYtMmE0IDQgMCAwIDAtNC00SDhhNCA0IDAgMCAwLTQgNHYyIi8+CjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCIvPgo8L3N2Zz4KPC9zdmc+" alt="Profile Picture">
+                    <div class="upload-controls">
+                        <h5>Profile Picture</h5>
+                        <p>Upload a new profile picture. Recommended size: 200x200px</p>
+                        <input type="file" id="profile-picture-input" accept="image/*" style="display: none;">
+                        <div class="settings-btn-group">
+                            <button class="settings-btn settings-btn-primary" onclick="document.getElementById('profile-picture-input').click()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                Upload New
+                            </button>
+                            <button class="settings-btn settings-btn-secondary" id="remove-picture">Remove</button>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="profile-form">
+                    <div class="settings-form-row">
+                        <div class="settings-form-group">
+                            <label for="first-name">First Name</label>
+                            <input type="text" id="first-name" class="settings-form-control" value="Charles">
+                        </div>
+                        <div class="settings-form-group">
+                            <label for="last-name">Last Name</label>
+                            <input type="text" id="last-name" class="settings-form-control" value="Freidein">
+                        </div>
+                    </div>
+
+                    <div class="settings-form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" class="settings-form-control" value="charles.freidein@shiftysolutions.com">
+                    </div>
+
+                    <div class="settings-form-row">
+                        <div class="settings-form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" class="settings-form-control" value="+1 (555) 123-4567">
+                        </div>
+                        <div class="settings-form-group">
+                            <label for="job-title">Job Title</label>
+                            <input type="text" id="job-title" class="settings-form-control" value="Store Manager">
+                        </div>
+                    </div>
+
+                    <div class="settings-form-group">
+                        <label for="bio">Bio</label>
+                        <textarea id="bio" class="settings-form-control" rows="4" placeholder="Tell us a little about yourself...">Experienced store manager with 8+ years in retail management. Passionate about team development and customer service excellence.</textarea>
+                    </div>
+
+                    <div class="settings-btn-group">
+                        <button type="submit" class="settings-btn settings-btn-success">
+                            <div class="loading-spinner" id="profile-spinner"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                                <polyline points="7 3 7 8 15 8"></polyline>
+                            </svg>
+                            Save Changes
+                        </button>
+                        <button type="button" class="settings-btn settings-btn-secondary" id="reset-profile">Reset</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Preferences Tab -->
+            <div id="preferences-tab" class="settings-tab-content">
+                <h3>Preferences</h3>
+
+                <div class="settings-form-section">
+                    <h4>Display Settings</h4>
+                    
+                    <div class="settings-form-group">
+                        <label for="theme-select">Theme</label>
+                        <div class="theme-picker">
+                            <div class="theme-option selected" data-theme="light">
+                                <div class="theme-preview light"></div>
+                                <span>Light</span>
+                            </div>
+                            <div class="theme-option" data-theme="dark">
+                                <div class="theme-preview dark"></div>
+                                <span>Dark</span>
+                            </div>
+                            <div class="theme-option" data-theme="blue">
+                                <div class="theme-preview blue"></div>
+                                <span>Blue</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-form-group">
+                        <label for="language">Language</label>
+                        <select id="language" class="settings-form-control">
+                            <option value="en" selected>English</option>
+                            <option value="es">Español</option>
+                            <option value="fr">Français</option>
+                            <option value="de">Deutsch</option>
+                        </select>
+                    </div>
+
+                    <div class="settings-form-group">
+                        <label for="timezone">Time Zone</label>
+                        <select id="timezone" class="settings-form-control">
+                            <option value="PST" selected>Pacific Standard Time (PST)</option>
+                            <option value="MST">Mountain Standard Time (MST)</option>
+                            <option value="CST">Central Standard Time (CST)</option>
+                            <option value="EST">Eastern Standard Time (EST)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-form-section">
+                    <h4>Schedule Preferences</h4>
+                    
+                    <div class="settings-switch-group">
+                        <div class="settings-switch-label">
+                            <span class="settings-switch-title">24-Hour Time Format</span>
+                            <span class="settings-switch-desc">Display times in 24-hour format instead of 12-hour</span>
+                        </div>
+                        <label class="settings-switch">
+                            <input type="checkbox" id="24hour-format">
+                            <span class="settings-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="settings-switch-group">
+                        <div class="settings-switch-label">
+                            <span class="settings-switch-title">Week Starts on Monday</span>
+                            <span class="settings-switch-desc">Start calendar weeks on Monday instead of Sunday</span>
+                        </div>
+                        <label class="settings-switch">
+                            <input type="checkbox" id="monday-start" checked>
+                            <span class="settings-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="settings-switch-group">
+                        <div class="settings-switch-label">
+                            <span class="settings-switch-title">Auto-refresh Schedule</span>
+                            <span class="settings-switch-desc">Automatically refresh schedule every 5 minutes</span>
+                        </div>
+                        <label class="settings-switch">
+                            <input type="checkbox" id="auto-refresh" checked>
+                            <span class="settings-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-btn-group">
+                    <button class="settings-btn settings-btn-success" id="save-preferences">
+                        <div class="loading-spinner" id="preferences-spinner"></div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                        Save Preferences
+                    </button>
+                </div>
+            </div>
+
+            <!-- Notifications Tab -->
+            <div id="notifications-tab" class="settings-tab-content">
+                <h3>Notification Settings</h3>
+
+                <div class="settings-form-section">
+                    <h4>Email Notifications</h4>
+                    
+                    <div class="settings-switch-group">
+                        <div class="settings-switch-label">
+                            <span class="settings-switch-title">Schedule Updates</span>
+                            <span class="settings-switch-desc">Receive emails when your schedule is updated</span>
+                        </div>
+                        <label class="settings-switch">
+                            <input type="checkbox" id="email-schedule" checked>
+                            <span class="settings-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="settings-switch-group">
+                        <div class="settings-switch-label">
+                            <span class="settings-switch-title">Shift Reminders</span>
+                            <span class="settings-switch-desc">Get reminded before your shifts start</span>
+                        </div>
+                        <label class="settings-switch">
+                            <input type="checkbox" id="email-reminders" checked>
+                            <span class="settings-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="settings-switch-group">
+                        <div class="settings-switch-label">
+                            <span class="settings-switch-title">Team Updates</span>
+                            <span class="settings-switch-desc">Notifications about team changes and announcements</span>
+                        </div>
+                        <label class="settings-switch">
+                            <input type="checkbox" id="email-team">
+                            <span class="settings-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-form-section">
+                    <h4>Push Notifications</h4>
+                    
+                    <div class="settings-switch-group">
+                        <div class="settings-switch-label">
+                            <span class="settings-switch-title">Browser Notifications</span>
+                            <span class="settings-switch-desc">Show notifications in your browser</span>
+                        </div>
+                        <label class="settings-switch">
+                            <input type="checkbox" id="browser-notifications" checked>
+                            <span class="settings-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="settings-switch-group">
+                        <div class="settings-switch-label">
+                            <span class="settings-switch-title">Urgent Alerts</span>
+                            <span class="settings-switch-desc">Important notifications that require immediate attention</span>
+                        </div>
+                        <label class="settings-switch">
+                            <input type="checkbox" id="urgent-alerts" checked>
+                            <span class="settings-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-btn-group">
+                    <button class="settings-btn settings-btn-success" id="save-notifications">
+                        <div class="loading-spinner" id="notifications-spinner"></div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                        Save Notification Settings
+                    </button>
+                </div>
+            </div>
+
+            <!-- Security Tab -->
+            <div id="security-tab" class="settings-tab-content">
+                <h3>Security Settings</h3>
+
+                <div

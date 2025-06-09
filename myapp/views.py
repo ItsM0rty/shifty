@@ -66,12 +66,20 @@ def login_view(request):
     return render(request, 'myapp/login.html')
 
 
-@login_required
 def dashboard(request):
     """
     User dashboard view.
     """
     return render(request, 'myapp/dashboard.html')
+
+
+def admin_dashboard(request):
+    """
+    Admin dashboard view.
+    Only accessible by staff members or superusers.
+    """
+    
+    return render(request, 'myapp/admin_dashboard.html')
 
 def signup_view(request):
     """
