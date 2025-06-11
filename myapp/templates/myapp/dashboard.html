@@ -8,235 +8,213 @@
     <title>Employee Dashboard</title>
     <link rel="stylesheet" href="{% static 'myapp/css/dashboard.css' %}">
 
+    <style>
+        :root {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --bg-tertiary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --accent-color: #7e57c2;
+            --accent-hover: #9575cd;
+            --danger-color: #f44336;
+            --success-color: #4caf50;
+            --border-radius: 12px;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
 
-</head>
-<body>
-    <div class="dashboard-container">
-        <header class="dashboard-header">
-            <h1>Employee Dashboard</h1>
-            <div class="header-actions">
-                <a href="#" class="btn btn-danger">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                        <polyline points="16 17 21 12 16 7"></polyline>
-                        <line x1="21" y1="12" x2="9" y2="12"></line>
-                    </svg>
-                    Logout
-                </a>
-            </div>
-        </header>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-        <div class="dashboard-content">
-            <!-- Sidebar -->
-            <aside class="dashboard-sidebar">
-                <div class="sidebar-header">
-                    <img src="/api/placeholder/100/100" alt="User Avatar">
-                    <div>
-                        <h2>Suyash Bhattarai</h2>
-                        <p>Junior Barista</p>
-                    </div>
-                </div>
-                <nav>
-                    <ul>
-                        <li>
-                            <a href="#" class="active">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                                Dashboard
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                                </svg>
-                                Shifts
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="9" cy="7" r="4"></circle>
-                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                </svg>
-                                Team
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                                    <polyline points="10 9 9 9 8 9"></polyline>
-                                </svg>
-                                Reports
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="3"></circle>
-                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                                </svg>
-                                Settings
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </aside>
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
 
-            <!-- Main Content -->
-            <main class="dashboard-main">
-                <div class="main-header">
-                    <h2>Welcome back, Suyash!</h2>
-                </div>
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-                <div class="stats-cards">
-                    <div class="card">
-                        <h3>Remaining Shifts This Week</h3>
-                        <p>3</p>
-                        <div class="trend">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="18 15 12 9 6 15"></polyline>
-                            </svg>
-                            Next: Monday, 9:00 AM
-                        </div>
-                    </div>
-                    <div class="card">
-                        <h3>Hours This Week</h3>
-                        <p>24</p>
-                        <div class="trend">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="18 15 12 9 6 15"></polyline>
-                            </svg>
-                            +2 from last week
-                        </div>
-                    </div>
-                    <div class="card">
-                        <h3>Manager's Notes</h3>
-                        <p class="manager-note">The ice cream machine is broken, please don't try using it</p>
-                        <div class="trend note-timestamp">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            Posted: May 1, 2025 5:00 PM
-                        </div>
-                    </div>
-                </div>
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 24px;
+        }
 
-                <div class="calendar">
-                    <div class="calendar-header">
-                        <div class="calendar-title">Select Days Off (5 max)</div>
-                        <div class="calendar-nav">
-                            <button id="prev-month">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="15 18 9 12 15 6"></polyline>
-                                </svg>
-                            </button>
-                            <button id="next-month">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="9 18 15 12 9 6"></polyline>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
+        .dashboard-sidebar {
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 24px 16px;
+            height: calc(100vh - 120px);
+        }
 
-                    <div id="calendar-month-year" class="calendar-title" style="margin-bottom: 16px; font-weight: 600; color: var(--accent-color);"></div>
+        .dashboard-sidebar nav ul {
+            list-style: none;
+        }
 
-                    <div class="calendar-grid" id="weekdays">
-                        <!-- Weekday headers filled by JavaScript -->
-                    </div>
-                    <div class="calendar-grid" id="calendar-days">
-                        <!-- Calendar days filled by JavaScript -->
-                    </div>
+        .dashboard-sidebar nav li {
+            margin-bottom: 4px;
+        }
 
-                    <div class="calendar-info" id="selection-info">
-                        <p>You have selected <span id="selected-count">0</span> day(s) off. You can select up to 5 days.</p>
-                        <p id="selected-dates"></p>
-                    </div>
-                    
-                    <div class="submit-btn-container">
-                        <button id="submit-days-btn" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                            </svg>
-                            Submit Days Off
-                        </button>
-                    </div>
-                </div>
+        .dashboard-sidebar nav a {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            border-radius: var(--border-radius);
+            transition: all 0.2s ease;
+            gap: 12px;
+            font-weight: 500;
+            font-size: 14px;
+        }
 
-                <div class="recent-activity">
-                    <h2>Recent Activity</h2>
-                    <div class="activity-item">
-                        <div class="activity-content">
-                            <div class="activity-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                                    <polyline points="10 9 9 9 8 9"></polyline>
-                                </svg>
-                            </div>
-                            <div class="activity-text">
-                                <p>Shift swap approved with Charles Freidenreich</p>
-                            </div>
-                        </div>
-                        <div class="activity-time">Today, 10:30 AM</div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-content">
-                            <div class="activity-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                                </svg>
-                            </div>
-                            <div class="activity-text">
-                                <p>New schedule published for next month</p>
-                            </div>
-                        </div>
-                        <div class="activity-time">Yesterday</div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-content">
-                            <div class="activity-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="9" cy="7" r="4"></circle>
-                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                </svg>
-                            </div>
-                            <div class="activity-text">
-                                <p>Time-off request submitted and pending approval</p>
-                            </div>
-                        </div>
-                        <div class="activity-time">2 days ago</div>
-                    </div>
-                </div>
-                
-                <div class="footer">
-                    <p>&copy; 2025 Shifty Solutions. All rights reserved.</p>
-                </div>
-            </main>
-        </div>
-    </div>
+        .dashboard-sidebar nav svg {
+            width: 20px;
+            height: 20px;
+        }
 
+        .dashboard-sidebar nav a:hover,
+        .dashboard-sidebar nav a.active {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .dashboard-sidebar nav a.active {
+            background-color: rgba(126, 87, 194, 0.2);
+            color: var(--accent-color);
+        }
+
+        .dashboard-main {
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 24px;
+        }
+
+        /* CRITICAL: These classes were missing in your CSS */
+        .content-section {
+            display: block;
+        }
+
+        .hidden-section {
+            display: none !important;
+        }
+
+        .active-section {
+            display: block !important;
+        }
+
+        /* Demo content styling */
+        .section-content {
+            padding: 20px;
+            background-color: var(--bg-tertiary);
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+        }
+
+        .debug-info {
+            background-color: rgba(76, 175, 80, 0.1);
+            border: 1px solid var(--success-color);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+    </style>
+
+
+
+    <!-- Navbar -->
     <script>
+        // Enhanced debug logging
+        console.log('🚀 Dashboard navigation script loaded');
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📋 DOM loaded, initializing dashboard navigation');
+            
+            // Get all content sections
+            const sections = document.querySelectorAll('.content-section');
+            console.log('📦 Found sections:', sections.length, Array.from(sections).map(s => s.id));
+            
+            // Function to hide all sections
+            function hideAllSections() {
+                sections.forEach(section => {
+                    section.classList.add('hidden-section');
+                    section.classList.remove('active-section');
+                    console.log('🔒 Hiding section:', section.id);
+                });
+            }
+            
+            // Function to show specific section
+            function showSection(sectionId) {
+                const targetSection = document.getElementById(sectionId);
+                if (targetSection) {
+                    hideAllSections();
+                    targetSection.classList.remove('hidden-section');
+                    targetSection.classList.add('active-section');
+                    console.log('🔓 Showing section:', sectionId);
+                } else {
+                    console.error('❌ Section not found:', sectionId);
+                }
+            }
+            
+            // Show dashboard section by default
+            showSection('dashboard-section');
+            
+            // Set dashboard link as active by default
+            const dashboardLink = document.querySelector('[data-section="dashboard-section"]');
+            if (dashboardLink) {
+                dashboardLink.classList.add('active');
+                console.log('✅ Dashboard link set as active');
+            }
+        });
+
+        // Handle navigation clicks
+        document.addEventListener('click', function(e) {
+            const navLink = e.target.closest('.nav-link');
+            
+            if (navLink && navLink.hasAttribute('data-section')) {
+                console.log('🖱️ Nav link clicked');
+                e.preventDefault();
+                
+                const targetSectionId = navLink.getAttribute('data-section');
+                console.log('🎯 Target section:', targetSectionId);
+                
+                // Hide all sections
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.add('hidden-section');
+                    section.classList.remove('active-section');
+                });
+                
+                // Show target section
+                const sectionToShow = document.getElementById(targetSectionId);
+                if (sectionToShow) {
+                    sectionToShow.classList.remove('hidden-section');
+                    sectionToShow.classList.add('active-section');
+                    console.log('✅ Successfully showing section:', targetSectionId);
+                } else {
+                    console.error('❌ Target section not found:', targetSectionId);
+                }
+                
+                // Update active navigation state
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                navLink.classList.add('active');
+                console.log('🎨 Updated active nav state');
+            }
+        });
+    </script>
+    
+    <script>
+
 
         const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
                     'July', 'August', 'September', 'October', 'November', 'December'];
@@ -530,5 +508,275 @@ updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
 
         });
     </script>
+
+</head>
+
+
+
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <h1>Employee Dashboard</h1>
+            <div class="header-actions">
+                <a href="#" class="btn btn-danger">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Logout
+                </a>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <!-- Sidebar -->
+            <aside class="dashboard-sidebar">
+                <div class="sidebar-header">
+                    <img src="/api/placeholder/100/100" alt="User Avatar">
+                    <div>
+                        <h2>Suyash Bhattarai</h2>
+                        <p>Junior Barista</p>
+                    </div>
+                </div>
+                <nav>
+                    <ul>
+                        <li>
+                            <a href="#" class="nav-link" data-section="dashboard-section">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link" data-section="shifts-section">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                Shifts
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link" data-section="team-section">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                Team
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link" data-section="reports-section">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                                Reports
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link" data-section="settings-section">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                                </svg>
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+        <div id="dashboard-section" class="content-section">
+        <div class="settings-header">
+            <h2>Welcome back, Suyash!</h2>
+        </div>
+
+
+        
+
+   <div class="stats-cards">
+       <div class="card">
+           <h3>Remaining Shifts This Week</h3>
+           <p>3</p>
+           <div class="trend">
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                   <polyline points="18 15 12 9 6 15"></polyline>
+               </svg>
+               Next: Monday, 9:00 AM
+           </div>
+       </div>
+       <div class="card">
+           <h3>Hours This Week</h3>
+           <p>24</p>
+           <div class="trend">
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                   <polyline points="18 15 12 9 6 15"></polyline>
+               </svg>
+               +2 from last week
+           </div>
+       </div>
+       <div class="card">
+           <h3>Manager's Notes</h3>
+           <p class="manager-note">The ice cream machine is broken, please don't try using it</p>
+           <div class="trend note-timestamp">
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                   <circle cx="12" cy="12" r="10"></circle>
+                   <polyline points="12 6 12 12 16 14"></polyline>
+               </svg>
+               Posted: May 1, 2025 5:00 PM
+           </div>
+       </div>
+   </div>
+
+   <div class="calendar">
+       <div class="calendar-header">
+           <div class="calendar-title">Select Days Off (5 max)</div>
+           <div class="calendar-nav">
+               <button id="prev-month">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                       <polyline points="15 18 9 12 15 6"></polyline>
+                   </svg>
+               </button>
+               <button id="next-month">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                       <polyline points="9 18 15 12 9 6"></polyline>
+                   </svg>
+               </button>
+           </div>
+       </div>
+
+       <div id="calendar-month-year" class="calendar-title" style="margin-bottom: 16px; font-weight: 600; color: var(--accent-color);"></div>
+
+       <div class="calendar-grid" id="weekdays">
+           <!-- Weekday headers filled by JavaScript -->
+       </div>
+       <div class="calendar-grid" id="calendar-days">
+           <!-- Calendar days filled by JavaScript -->
+       </div>
+
+       <div class="calendar-info" id="selection-info">
+           <p>You have selected <span id="selected-count">0</span> day(s) off. You can select up to 5 days.</p>
+           <p id="selected-dates"></p>
+       </div>
+       
+       <div class="submit-btn-container">
+           <button id="submit-days-btn" class="btn btn-primary">
+               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                   <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                   <polyline points="22 4 12 14.01 9 11.01"></polyline>
+               </svg>
+               Submit Days Off
+           </button>
+       </div>
+   </div>
+
+   <div class="recent-activity">
+       <h2>Recent Activity</h2>
+       <div class="activity-item">
+           <div class="activity-content">
+               <div class="activity-icon">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                       <polyline points="14 2 14 8 20 8"></polyline>
+                       <line x1="16" y1="13" x2="8" y2="13"></line>
+                       <line x1="16" y1="17" x2="8" y2="17"></line>
+                       <polyline points="10 9 9 9 8 9"></polyline>
+                   </svg>
+               </div>
+               <div class="activity-text">
+                   <p>Shift swap approved with Charles Freidenreich</p>
+               </div>
+           </div>
+           <div class="activity-time">Today, 10:30 AM</div>
+       </div>
+       <div class="activity-item">
+           <div class="activity-content">
+               <div class="activity-icon">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                       <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                       <line x1="16" y1="2" x2="16" y2="6"></line>
+                       <line x1="8" y1="2" x2="8" y2="6"></line>
+                       <line x1="3" y1="10" x2="21" y2="10"></line>
+                   </svg>
+               </div>
+               <div class="activity-text">
+                   <p>New schedule published for next month</p>
+               </div>
+           </div>
+           <div class="activity-time">Yesterday</div>
+       </div>
+       <div class="activity-item">
+           <div class="activity-content">
+               <div class="activity-icon">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                       <circle cx="9" cy="7" r="4"></circle>
+                       <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                       <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                   </svg>
+               </div>
+               <div class="activity-text">
+                   <p>Time-off request submitted and pending approval</p>
+               </div>
+           </div>
+           <div class="activity-time">2 days ago</div>
+       </div>
+   </div>
+   
+
+</div>
+                <!-- Shifts Section -->
+                <div id="shifts-section" class="content-section">
+                    <div class="section-content">
+                        <h2>Shifts</h2>
+                        <p>Manage your work shifts and schedule here.</p>
+                        <p>Today's Shifts: <span style="color: var(--accent-color);">3 scheduled</span></p>
+                    </div>
+                </div>
+
+                <!-- Team Section -->
+                <div id="team-section" class="content-section">
+                    <div class="section-content">
+                        <h2>Team</h2>
+                        <p>View and manage your team members.</p>
+                        <p>Team Size: <span style="color: var(--accent-color);">12 members</span></p>
+                    </div>
+                </div>
+
+                <!-- Reports Section -->
+                <div id="reports-section" class="content-section">
+                    <div class="section-content">
+                        <h2>Reports</h2>
+                        <p>Generate and view various reports and analytics.</p>
+                        <p>Last Report: <span style="color: var(--text-secondary);">2 days ago</span></p>
+                    </div>
+                </div>
+                    {% include 'myapp/db_settings.html' %}
+
+            </div>
+
+
+            <div class="footer">
+                <p>&copy; 2025 Shifty Solutions. All rights reserved.</p>
+            </div>
+        </div>
+        
+    </div>
+
+    
 </body>
+
+
 </html>
