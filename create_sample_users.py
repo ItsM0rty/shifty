@@ -34,6 +34,16 @@ def create_users():
         },
     ]
 
+    # Add an employee account
+    users.append({
+        "email": "employee@example.com",
+        "username": "employee",
+        "password": "password123",
+        "is_manager": False,
+        "is_superuser": False,
+        "is_staff": True,  # This grants employee access
+    })
+
     for user_data in users:
         if not User.objects.filter(username=user_data["username"]).exists():
             user = User.objects.create_user(

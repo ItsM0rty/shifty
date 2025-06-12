@@ -73,12 +73,14 @@ def dashboard(request):
     return render(request, 'myapp/dashboard.html')
 
 
+from django.contrib.admin.views.decorators import staff_member_required
+
+@staff_member_required
 def admin_dashboard(request):
     """
     Admin dashboard view.
     Only accessible by staff members or superusers.
     """
-    
     return render(request, 'myapp/admin_dashboard.html')
 
 def signup_view(request):
