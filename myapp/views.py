@@ -41,26 +41,26 @@ def login_view(request):
     logger.debug("Login view accessed")
     
     if request.method == 'POST':
-        username = request.POST.get('username')
+        email = request.POST.get('email')
         password = request.POST.get('password')
         
-        logger.debug(f"Login attempt with email: {username}")
+        logger.debug(f"Login attempt with email: {email}")
         
-        # Try to authenticate with email
-        user = authenticate(request, username=username, password=password)
+        # Authenticate using custom email backend
+        user = authenticate(request, email=email, password=password)
         
         if user is not None:
             # Authentication successful
-            logger.debug(f"Authentication successful for {username}")
+            logger.debug(f"Authentication successful for {email}")
             login(request, user)
             logger.debug("User logged in, redirecting to dashboard")
             messages.success(request, f"Welcome back, {user.email}!")
             return redirect('myapp:dashboard')
         else:
             # Authentication failed
-            logger.debug(f"Authentication failed for {username}")
+            logger.debug(f"Authentication failed for {email}")
             messages.error(request, "Invalid email or password. Please try again.")
-            return render(request, 'myapp/login.html', {'username': username})
+            return render(request, 'myapp/login.html', {'email': email})
     
     # GET request - just show the login form
     return render(request, 'myapp/login.html')

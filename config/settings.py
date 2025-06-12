@@ -113,6 +113,10 @@ LOGIN_REDIRECT_URL = '/dashboard/'  # Where to send users after login
 LOGOUT_REDIRECT_URL = '/'  # Where to send users after logout
 LOGIN_URL = '/login/'  # Where to send users if they need to log in
 
+# Use custom email authentication backend
+AUTHENTICATION_BACKENDS = [
+    'myapp.backends.EmailBackend',
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
