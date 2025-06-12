@@ -46,8 +46,8 @@ def login_view(request):
         
         logger.debug(f"Login attempt with email: {email}")
         
-        # Authenticate using custom email backend
-        user = authenticate(request, email=email, password=password)
+        # Authenticate using custom email backend by passing both username and email
+        user = authenticate(request, username=email, email=email, password=password)
         
         if user is not None:
             # Authentication successful
