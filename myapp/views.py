@@ -73,14 +73,17 @@ def dashboard(request):
     return render(request, 'myapp/dashboard.html')
 
 
-from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 
-@staff_member_required
+@login_required(login_url='/login')
 def admin_dashboard(request):
     """
     Admin dashboard view.
     Only accessible by staff members or superusers.
     """
+    if not request.user.is_staff:
+        messages.error(request, "You don't have permission to access the admin dashboard")
+        return redirect('myapp:dashboard')
     return render(request, 'myapp/admin_dashboard.html')
 
 def signup_view(request):
