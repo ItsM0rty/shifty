@@ -519,7 +519,7 @@ updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
         <header class="dashboard-header">
             <h1>Employee Dashboard</h1>
             <div class="header-actions">
-                <a href="#" class="btn btn-danger">
+                <a href="{% url 'myapp:user_logout' %}" class="btn btn-danger">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                         <polyline points="16 17 21 12 16 7"></polyline>
@@ -536,8 +536,8 @@ updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
                 <div class="sidebar-header">
                     <img src="/api/placeholder/100/100" alt="User Avatar">
                     <div>
-                        <h2>Suyash Bhattarai</h2>
-                        <p>Junior Barista</p>
+                        <h2>{{ user.get_full_name }}</h2>
+                        <p>{{ user.position }}</p>
                     </div>
                 </div>
                 <nav>
@@ -601,7 +601,7 @@ updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
             <!-- Main Content -->
         <div id="dashboard-section" class="content-section">
         <div class="settings-header">
-            <h2>Welcome back, Suyash!</h2>
+            <h2>Welcome back, {{ user.first_name }}!</h2>
         </div>
 
 

@@ -66,11 +66,14 @@ def login_view(request):
     return render(request, 'myapp/login.html')
 
 
+@login_required
 def dashboard(request):
     """
     User dashboard view.
     """
-    return render(request, 'myapp/dashboard.html')
+    return render(request, 'myapp/dashboard.html', {
+        'user': request.user
+    })
 
 
 from django.contrib.auth.decorators import login_required
