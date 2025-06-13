@@ -33,19 +33,25 @@ class Command(BaseCommand):
         ]
 
         for user_data in users:
-            if not User.objects.filter(email=user_data["email"]).exists():
-                user = User.objects.create_user(
-                    username=user_data["username"],
-                    email=user_data["email"],
-                    password=user_data["password"],
-                )
-                user.is_manager = user_data["is_manager"]
-                user.is_superuser = user_data["is_superuser"]
-                user.is_staff = user_data["is_staff"]
-                user.save()
-                self.stdout.write(
-                    self.style.SUCCESS(f'Successfully created user: {user.email}')
-                )
+            # Check both email and username to avoid conflicts
+            if not User.objects.filter(email=user_data["email"]).exists() and not User.objects.filter(username=user_data["username"]).exists():
+                try:
+                    user = User.objects.create_user(
+                        username=user_data["username"],
+                        email=user_data["email"],
+                        password=user_data["password"],
+                    )
+                    user.is_manager = user_data["is_manager"]
+                    user.is_superuser = user_data["is_superuser"]
+                    user.is_staff = user_data["is_staff"]
+                    user.save()
+                    self.stdout.write(
+                        self.style.SUCCESS(f'Successfully created user: {user.email}')
+                    )
+                except Exception as e:
+                    self.stdout.write(
+                        self.style.ERROR(f'Error creating user {user_data["email"]}: {str(e)}')
+                    )
             else:
                 self.stdout.write(
                     self.style.WARNING(f'User {user_data["email"]} already exists')
