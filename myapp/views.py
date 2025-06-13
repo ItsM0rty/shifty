@@ -46,20 +46,29 @@ def login_view(request):
         
         logger.debug(f"Login attempt with email: {email}")
         
-        # Authenticate using custom email backend by passing both username and email
-        user = authenticate(request, username=email, email=email, password=password)
-        
-        if user is not None:
-            # Authentication successful
-            logger.debug(f"Authentication successful for {email}")
-            login(request, user)
-            logger.debug("User logged in, redirecting to dashboard")
-            messages.success(request, f"Welcome back, {user.email}!")
-            return redirect('myapp:dashboard')
-        else:
-            # Authentication failed
-            logger.debug(f"Authentication failed for {email}")
-            messages.error(request, "Invalid email or password. Please try again.")
+        try:
+            # Authenticate using custom email backend by passing both username and email
+            logger.debug(f"Attempting authentication for email: {email}")
+            user = authenticate(request, username=email, email=email, password=password)
+            
+            if user is not None:
+                # Authentication successful
+                logger.debug(f"Authentication successful for {email}")
+                login(request, user)
+                logger.debug("User logged in, redirecting to dashboard")
+                messages.success(request, f"Welcome back, {user.email}!")
+                return redirect('myapp:dashboard')
+            else:
+                # Authentication failed
+                logger.debug(f"Authentication failed for {email}")
+                messages.error(request, "Invalid email or password. Please try again.")
+                return render(request, 'myapp/login.html', {'email': email})
+        except Exception as e:
+            logger.error(f"Authentication error: {str(e)}")
+            logger.error(f"Error type: {type(e).__name__}")
+            import traceback
+            logger.error(f"Full traceback: {traceback.format_exc()}")
+            messages.error(request, "An unexpected error occurred during authentication. Please try again.")
             return render(request, 'myapp/login.html', {'email': email})
     
     # GET request - just show the login form
@@ -189,3 +198,9 @@ def user_logout(request):
     logout(request)
     messages.info(request, "You have been logged out.")
     return redirect('myapp:login')
+
+def test_static(request):
+    """
+    Test view for verifying static file serving
+    """
+    return render(request, 'myapp/test_static.html')

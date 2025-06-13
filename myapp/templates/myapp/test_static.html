@@ -1,0 +1,25 @@
+{% extends "myapp/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Static Files Test</h1>
+    <div class="alert alert-success">
+        <p>Bootstrap styles are working!</p>
+    </div>
+    <div class="mt-4">
+        <h4>Image Test</h4>
+        <img src="{% static 'myapp/images/logo.png' %}" alt="Logo" class="img-fluid">
+        <p class="mt-2">If you see the logo above, images are loading correctly.</p>
+    </div>
+    <div class="mt-4">
+        <h4>JavaScript Test</h4>
+        <button id="test-button" class="btn btn-primary">Click Me</button>
+        <p id="test-result" class="mt-2"></p>
+    </div>
+</div>
+<script>
+    document.getElementById('test-button').addEventListener('click', function() {
+        document.getElementById('test-result').textContent = 'JavaScript is working!';
+    });
+</script>
+{% endblock %}

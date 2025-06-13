@@ -69,10 +69,18 @@ TEMPLATES = [
     },
 ]
 
-# Add these lines at the bottom of the file
+# Static files configuration
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'myapp/static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# WhiteNoise configuration for serving static files in production
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Keep this first
+    # ... rest of middleware
+]
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
