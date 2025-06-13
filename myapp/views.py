@@ -61,6 +61,16 @@ def login_view(request):
             else:
                 # Authentication failed
                 logger.debug(f"Authentication failed for {email}")
+                
+                # Additional debugging: Check if user exists but password is wrong
+                try:
+                    user = User.objects.get(email__iexact=email)
+                    logger.debug(f"User exists but password is invalid: {user}")
+                except User.DoesNotExist:
+                    logger.debug(f"No user found with email: {email}")
+                except Exception as e:
+                    logger.debug(f"Error checking user existence: {str(e)}")
+                
                 messages.error(request, "Invalid email or password. Please try again.")
                 return render(request, 'myapp/login.html', {'email': email})
         except Exception as e:
