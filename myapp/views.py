@@ -66,7 +66,7 @@ def login_view(request):
     return render(request, 'myapp/login.html')
 
 
-@login_required
+@login_required(login_url='/login')  # Fixed: Added login_url parameter
 def dashboard(request):
     """
     User dashboard view.
@@ -115,8 +115,8 @@ def signup_view(request):
                     username = email
                     
                 user = User.objects.create_user(
-                    username=username, 
-                    email=email, 
+                    username=username,
+                    email=email,
                     password=password
                 )
                 
