@@ -140,14 +140,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # For production, we'll use PostgreSQL on a cloud provider
 
 
-# Check if we're running on a cloud platform (like Heroku, Render, etc.)
+# Database configuration with explicit engine for production
 if 'DATABASE_URL' in os.environ:
-    # Use the cloud database
+    # Parse DATABASE_URL for PostgreSQL
+    db_from_env = dj_database_url.config(conn_max_age=600, conn_health_checks=True)
+    # Explicitly set engine for PostgreSQL
+    db_from_env['ENGINE'] = 'django.db.backends.postgresql'
     DATABASES = {
-        'default': dj_database_url.config(
-            conn_max_age=600,
-            conn_health_checks=True,
-        )
+        'default': db_from_env
     }
 else:
     # Use SQLite for local development

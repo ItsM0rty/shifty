@@ -71,9 +71,57 @@ def dashboard(request):
     """
     User dashboard view.
     """
-    return render(request, 'myapp/dashboard.html', {
-        'user': request.user
-    })
+    logger.debug("Dashboard view accessed")
+    
+    try:
+        # Log user information
+        logger.debug(f"User authenticated: {request.user.is_authenticated}")
+        logger.debug(f"User ID: {request.user.id}")
+        logger.debug(f"User email: {request.user.email}")
+        
+        # Test database connection
+        logger.debug("Testing database connection...")
+        try:
+            user_count = User.objects.count()
+            logger.debug(f"Total users in database: {user_count}")
+        except Exception as db_err:
+            logger.error(f"Database connection failed: {str(db_err)}")
+            logger.error(f"DB error type: {type(db_err).__name__}")
+            messages.error(request, "Database connection issue. Please try again later.")
+            return render(request, 'myapp/error.html', {'error': 'Database connection failed'}, status=500)
+        
+        # Test user object access
+        logger.debug("Testing user object access...")
+        user_data = {
+            'id': request.user.id,
+            'email': request.user.email,
+            'first_name': getattr(request.user, 'first_name', 'N/A'),
+            'last_name': getattr(request.user, 'last_name', 'N/A'),
+            'is_staff': request.user.is_staff,
+        }
+        logger.debug(f"User data: {user_data}")
+        
+        # Test template context
+        context = {
+            'user': request.user
+        }
+        logger.debug("Context prepared successfully")
+        
+        # Attempt to render template
+        logger.debug("Attempting to render dashboard template...")
+        response = render(request, 'myapp/dashboard.html', context)
+        logger.debug("Dashboard template rendered successfully")
+        
+        return response
+        
+    except Exception as e:
+        logger.error(f"Error in dashboard view: {str(e)}")
+        logger.error(f"Error type: {type(e).__name__}")
+        import traceback
+        logger.error(f"Full traceback: {traceback.format_exc()}")
+        
+        # Return user-friendly error page
+        return render(request, 'myapp/error.html', {'error': str(e)}, status=500)
 
 
 from django.contrib.auth.decorators import login_required
