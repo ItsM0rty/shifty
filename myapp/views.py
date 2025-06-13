@@ -213,4 +213,13 @@ def test_static(request):
     """
     Test view for verifying static file serving
     """
-    return render(request, 'myapp/test_static.html')
+    try:
+        return render(request, 'myapp/test_static.html')
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error rendering test_static.html: {str(e)}")
+        logger.error(f"Error type: {type(e).__name__}")
+        import traceback
+        logger.error(f"Full traceback: {traceback.format_exc()}")
+        return HttpResponse("Error rendering template", status=500)
