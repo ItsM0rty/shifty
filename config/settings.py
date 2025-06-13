@@ -113,9 +113,10 @@ LOGIN_REDIRECT_URL = '/dashboard/'  # Where to send users after login
 LOGOUT_REDIRECT_URL = '/'  # Where to send users after logout
 LOGIN_URL = '/login/'  # Where to send users if they need to log in
 
-# Use custom email authentication backend
+# Use custom email authentication backend along with Django's default
 AUTHENTICATION_BACKENDS = [
     'myapp.backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',  # Add Django's default backend
 ]
 
 # Internationalization
