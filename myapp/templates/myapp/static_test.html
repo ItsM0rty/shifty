@@ -1,0 +1,16 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Static File Test</title>
+</head>
+<body>
+    <h1>Static File Test</h1>
+    {% if works %}
+        <p>Static files are working!</p>
+        <img src="{% static 'myapp/images/logo.png' %}" alt="Logo">
+    {% else %}
+        <p>Static files are not working</p>
+    {% endif %}
+</body>
+</html>

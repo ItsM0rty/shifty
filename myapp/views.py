@@ -223,3 +223,10 @@ def test_static(request):
         import traceback
         logger.error(f"Full traceback: {traceback.format_exc()}")
         return HttpResponse("Error rendering template", status=500)
+
+def static_test(request):
+    """
+    Simple view to test static file serving
+    """
+    context = {'works': True}
+    return render(request, 'myapp/static_test.html', context)
