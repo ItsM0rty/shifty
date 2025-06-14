@@ -616,134 +616,128 @@ updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
             </div>
         </div>
 
+        <div class="dashboard-stats-grid">
+            <div class="dashboard-card">
+                <h3>Upcoming Shifts</h3>
+                <p class="dashboard-stat-value">3</p>
+                <div class="dashboard-trend">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    Next shift: Tomorrow
+                </div>
+            </div>
+            <div class="dashboard-card">
+                <h3>Hours This Week</h3>
+                <p class="dashboard-stat-value">24</p>
+                <div class="dashboard-trend">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 20V10"></path>
+                        <path d="M18 20V4"></path>
+                        <path d="M6 20v-4"></path>
+                    </svg>
+                    +4 from last week
+                </div>
+            </div>
+            <div class="dashboard-card">
+                <h3>Time Off Balance</h3>
+                <p class="dashboard-stat-value">12 days</p>
+                <div class="dashboard-trend">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v16"></path>
+                        <path d="M1 21h22"></path>
+                        <path d="M9 9h6"></path>
+                        <path d="M9 13h6"></path>
+                        <path d="M9 17h6"></path>
+                    </svg>
+                    Available
+                </div>
+            </div>
+        </div>
 
-        
-
-   <div class="stats-cards">
-       <div class="card">
-           <h3>Upcoming Shifts</h3>
-           <p>3</p>
-           <div class="trend">
-               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                   <circle cx="12" cy="12" r="10"></circle>
-                   <polyline points="12 6 12 12 16 14"></polyline>
-               </svg>
-               Next shift: Tomorrow
-           </div>
-       </div>
-       <div class="card">
-           <h3>Hours This Week</h3>
-           <p>24</p>
-           <div class="trend">
-               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                   <path d="M12 20V10"></path>
-                   <path d="M18 20V4"></path>
-                   <path d="M6 20v-4"></path>
-               </svg>
-               +4 from last week
-           </div>
-       </div>
-       <div class="card">
-           <h3>Time Off Balance</h3>
-           <p>12 days</p>
-           <div class="trend">
-               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                   <path d="M19 21V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v16"></path>
-                   <path d="M1 21h22"></path>
-                   <path d="M9 9h6"></path>
-                   <path d="M9 13h6"></path>
-                   <path d="M9 17h6"></path>
-               </svg>
-               Available
-           </div>
-       </div>
-   </div>
-
-   <div class="dashboard-grid">
-       <div class="upcoming-shifts">
-           <div class="section-header">
-               <h3>Upcoming Shifts</h3>
-               <a href="#" class="btn btn-secondary btn-sm">View All</a>
-           </div>
-           <div class="shifts-list">
-               <div class="shift-item">
-                   <div class="shift-date">
-                       <span class="day">Tomorrow</span>
-                       <span class="time">9:00 AM - 5:00 PM</span>
-                   </div>
-                   <div class="shift-details">
-                       <span class="role">Cashier</span>
-                       <span class="location">Main Store</span>
-                   </div>
-               </div>
-               <div class="shift-item">
-                   <div class="shift-date">
-                       <span class="day">Thursday</span>
-                       <span class="time">1:00 PM - 9:00 PM</span>
-                   </div>
-                   <div class="shift-details">
-                       <span class="role">Sales Associate</span>
-                       <span class="location">Main Store</span>
-                   </div>
-               </div>
-               <div class="shift-item">
-                   <div class="shift-date">
-                       <span class="day">Saturday</span>
-                       <span class="time">10:00 AM - 6:00 PM</span>
-                   </div>
-                   <div class="shift-details">
-                       <span class="role">Cashier</span>
-                       <span class="location">Main Store</span>
-                   </div>
-               </div>
-           </div>
-       </div>
-
-       <div class="recent-activity">
-           <div class="section-header">
-               <h3>Recent Activity</h3>
-               <a href="#" class="btn btn-secondary btn-sm">View All</a>
-           </div>
-           <div class="activity-list">
-               <div class="activity-item">
-                   <div class="activity-content">
-                       <div class="activity-icon">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                               <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                               <line x1="16" y1="2" x2="16" y2="6"></line>
-                               <line x1="8" y1="2" x2="8" y2="6"></line>
-                               <line x1="3" y1="10" x2="21" y2="10"></line>
-                           </svg>
-                       </div>
-                       <div class="activity-text">
-                           <p>New schedule published for next month</p>
-                       </div>
-                   </div>
-                   <div class="activity-time">Yesterday</div>
-               </div>
-               <div class="activity-item">
-                   <div class="activity-content">
-                       <div class="activity-icon">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                               <path d="M19 21V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v16"></path>
-                               <path d="M1 21h22"></path>
-                               <path d="M9 9h6"></path>
-                               <path d="M9 13h6"></path>
-                               <path d="M9 17h6"></path>
-                           </svg>
-                       </div>
-                       <div class="activity-text">
-                           <p>Time-off request submitted and pending approval</p>
-                       </div>
-                   </div>
-                   <div class="activity-time">2 days ago</div>
-               </div>
-           </div>
-       </div>
-   </div>
-   
-
-</div>
+        <div class="dashboard-main-grid">
+            <div class="dashboard-card dashboard-upcoming-shifts">
+                <div class="section-header">
+                    <h3>Upcoming Shifts</h3>
+                    <a href="#" class="btn btn-secondary btn-sm">View All</a>
+                </div>
+                <div class="shifts-list">
+                    <div class="shift-item">
+                        <div class="shift-date">
+                            <span class="day">Tomorrow</span>
+                            <span class="time">9:00 AM - 5:00 PM</span>
+                        </div>
+                        <div class="shift-details">
+                            <span class="role">Cashier</span>
+                            <span class="location">Main Store</span>
+                        </div>
+                    </div>
+                    <div class="shift-item">
+                        <div class="shift-date">
+                            <span class="day">Thursday</span>
+                            <span class="time">1:00 PM - 9:00 PM</span>
+                        </div>
+                        <div class="shift-details">
+                            <span class="role">Sales Associate</span>
+                            <span class="location">Main Store</span>
+                        </div>
+                    </div>
+                    <div class="shift-item">
+                        <div class="shift-date">
+                            <span class="day">Saturday</span>
+                            <span class="time">10:00 AM - 6:00 PM</span>
+                        </div>
+                        <div class="shift-details">
+                            <span class="role">Cashier</span>
+                            <span class="location">Main Store</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="dashboard-card dashboard-recent-activity">
+                <div class="section-header">
+                    <h3>Recent Activity</h3>
+                    <a href="#" class="btn btn-secondary btn-sm">View All</a>
+                </div>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-content">
+                            <div class="activity-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                            </div>
+                            <div class="activity-text">
+                                <p>New schedule published for next month</p>
+                            </div>
+                        </div>
+                        <div class="activity-time">Yesterday</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-content">
+                            <div class="activity-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M19 21V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v16"></path>
+                                    <path d="M1 21h22"></path>
+                                    <path d="M9 9h6"></path>
+                                    <path d="M9 13h6"></path>
+                                    <path d="M9 17h6"></path>
+                                </svg>
+                            </div>
+                            <div class="activity-text">
+                                <p>Time-off request submitted and pending approval</p>
+                            </div>
+                        </div>
+                        <div class="activity-time">2 days ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
                 <!-- Shifts Section -->
@@ -762,8 +756,7 @@ updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
                             </button>
                         </div>
                     </div>
-
-                    <div class="shifts-filters">
+                    <div class="shifts-filters shifts-card">
                         <div class="filter-group">
                             <label for="month-select">Month</label>
                             <select id="month-select" class="filter-select">
@@ -780,8 +773,7 @@ updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
                             </select>
                         </div>
                     </div>
-
-                    <div class="shifts-calendar">
+                    <div class="shifts-calendar shifts-card">
                         <div class="calendar-header">
                             <button class="btn btn-secondary btn-sm" id="prev-week">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -797,7 +789,6 @@ updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
                                 </svg>
                             </button>
                         </div>
-
                         <div class="weekly-schedule">
                             <div class="schedule-day">
                                 <div class="day-header">
@@ -874,8 +865,7 @@ updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
                             </div>
                         </div>
                     </div>
-
-                    <div class="shifts-summary">
+                    <div class="shifts-summary-grid">
                         <div class="summary-card">
                             <h3>Weekly Hours</h3>
                             <p class="summary-value">32</p>
@@ -916,12 +906,11 @@ updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
                             </button>
                         </div>
                     </div>
-
-                    <div class="team-stats">
-                        <div class="stats-card">
+                    <div class="team-stats-grid">
+                        <div class="team-card">
                             <h3>Team Size</h3>
-                            <p class="stats-value">12</p>
-                            <div class="stats-trend">
+                            <p class="team-stat-value">12</p>
+                            <div class="team-trend">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="9" cy="7" r="4"></circle>
@@ -931,10 +920,10 @@ updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
                                 Active members
                             </div>
                         </div>
-                        <div class="stats-card">
+                        <div class="team-card">
                             <h3>On Shift Today</h3>
-                            <p class="stats-value">6</p>
-                            <div class="stats-trend">
+                            <p class="team-stat-value">6</p>
+                            <div class="team-trend">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="12" cy="12" r="10"></circle>
                                     <polyline points="12 6 12 12 16 14"></polyline>
@@ -942,10 +931,10 @@ updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
                                 Currently working
                             </div>
                         </div>
-                        <div class="stats-card">
+                        <div class="team-card">
                             <h3>Available for Swap</h3>
-                            <p class="stats-value">4</p>
-                            <div class="stats-trend">
+                            <p class="team-stat-value">4</p>
+                            <div class="team-trend">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="9" cy="7" r="4"></circle>
@@ -956,8 +945,7 @@ updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
                             </div>
                         </div>
                     </div>
-
-                    <div class="team-filters">
+                    <div class="team-filters team-card">
                         <div class="search-box">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="11" cy="11" r="8"></circle>
@@ -984,7 +972,6 @@ updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
                             </select>
                         </div>
                     </div>
-
                     <div class="team-grid">
                         <div class="team-member">
                             <div class="member-avatar">

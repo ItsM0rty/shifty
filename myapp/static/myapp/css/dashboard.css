@@ -994,3 +994,153 @@ body {
     }
 }
 
+/* Dashboard Main Section Improvements */
+.dashboard-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    margin-top: 32px;
+    margin-bottom: 32px;
+}
+
+.dashboard-main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.dashboard-card {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.dashboard-card h3 {
+    color: var(--text-secondary);
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.dashboard-stat-value {
+    font-size: 2.5em;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.dashboard-trend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent-color);
+    font-size: 1em;
+}
+
+.dashboard-upcoming-shifts .shifts-list,
+.dashboard-recent-activity .activity-list {
+    margin-top: 16px;
+}
+
+@media (max-width: 992px) {
+    .dashboard-main-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Team Section Modern Card/Grid Layout */
+.team-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.team-card {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.team-card h3 {
+    color: var(--text-secondary);
+    font-size: 1em;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.team-stat-value {
+    font-size: 2em;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+}
+
+.team-trend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent-color);
+    font-size: 0.95em;
+}
+
+.team-filters.team-card {
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+@media (max-width: 992px) {
+    .team-stats-grid {
+        grid-template-columns: 1fr;
+    }
+    .team-filters.team-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+/* Shifts Section Modern Card/Grid Layout */
+.shifts-card {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    padding: 24px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.shifts-filters.shifts-card {
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 16px;
+}
+
+.shifts-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+}
+
+@media (max-width: 992px) {
+    .shifts-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .shifts-summary-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
