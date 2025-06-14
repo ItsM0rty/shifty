@@ -485,3 +485,512 @@ body {
     }
 }
 
+/* Dashboard Grid Layout */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+}
+
+/* Section Headers */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.section-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Upcoming Shifts */
+.upcoming-shifts {
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    padding: 24px;
+    box-shadow: var(--card-shadow);
+}
+
+.shifts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.shift-item {
+    background-color: var(--bg-tertiary);
+    border-radius: var(--border-radius);
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.shift-date {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.shift-date .day {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.shift-date .time {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.shift-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.shift-details .role {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.shift-details .location {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* Recent Activity */
+.recent-activity {
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    padding: 24px;
+    box-shadow: var(--card-shadow);
+}
+
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.activity-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background-color: var(--bg-tertiary);
+    border-radius: var(--border-radius);
+}
+
+.activity-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.activity-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgba(126, 87, 194, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-color);
+}
+
+.activity-text p {
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.activity-time {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Shifts Section */
+.shifts-filters {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filter-group label {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.filter-select {
+    padding: 8px 12px;
+    border-radius: var(--border-radius);
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--bg-tertiary);
+    color: var(--text-primary);
+    font-size: 14px;
+    min-width: 160px;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+.shifts-calendar {
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.calendar-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.weekly-schedule {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 16px;
+}
+
+.schedule-day {
+    background-color: var(--bg-tertiary);
+    border-radius: var(--border-radius);
+    padding: 16px;
+    min-height: 160px;
+}
+
+.day-header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.day-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.day-date {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.shift-card {
+    background-color: rgba(126, 87, 194, 0.1);
+    border-radius: var(--border-radius);
+    padding: 12px;
+    border: 1px solid rgba(126, 87, 194, 0.2);
+}
+
+.shift-card.off-day {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.shift-time {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.shift-role {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.shift-location {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.off-day-text {
+    color: var(--text-secondary);
+    font-size: 14px;
+    text-align: center;
+    padding: 8px 0;
+}
+
+.shifts-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+}
+
+.summary-card {
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    padding: 24px;
+    box-shadow: var(--card-shadow);
+}
+
+.summary-card h3 {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+}
+
+.summary-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+}
+
+.summary-trend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--success-color);
+    font-size: 14px;
+}
+
+/* Responsive Design for Shifts Section */
+@media (max-width: 1200px) {
+    .weekly-schedule {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 992px) {
+    .weekly-schedule {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .weekly-schedule {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .shifts-filters {
+        flex-direction: column;
+    }
+    
+    .filter-select {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .weekly-schedule {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Team Section Styles */
+.team-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.stats-card {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stats-card h3 {
+    color: var(--text-secondary);
+    font-size: 0.9em;
+    margin-bottom: 8px;
+}
+
+.stats-value {
+    font-size: 2em;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+}
+
+.stats-trend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    font-size: 0.9em;
+}
+
+.team-filters {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    align-items: flex-end;
+}
+
+.search-box {
+    flex: 1;
+    position: relative;
+}
+
+.search-box svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 0.9em;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filter-group label {
+    color: var(--text-secondary);
+    font-size: 0.9em;
+}
+
+.filter-select {
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 0.9em;
+    min-width: 160px;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.team-member {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.member-avatar {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.member-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.status-indicator {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-secondary);
+}
+
+.status-indicator.online {
+    background: #4CAF50;
+}
+
+.status-indicator.available {
+    background: #2196F3;
+}
+
+.status-indicator.offline {
+    background: #9E9E9E;
+}
+
+.member-info h3 {
+    font-size: 1.2em;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.member-role {
+    color: var(--text-secondary);
+    font-size: 0.9em;
+    margin-bottom: 4px;
+}
+
+.member-status {
+    color: var(--accent-color);
+    font-size: 0.9em;
+}
+
+.member-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 0.9em;
+}
+
+@media (max-width: 768px) {
+    .team-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .team-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-select {
+        width: 100%;
+    }
+
+    .team-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
