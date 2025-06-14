@@ -41,13 +41,15 @@ body {
 }
 
 .dashboard-header h1 {
-    font-size: 28px;
-    font-weight: 600;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--accent-color);
+    letter-spacing: 0.03em;
 }
 
 .header-actions {
     display: flex;
-    gap: 16px;
+    gap: 20px;
     align-items: center;
 }
 
@@ -101,34 +103,39 @@ body {
 .dashboard-sidebar {
     background-color: var(--bg-secondary);
     border-radius: var(--border-radius);
-    padding: 24px 16px;
+    padding: 24px 20px;
     height: calc(100vh - 120px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 .sidebar-header {
-    padding-bottom: 16px;
-    margin-bottom: 16px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
     border-bottom: 1px solid var(--bg-tertiary);
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
 }
 
 .sidebar-header img {
-    width: 36px;
-    height: 36px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
+    border: 2px solid var(--accent-color);
+    box-shadow: 0 0 8px var(--accent-color);
+    object-fit: cover;
 }
 
 .sidebar-header h2 {
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
 }
 
 .sidebar-header p {
-    font-size: 12px;
-    color: var(--text-secondary);
-    margin-top: 2px;
+    font-size: 14px;
+    color: var(--accent-color);
+    margin-top: 4px;
 }
 
 .dashboard-sidebar nav ul {
@@ -142,30 +149,35 @@ body {
 .dashboard-sidebar nav a {
     display: flex;
     align-items: center;
-    padding: 12px 16px;
+    padding: 14px 20px;
     text-decoration: none;
     color: var(--text-secondary);
     border-radius: var(--border-radius);
-    transition: all 0.2s ease;
-    gap: 12px;
-    font-weight: 500;
-    font-size: 14px;
+    transition: all 0.3s ease;
+    gap: 14px;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.02em;
 }
 
 .dashboard-sidebar nav svg {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
+    stroke-width: 2.5;
 }
 
 .dashboard-sidebar nav a:hover,
 .dashboard-sidebar nav a.active {
     background-color: var(--bg-tertiary);
-    color: var(--text-primary);
+    color: var(--accent-color);
+    box-shadow: 0 0 10px var(--accent-color);
+    transform: translateX(4px);
 }
 
 .dashboard-sidebar nav a.active {
-    background-color: rgba(126, 87, 194, 0.2);
+    background-color: rgba(126, 87, 194, 0.25);
     color: var(--accent-color);
+    font-weight: 700;
 }
 
 .dashboard-main {
@@ -440,10 +452,12 @@ body {
 }
 
 .footer {
-    margin-top: 24px;
+    margin-top: 40px;
     text-align: center;
     color: var(--text-secondary);
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
 }
 
 /* Responsive */
@@ -997,53 +1011,59 @@ body {
 /* Dashboard Main Section Improvements */
 .dashboard-stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 24px;
-    margin-top: 32px;
-    margin-bottom: 32px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 28px;
+    margin-top: 40px;
+    margin-bottom: 40px;
 }
 
 .dashboard-main-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    gap: 28px;
 }
 
 .dashboard-card {
     background: var(--bg-secondary);
     border-radius: var(--border-radius);
-    box-shadow: var(--card-shadow);
-    padding: 32px 24px;
+    box-shadow: 0 8px 20px rgba(126, 87, 194, 0.3);
+    padding: 36px 28px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
+    transition: box-shadow 0.3s ease;
+}
+
+.dashboard-card:hover {
+    box-shadow: 0 12px 28px rgba(126, 87, 194, 0.5);
 }
 
 .dashboard-card h3 {
     color: var(--text-secondary);
-    font-size: 1.1em;
-    font-weight: 600;
-    margin-bottom: 8px;
+    font-size: 1.2em;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: 0.02em;
 }
 
 .dashboard-stat-value {
-    font-size: 2.5em;
-    font-weight: 700;
+    font-size: 3em;
+    font-weight: 800;
     color: var(--text-primary);
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 .dashboard-trend {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     color: var(--accent-color);
-    font-size: 1em;
+    font-size: 1.1em;
 }
 
 .dashboard-upcoming-shifts .shifts-list,
 .dashboard-recent-activity .activity-list {
-    margin-top: 16px;
+    margin-top: 20px;
 }
 
 @media (max-width: 992px) {
@@ -1143,4 +1163,3 @@ body {
         grid-template-columns: 1fr;
     }
 }
-
