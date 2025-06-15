@@ -7,239 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Dashboard</title>
     <link rel="stylesheet" href="{% static 'myapp/css/dashboard.css' %}">
-    <!-- Note: It's often better practice to place scripts at the end of the <body> tag -->
-    <!-- SCRIPT 1: Main Dashboard Navigation -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get all content sections
-            const sections = document.querySelectorAll('.content-section');
-            
-            function hideAllSections() {
-                sections.forEach(section => {
-                    section.classList.add('hidden-section');
-                    section.classList.remove('active-section');
-                });
-            }
-            
-            function showSection(sectionId) {
-                const targetSection = document.getElementById(sectionId);
-                if (targetSection) {
-                    hideAllSections();
-                    targetSection.classList.remove('hidden-section');
-                    targetSection.classList.add('active-section');
-                }
-            }
-            
-            // Show dashboard section by default
-            showSection('dashboard-section');
-            
-            // Set dashboard link as active by default
-            const dashboardLink = document.querySelector('[data-section="dashboard-section"]');
-            if (dashboardLink) {
-                dashboardLink.classList.add('active');
-            }
-
-            // Handle navigation clicks
-            document.addEventListener('click', function(e) {
-                const navLink = e.target.closest('.nav-link');
-                
-                if (navLink && navLink.hasAttribute('data-section')) {
-                    e.preventDefault();
-                    
-                    const targetSectionId = navLink.getAttribute('data-section');
-                    
-                    // Show target section
-                    showSection(targetSectionId);
-                    
-                    // Update active navigation state
-                    document.querySelectorAll('.nav-link').forEach(link => {
-                        link.classList.remove('active');
-                    });
-                    navLink.classList.add('active');
-                }
-            });
-        });
-    </script>
-    
-    <!-- SCRIPT 2: Calendar Logic -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const weekdaysContainer = document.getElementById('weekdays');
-            const calendarDaysContainer = document.getElementById('calendar-days');
-            const calendarMonthYear = document.getElementById('calendar-month-year');
-            const selectedCountElement = document.getElementById('selected-count');
-            const selectedDatesElement = document.getElementById('selected-dates');
-            const prevMonthButton = document.getElementById('prev-month');
-            const nextMonthButton = document.getElementById('next-month');
-            const submitButton = document.getElementById('submit-days-btn');
-
-            if (!calendarDaysContainer) return; // Exit if calendar elements aren't on the page
-
-            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            const today = new Date();
-            let currentMonth = today.getMonth();
-            let currentYear = today.getFullYear();
-
-            let selectedDates = [];
-            const submittedDatesByMonth = {}; 
-            const MAX_SELECTIONS = 5;
-
-            function generateCalendar(month, year) {
-                calendarDaysContainer.innerHTML = '';
-                calendarMonthYear.textContent = `${monthNames[month]} ${year}`;
-                
-                const firstDay = new Date(year, month, 1).getDay();
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
-                const monthKey = `${year}-${month+1}`;
-                
-                if (!submittedDatesByMonth[monthKey]) {
-                    submittedDatesByMonth[monthKey] = [];
-                }
-                
-                for (let i = 0; i < firstDay; i++) {
-                    const emptyDay = document.createElement('div');
-                    emptyDay.classList.add('calendar-day', 'disabled');
-                    calendarDaysContainer.appendChild(emptyDay);
-                }
-                
-                const currentDate = new Date();
-                currentDate.setHours(0, 0, 0, 0);
-                
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const cellDate = new Date(year, month, day);
-                    const dateString = `${year}-${month+1}-${day}`;
-                    const dayElement = document.createElement('div');
-                    dayElement.classList.add('calendar-day');
-                    dayElement.textContent = day;
-                    dayElement.dataset.date = dateString;
-                    
-                    if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
-                        dayElement.classList.add('today');
-                    }
-                    if (cellDate < currentDate) {
-                        dayElement.classList.add('past');
-                    }
-                    if (submittedDatesByMonth[monthKey].includes(dateString)) {
-                        dayElement.classList.add('submitted');
-                    } else if (selectedDates.includes(dateString)) {
-                        dayElement.classList.add('selected');
-                    }
-                    
-                    dayElement.addEventListener('click', function() {
-                        const date = this.dataset.date;
-                        if (cellDate < currentDate || this.classList.contains('past') || this.classList.contains('submitted')) {
-                            return;
-                        }
-                        
-                        if (this.classList.contains('selected')) {
-                            this.classList.remove('selected');
-                            const index = selectedDates.indexOf(date);
-                            if (index > -1) selectedDates.splice(index, 1);
-                        } else {
-                            const submittedCount = submittedDatesByMonth[monthKey].length;
-                            const selectedForCurrentMonth = selectedDates.filter(d => d.startsWith(`${year}-${month+1}`)).length;
-                            
-                            if (submittedCount + selectedForCurrentMonth < MAX_SELECTIONS) {
-                                this.classList.add('selected');
-                                selectedDates.push(date);
-                            } else {
-                                alert(`You can only select up to ${MAX_SELECTIONS} days off per month.`);
-                            }
-                        }
-                        updateSelectionInfo(monthKey);
-                    });
-                    
-                    calendarDaysContainer.appendChild(dayElement);
-                }
-            }
-            
-            function updateSelectionInfo(monthKey) {
-                const selectedForCurrentMonth = selectedDates.filter(d => d.startsWith(monthKey));
-                const [year, monthNum] = monthKey.split('-');
-                const monthName = monthNames[parseInt(monthNum) - 1];
-                const monthYearText = `${monthName} ${year}`;
-                
-                const hasSubmittedDates = submittedDatesByMonth[monthKey] && submittedDatesByMonth[monthKey].length > 0;
-                
-                if (hasSubmittedDates) {
-                    selectedCountElement.textContent = submittedDatesByMonth[monthKey].length;
-                    selectedDatesElement.textContent = `You have already submitted ${submittedDatesByMonth[monthKey].length} day(s) off for ${monthYearText}.`;
-                    submitButton.style.display = 'none';
-                } else {
-                    selectedCountElement.textContent = selectedForCurrentMonth.length;
-                    if (selectedForCurrentMonth.length > 0) {
-                        const formattedDates = selectedForCurrentMonth.map(dateStr => {
-                            const [y, m, d] = dateStr.split('-');
-                            const date = new Date(y, m-1, d);
-                            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-                        });
-                        selectedDatesElement.textContent = `Selected dates: ${formattedDates.join(', ')}`;
-                    } else {
-                        selectedDatesElement.textContent = 'No dates selected yet.';
-                    }
-                    submitButton.style.display = 'block';
-                }
-                submitButton.disabled = selectedForCurrentMonth.length === 0 && !hasSubmittedDates;
-            }
-
-            // *** FIXED: Consolidated event listeners to avoid duplicates ***
-            prevMonthButton.addEventListener('click', function() {
-                const today = new Date();
-                const currentMonthDate = new Date(today.getFullYear(), today.getMonth());
-                const targetDate = new Date(currentYear, currentMonth - 1);
-                
-                if (targetDate >= currentMonthDate) {
-                    currentMonth--;
-                    if (currentMonth < 0) {
-                        currentMonth = 11;
-                        currentYear--;
-                    }
-                    generateCalendar(currentMonth, currentYear);
-                    updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
-                }
-            });
-            
-            nextMonthButton.addEventListener('click', function() {
-                currentMonth++;
-                if (currentMonth > 11) {
-                    currentMonth = 0;
-                    currentYear++;
-                }
-                generateCalendar(currentMonth, currentYear);
-                updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
-            });
-            
-            submitButton.addEventListener('click', function() {
-                const monthKey = `${currentYear}-${currentMonth+1}`;
-                const selectedForCurrentMonth = selectedDates.filter(d => d.startsWith(monthKey));
-                
-                if (selectedForCurrentMonth.length === 0) {
-                    alert('Please select at least one day off before submitting.');
-                    return;
-                }
-                
-                if (!submittedDatesByMonth[monthKey]) {
-                    submittedDatesByMonth[monthKey] = [];
-                }
-                
-                selectedForCurrentMonth.forEach(date => {
-                    submittedDatesByMonth[monthKey].push(date);
-                    const index = selectedDates.indexOf(date);
-                    if (index > -1) selectedDates.splice(index, 1);
-                });
-                
-                generateCalendar(currentMonth, currentYear);
-                updateSelectionInfo(monthKey);
-                
-                const monthName = monthNames[currentMonth];
-                alert(`Successfully submitted ${selectedForCurrentMonth.length} day(s) off for ${monthName} ${currentYear}.`);
-            });
-
-            // Initialize
-            generateCalendar(currentMonth, currentYear);
-            updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
-        });
-    </script>
 </head>
 <body>
     <div class="dashboard-container">
@@ -304,19 +71,245 @@
             </aside>
 
             <!-- Main Content Sections -->
-            <!-- All content sections are now styled correctly by the external CSS -->
             <div id="dashboard-section" class="content-section">
-                <!-- ... content from original file ... -->
+                <div class="main-header">
+                    <h2>Welcome, {{ user.get_full_name }}</h2>
+                    <p class="subtitle">Here's your schedule overview</p>
+                </div>
+
+                <div class="stats-cards">
+                    <div class="card">
+                        <h3>Upcoming Shifts</h3>
+                        <p class="stat-number">3</p>
+                        <div class="trend">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                            Next shift: Tomorrow
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Hours This Week</h3>
+                        <p class="stat-number">24</p>
+                        <div class="trend">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                            8 hours remaining
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Time Off Balance</h3>
+                        <p class="stat-number">12</p>
+                        <div class="trend">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                            Days remaining
+                        </div>
+                    </div>
+                </div>
+
+                <div class="upcoming-shifts">
+                    <h3>Upcoming Shifts</h3>
+                    <div class="shift-list">
+                        <div class="shift-card">
+                            <div class="shift-date">
+                                <span class="day">Tomorrow</span>
+                                <span class="time">9:00 AM - 5:00 PM</span>
+                            </div>
+                            <div class="shift-details">
+                                <span class="location">Main Store</span>
+                                <span class="role">Sales Associate</span>
+                            </div>
+                        </div>
+                        <div class="shift-card">
+                            <div class="shift-date">
+                                <span class="day">Thursday</span>
+                                <span class="time">12:00 PM - 8:00 PM</span>
+                            </div>
+                            <div class="shift-details">
+                                <span class="location">Main Store</span>
+                                <span class="role">Sales Associate</span>
+                            </div>
+                        </div>
+                        <div class="shift-card">
+                            <div class="shift-date">
+                                <span class="day">Saturday</span>
+                                <span class="time">10:00 AM - 6:00 PM</span>
+                            </div>
+                            <div class="shift-details">
+                                <span class="location">Main Store</span>
+                                <span class="role">Sales Associate</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
             <div id="shifts-section" class="content-section hidden-section">
-                <!-- ... content from original file ... -->
+                <div class="main-header">
+                    <h2>My Shifts</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" id="request-time-off">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            Request Time Off
+                        </button>
+                    </div>
+                </div>
+
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button id="prev-month" class="btn btn-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                        </button>
+                        <h3 id="calendar-month-year">April 2024</h3>
+                        <button id="next-month" class="btn btn-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="calendar-grid">
+                        <div id="weekdays" class="weekdays">
+                            <div>Sun</div>
+                            <div>Mon</div>
+                            <div>Tue</div>
+                            <div>Wed</div>
+                            <div>Thu</div>
+                            <div>Fri</div>
+                            <div>Sat</div>
+                        </div>
+                        <div id="calendar-days" class="calendar-days"></div>
+                    </div>
+
+                    <div class="calendar-footer">
+                        <div class="selection-info">
+                            <p>Selected days: <span id="selected-count">0</span></p>
+                            <p id="selected-dates">No dates selected yet.</p>
+                        </div>
+                        <button id="submit-days-btn" class="btn btn-primary" disabled>Submit Time Off Request</button>
+                    </div>
+                </div>
             </div>
+
             <div id="team-section" class="content-section hidden-section">
-                <!-- ... content from original file ... -->
+                <div class="main-header">
+                    <h2>My Team</h2>
+                </div>
+
+                <div class="team-grid">
+                    <div class="team-member-card">
+                        <img src="https://i.pravatar.cc/150?u=john.doe" alt="John Doe">
+                        <div class="member-info">
+                            <h3>John Doe</h3>
+                            <p>Store Manager</p>
+                            <div class="member-contact">
+                                <a href="mailto:john.doe@example.com" class="btn btn-icon btn-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                        <polyline points="22,6 12,13 2,6"></polyline>
+                                    </svg>
+                                </a>
+                                <a href="tel:+1234567890" class="btn btn-icon btn-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="team-member-card">
+                        <img src="https://i.pravatar.cc/150?u=jane.smith" alt="Jane Smith">
+                        <div class="member-info">
+                            <h3>Jane Smith</h3>
+                            <p>Assistant Manager</p>
+                            <div class="member-contact">
+                                <a href="mailto:jane.smith@example.com" class="btn btn-icon btn-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                        <polyline points="22,6 12,13 2,6"></polyline>
+                                    </svg>
+                                </a>
+                                <a href="tel:+1234567891" class="btn btn-icon btn-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
             <div id="notes-section" class="content-section hidden-section">
-                <!-- THE INLINE <style> TAG HAS BEEN REMOVED FROM HERE -->
-                <!-- ... content from original file ... -->
+                <div class="main-header">
+                    <h2>My Notes</h2>
+                    <button class="btn btn-primary" id="add-note-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Note
+                    </button>
+                </div>
+
+                <div class="notes-container">
+                    <div class="note-card">
+                        <div class="note-header">
+                            <h3>Important Meeting Notes</h3>
+                            <span class="note-date">April 15, 2024</span>
+                        </div>
+                        <p class="note-content">Remember to prepare the quarterly sales report for the team meeting next week. Include performance metrics and customer feedback.</p>
+                        <div class="note-actions">
+                            <button class="btn btn-icon btn-sm edit-note">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                            </button>
+                            <button class="btn btn-icon btn-sm delete-note">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="note-card">
+                        <div class="note-header">
+                            <h3>Training Schedule</h3>
+                            <span class="note-date">April 10, 2024</span>
+                        </div>
+                        <p class="note-content">Complete the new POS system training by the end of the month. Schedule practice sessions with the team.</p>
+                        <div class="note-actions">
+                            <button class="btn btn-icon btn-sm edit-note">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                            </button>
+                            <button class="btn btn-icon btn-sm delete-note">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
             {% include 'myapp/db_settings.html' %}
         </div>
@@ -325,5 +318,7 @@
             <p>© 2025 Shifty Solutions. All rights reserved.</p>
         </div>
     </div>
+
+    <script src="{% static 'myapp/js/dashboard.js' %}"></script>
 </body>
 </html>
