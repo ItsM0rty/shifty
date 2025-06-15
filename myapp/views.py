@@ -85,7 +85,7 @@ def login_view(request):
     return render(request, 'myapp/login.html')
 
 
-@login_required(login_url='/login')
+# @login_required(login_url='/login')
 def dashboard(request):
     """
     User dashboard view.
@@ -161,7 +161,7 @@ def dashboard(request):
 
 from django.contrib.auth.decorators import login_required
 
-@login_required(login_url='/login')
+# @login_required(login_url='/login')
 def admin_dashboard(request):
     """
     Admin dashboard view.
