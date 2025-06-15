@@ -85,19 +85,18 @@ def login_view(request):
     return render(request, 'myapp/login.html')
 
 
-@login_required(login_url='/login')  # Fixed: Added login_url parameter
+@login_required(login_url='/login')
 def dashboard(request):
     """
     User dashboard view.
     """
     logger.debug("Dashboard view accessed")
-    
     try:
         # Log user information
         logger.debug(f"User authenticated: {request.user.is_authenticated}")
         logger.debug(f"User ID: {request.user.id}")
         logger.debug(f"User email: {request.user.email}")
-        
+
         # Test database connection
         logger.debug("Testing database connection...")
         try:
@@ -108,38 +107,55 @@ def dashboard(request):
             logger.error(f"DB error type: {type(db_err).__name__}")
             messages.error(request, "Database connection issue. Please try again later.")
             return render(request, 'myapp/error.html', {'error': 'Database connection failed'}, status=500)
-        
-        # Test user object access
-        logger.debug("Testing user object access...")
-        user_data = {
-            'id': request.user.id,
-            'email': request.user.email,
-            'first_name': getattr(request.user, 'first_name', 'N/A'),
-            'last_name': getattr(request.user, 'last_name', 'N/A'),
-            'is_staff': request.user.is_staff,
-        }
-        logger.debug(f"User data: {user_data}")
-        
-        # Test template context
+
+        # Provide all required context variables with sample data
         context = {
-            'user': request.user
+            'user': request.user,
+            'remaining_shifts': 3,
+            'next_shift_time': 'Friday, 9:00 AM',
+            'hours_this_week': 24,
+            'hours_trend': '+2 from last week',
+            'manager_note': 'Great job this week!',
+            'note_timestamp': '2024-06-01 10:00',
+            'recent_activities': [
+                {'icon': '<i class="fas fa-check-circle"></i>', 'text': 'Completed shift on Monday', 'time': '2 days ago'},
+                {'icon': '<i class="fas fa-calendar-plus"></i>', 'text': 'Requested day off', 'time': '1 day ago'},
+            ],
+            'shifts_this_week': 5,
+            'total_hours': 40,
+            'next_shift_day': 'Friday',
+            'shift_status': 'On Track',
+            'shift_status_detail': 'No issues',
+            'upcoming_shifts': [
+                {'title': 'Morning Shift', 'role': 'Barista', 'day': 'Friday', 'time': '9:00 AM - 1:00 PM'},
+                {'title': 'Evening Shift', 'role': 'Barista', 'day': 'Saturday', 'time': '4:00 PM - 8:00 PM'},
+            ],
+            'team_size': 8,
+            'on_shift_today': 3,
+            'manager_name': 'Alex Smith',
+            'team_members': [
+                {'name': 'Jane Doe', 'role': 'Barista', 'status': 'On Shift', 'schedule': '9:00 AM - 1:00 PM'},
+                {'name': 'John Roe', 'role': 'Cashier', 'status': 'Off', 'schedule': 'None'},
+            ],
+            'new_notes_count': 1,
+            'notes': [
+                {'date': '2024-06-01', 'notes': [
+                    {'icon': '<i class="fas fa-exclamation"></i>', 'priority': 'urgent', 'time': '09:00', 'content': 'Remember to check inventory.'},
+                    {'icon': '<i class="fas fa-info-circle"></i>', 'priority': 'important', 'time': '10:00', 'content': 'Team meeting at 2 PM.'},
+                ]}
+            ],
+            'days': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+            'time_slots': ['Morning', 'Afternoon', 'Evening'],
         }
         logger.debug("Context prepared successfully")
-        
-        # Attempt to render template
-        logger.debug("Attempting to render dashboard template...")
         response = render(request, 'myapp/dashboard.html', context)
         logger.debug("Dashboard template rendered successfully")
-        
         return response
-        
     except Exception as e:
         logger.error(f"Error in dashboard view: {str(e)}")
         logger.error(f"Error type: {type(e).__name__}")
         import traceback
         logger.error(f"Full traceback: {traceback.format_exc()}")
-        
-        # Return user-friendly error page
         return render(request, 'myapp/error.html', {'error': str(e)}, status=500)
 
 

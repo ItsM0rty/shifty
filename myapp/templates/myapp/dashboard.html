@@ -7,19 +7,525 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Dashboard</title>
     <link rel="stylesheet" href="{% static 'myapp/css/dashboard.css' %}">
+
+    <style>
+        :root {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --bg-tertiary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --accent-color: #7e57c2;
+            --accent-hover: #9575cd;
+            --danger-color: #f44336;
+            --success-color: #4caf50;
+            --border-radius: 12px;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 24px;
+        }
+
+        .dashboard-sidebar {
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 24px 16px;
+            height: calc(100vh - 120px);
+        }
+
+        .dashboard-sidebar nav ul {
+            list-style: none;
+        }
+
+        .dashboard-sidebar nav li {
+            margin-bottom: 4px;
+        }
+
+        .dashboard-sidebar nav a {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            border-radius: var(--border-radius);
+            transition: all 0.2s ease;
+            gap: 12px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .dashboard-sidebar nav svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .dashboard-sidebar nav a:hover,
+        .dashboard-sidebar nav a.active {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .dashboard-sidebar nav a.active {
+            background-color: rgba(126, 87, 194, 0.2);
+            color: var(--accent-color);
+        }
+
+        .dashboard-main {
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 24px;
+        }
+
+        /* CRITICAL: These classes were missing in your CSS */
+        .content-section {
+            display: block;
+        }
+
+        .hidden-section {
+            display: none !important;
+        }
+
+        .active-section {
+            display: block !important;
+        }
+
+        /* Demo content styling */
+        .section-content {
+            padding: 20px;
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            
+        }
+
+        .debug-info {
+            background-color: rgba(76, 175, 80, 0.1);
+            border: 1px solid var(--success-color);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+    </style>
+
+
+
+    <!-- Navbar -->
+    <script>
+        // Enhanced debug logging
+        console.log('🚀 Dashboard navigation script loaded');
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📋 DOM loaded, initializing dashboard navigation');
+            
+            // Get all content sections
+            const sections = document.querySelectorAll('.content-section');
+            console.log('📦 Found sections:', sections.length, Array.from(sections).map(s => s.id));
+            
+            // Function to hide all sections
+            function hideAllSections() {
+                sections.forEach(section => {
+                    section.classList.add('hidden-section');
+                    section.classList.remove('active-section');
+                    console.log('🔒 Hiding section:', section.id);
+                });
+            }
+            
+            // Function to show specific section
+            function showSection(sectionId) {
+                const targetSection = document.getElementById(sectionId);
+                if (targetSection) {
+                    hideAllSections();
+                    targetSection.classList.remove('hidden-section');
+                    targetSection.classList.add('active-section');
+                    console.log('🔓 Showing section:', sectionId);
+                } else {
+                    console.error('❌ Section not found:', sectionId);
+                }
+            }
+            
+            // Show dashboard section by default
+            showSection('dashboard-section');
+            
+            // Set dashboard link as active by default
+            const dashboardLink = document.querySelector('[data-section="dashboard-section"]');
+            if (dashboardLink) {
+                dashboardLink.classList.add('active');
+                console.log('✅ Dashboard link set as active');
+            }
+        });
+
+        // Handle navigation clicks
+        document.addEventListener('click', function(e) {
+            const navLink = e.target.closest('.nav-link');
+            
+            if (navLink && navLink.hasAttribute('data-section')) {
+                console.log('🖱️ Nav link clicked');
+                e.preventDefault();
+                
+                const targetSectionId = navLink.getAttribute('data-section');
+                console.log('🎯 Target section:', targetSectionId);
+                
+                // Hide all sections
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.add('hidden-section');
+                    section.classList.remove('active-section');
+                });
+                
+                // Show target section
+                const sectionToShow = document.getElementById(targetSectionId);
+                if (sectionToShow) {
+                    sectionToShow.classList.remove('hidden-section');
+                    sectionToShow.classList.add('active-section');
+                    console.log('✅ Successfully showing section:', targetSectionId);
+                } else {
+                    console.error('❌ Target section not found:', targetSectionId);
+                }
+                
+                // Update active navigation state
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                navLink.classList.add('active');
+                console.log('🎨 Updated active nav state');
+            }
+        });
+    </script>
+    
+    <script>
+
+
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                    'July', 'August', 'September', 'October', 'November', 'December'];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const weekdaysContainer = document.getElementById('weekdays');
+            const calendarDaysContainer = document.getElementById('calendar-days');
+            const calendarMonthYear = document.getElementById('calendar-month-year');
+            const selectedCountElement = document.getElementById('selected-count');
+            const selectedDatesElement = document.getElementById('selected-dates');
+            const prevMonthButton = document.getElementById('prev-month');
+            const nextMonthButton = document.getElementById('next-month');
+
+            // Current date
+            const today = new Date();
+            let currentMonth = today.getMonth();
+            let currentYear = today.getFullYear();
+
+
+
+            // Generate calendar
+            let selectedDates = [];
+const submittedDatesByMonth = {}; // Store submitted dates by month key
+const MAX_SELECTIONS = 5;
+
+// Replace the generateCalendar function with:
+function generateCalendar(month, year) {
+    // Clear previous calendar days
+    calendarDaysContainer.innerHTML = '';
+    
+    // Update month/year display
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    calendarMonthYear.textContent = `${monthNames[month]} ${year}`;
+    
+    // Get first day of the month
+    const firstDay = new Date(year, month, 1).getDay();
+    
+    // Get number of days in month
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    
+    // Create a monthly key for tracking
+    const monthKey = `${year}-${month+1}`;
+    
+    // Initialize if not exists
+    if (!submittedDatesByMonth[monthKey]) {
+        submittedDatesByMonth[monthKey] = [];
+    }
+    
+    // Create empty cells for days before the first day of month
+    for (let i = 0; i < firstDay; i++) {
+        const emptyDay = document.createElement('div');
+        emptyDay.classList.add('calendar-day', 'disabled');
+        calendarDaysContainer.appendChild(emptyDay);
+    }
+    
+    // Current date for comparison
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    
+    // Create cells for days in month
+    for (let day = 1; day <= daysInMonth; day++) {
+        const cellDate = new Date(year, month, day);
+        const dateString = `${year}-${month+1}-${day}`;
+        const dayElement = document.createElement('div');
+        dayElement.classList.add('calendar-day');
+        dayElement.textContent = day;
+        dayElement.dataset.date = dateString;
+        
+        // Check if day is today
+        if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+            dayElement.classList.add('today');
+        }
+        
+        // Mark past days
+        if (cellDate < currentDate) {
+            dayElement.classList.add('past');
+        }
+        
+        // Check if day is in submitted dates for this month
+        if (submittedDatesByMonth[monthKey].includes(dateString)) {
+            dayElement.classList.add('submitted');
+        } 
+        // Check if day is selected
+        else if (selectedDates.includes(dateString)) {
+            dayElement.classList.add('selected');
+        }
+        
+        // Add click event only for future dates
+        dayElement.addEventListener('click', function() {
+            const date = this.dataset.date;
+            const cellDate = new Date(year, month, day);
+            
+            // Skip if past date
+            if (cellDate < currentDate || this.classList.contains('past')) {
+                return;
+            }
+            
+            // Handle already submitted dates - can't unselect them
+            if (this.classList.contains('submitted')) {
+                return;
+            }
+            
+            if (this.classList.contains('selected')) {
+                // Remove selection
+                this.classList.remove('selected');
+                const index = selectedDates.indexOf(date);
+                if (index > -1) {
+                    selectedDates.splice(index, 1);
+                }
+            } else {
+                // Get count of already submitted days for this month
+                const submittedCount = submittedDatesByMonth[monthKey].length;
+                // Count selected dates for current month only
+                const selectedForCurrentMonth = selectedDates.filter(d => d.startsWith(`${year}-${month+1}`)).length;
+                
+                // Add selection if limit not reached for this month
+                if (submittedCount + selectedForCurrentMonth < MAX_SELECTIONS) {
+                    this.classList.add('selected');
+                    selectedDates.push(date);
+                } else {
+                    // Show alert or visual feedback that max selections reached
+                    alert(`You can only select up to ${MAX_SELECTIONS} days off per month.`);
+                }
+            }
+            
+            // Update selection info
+            updateSelectionInfo(monthKey);
+        });
+        
+        calendarDaysContainer.appendChild(dayElement);
+    }
+}
+            
+function updateSelectionInfo(monthKey) {
+    // Filter selected dates for current month
+    const selectedForCurrentMonth = selectedDates.filter(d => {
+        const [year, month] = d.split('-');
+        return `${year}-${month}` === monthKey;
+    });
+    
+    const [year, monthNum] = monthKey.split('-');
+    const monthName = monthNames[parseInt(monthNum) - 1];
+    const monthYearText = `${monthName} ${year}`;
+    
+    // Check if there are already submitted dates for this month
+    const hasSubmittedDates = submittedDatesByMonth[monthKey] && 
+                             submittedDatesByMonth[monthKey].length > 0;
+    
+    if (hasSubmittedDates) {
+        // Show submitted info
+        selectedCountElement.textContent = submittedDatesByMonth[monthKey].length;
+        selectedDatesElement.textContent = `You have already submitted ${submittedDatesByMonth[monthKey].length} day(s) off for ${monthYearText}.`;
+        
+        // Hide or disable the submit button
+        submitButton.style.display = 'none';
+    } else {
+        // Show selection info
+        selectedCountElement.textContent = selectedForCurrentMonth.length;
+        
+        if (selectedForCurrentMonth.length > 0) {
+            // Format dates without weekday
+            const formattedDates = selectedForCurrentMonth.map(dateStr => {
+                const [year, month, day] = dateStr.split('-');
+                const date = new Date(year, month-1, day);
+                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            });
+            
+            selectedDatesElement.textContent = `Selected dates: ${formattedDates.join(', ')}`;
+        } else {
+            selectedDatesElement.textContent = 'No dates selected yet.';
+        }
+        
+        // Show the submit button
+        submitButton.style.display = 'block';
+    }
+    
+    // Update button state
+    submitButton.disabled = selectedForCurrentMonth.length === 0;
+}
+
+
+            
+            // Disable previous month navigation, only allow current month and future
+            prevMonthButton.addEventListener('click', function() {
+                // Check if we're not already at the current month
+                const today = new Date();
+                const currentMonthDate = new Date(today.getFullYear(), today.getMonth());
+                const targetDate = new Date(currentYear, currentMonth - 1);
+                
+                // Only allow if target date is not before the current month
+                if (targetDate >= currentMonthDate) {
+                    currentMonth--;
+                    if (currentMonth < 0) {
+                        currentMonth = 11;
+                        currentYear--;
+                    }
+                    generateCalendar(currentMonth, currentYear);
+                }
+            });
+            
+            // Navigate to next month
+            nextMonthButton.addEventListener('click', function() {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                generateCalendar(currentMonth, currentYear);
+            });
+            
+            // Submit button event handler
+            const submitButton = document.getElementById('submit-days-btn');
+            submitButton.addEventListener('click', function() {
+    const monthKey = `${currentYear}-${currentMonth+1}`;
+    
+    // Filter selected dates for current month
+    const selectedForCurrentMonth = selectedDates.filter(d => {
+        const [year, month] = d.split('-');
+        return `${year}-${month}` === monthKey;
+    });
+    
+    if (selectedForCurrentMonth.length === 0) {
+        alert('Please select at least one day off before submitting.');
+        return;
+    }
+    
+    // Copy selected dates to submitted dates for this month
+    if (!submittedDatesByMonth[monthKey]) {
+        submittedDatesByMonth[monthKey] = [];
+    }
+    
+    // Add selected dates to submitted for this month
+    selectedForCurrentMonth.forEach(date => {
+        submittedDatesByMonth[monthKey].push(date);
+        // Remove from selectedDates
+        const index = selectedDates.indexOf(date);
+        if (index > -1) {
+            selectedDates.splice(index, 1);
+        }
+    });
+    
+    // Regenerate calendar to show submitted days
+    generateCalendar(currentMonth, currentYear);
+    
+    // Update info text with monthName and year in the message
+    updateSelectionInfo(monthKey);
+    
+    // Show success message with month name
+    const monthName = monthNames[currentMonth];
+    alert(`Successfully submitted ${selectedForCurrentMonth.length} day(s) off for ${monthName} ${currentYear}.`);
+});
+
+// Prev month button
+prevMonthButton.addEventListener('click', function() {
+    // Check if we're not already at the current month
+    const today = new Date();
+    const currentMonthDate = new Date(today.getFullYear(), today.getMonth());
+    const targetDate = new Date(currentYear, currentMonth - 1);
+    
+    // Only allow if target date is not before the current month
+    if (targetDate >= currentMonthDate) {
+        currentMonth--;
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
+        generateCalendar(currentMonth, currentYear);
+        updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
+    }
+});
+
+// Next month button
+nextMonthButton.addEventListener('click', function() {
+    currentMonth++;
+    if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+    }
+    generateCalendar(currentMonth, currentYear);
+    updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
+});
+
+
+// Initialize calendar with current month
+generateCalendar(currentMonth, currentYear);
+updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
+
+
+
+
+        });
+    </script>
+
 </head>
+
+
+
 <body>
     <div class="dashboard-container">
         <header class="dashboard-header">
             <h1>Employee Dashboard</h1>
             <div class="header-actions">
-                <a href="{% url 'myapp:logout' %}" class="btn btn-danger">
+                <a href="#" class="btn btn-danger">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                         <polyline points="16 17 21 12 16 7"></polyline>
                         <line x1="21" y1="12" x2="9" y2="12"></line>
                     </svg>
-                    <span>Logout</span>
+                    Logout
                 </a>
             </div>
         </header>
@@ -28,35 +534,63 @@
             <!-- Sidebar -->
             <aside class="dashboard-sidebar">
                 <div class="sidebar-header">
-                    <img src="https://i.pravatar.cc/100?u={{ user.username }}" alt="User Avatar">
+                    <img src="/api/placeholder/100/100" alt="User Avatar">
                     <div>
-                        <h2>{{ user.get_full_name }}</h2>
-                        <p>{{ user.position|default:'Employee' }}</p>
+                        <h2>Suyash Bhattarai</h2>
+                        <p>Junior Barista</p>
                     </div>
                 </div>
                 <nav>
                     <ul>
                         <li>
                             <a href="#" class="nav-link" data-section="dashboard-section">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
                                 Dashboard
                             </a>
                         </li>
                         <li>
                             <a href="#" class="nav-link" data-section="shifts-section">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
                                 Shifts
                             </a>
                         </li>
                         <li>
+                            <a href="#" class="nav-link" data-section="team-section">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                Team
+                            </a>
+                        </li>
+                        <li>
                             <a href="#" class="nav-link" data-section="notes-section">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
                                 Notes
                             </a>
                         </li>
                         <li>
                             <a href="#" class="nav-link" data-section="settings-section">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                                </svg>
                                 Settings
                             </a>
                         </li>
@@ -64,241 +598,796 @@
                 </nav>
             </aside>
 
-            <!-- Main Content Sections -->
-            <main id="dashboard-section" class="content-section" aria-label="Employee Dashboard">
-                <header class="main-header">
-                    <div class="main-header-info">
-                        <h2>Welcome, {{ user.get_full_name }}</h2>
-                        <p class="subtitle">Here's your schedule overview</p>
+            <!-- Main Content -->
+        <div id="dashboard-section" class="content-section">
+        <div class="settings-header">
+            <h2>Welcome back, Suyash!</h2>
+        </div>
+
+
+        
+
+   <div class="stats-cards">
+       <div class="card">
+           <h3>Remaining Shifts This Week</h3>
+           <p>3</p>
+           <div class="trend">
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                   <polyline points="18 15 12 9 6 15"></polyline>
+               </svg>
+               Next: Monday, 9:00 AM
+           </div>
+       </div>
+       <div class="card">
+           <h3>Hours This Week</h3>
+           <p>24</p>
+           <div class="trend">
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                   <polyline points="18 15 12 9 6 15"></polyline>
+               </svg>
+               +2 from last week
+           </div>
+       </div>
+       <div class="card">
+           <h3>Manager's Notes</h3>
+           <p class="manager-note">The ice cream machine is broken, please don't try using it</p>
+           <div class="trend note-timestamp">
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                   <circle cx="12" cy="12" r="10"></circle>
+                   <polyline points="12 6 12 12 16 14"></polyline>
+               </svg>
+               Posted: May 1, 2025 5:00 PM
+           </div>
+       </div>
+   </div>
+
+   <div class="calendar">
+       <div class="calendar-header">
+           <div class="calendar-title">Select Days Off (5 max)</div>
+           <div class="calendar-nav">
+               <button id="prev-month">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                       <polyline points="15 18 9 12 15 6"></polyline>
+                   </svg>
+               </button>
+               <button id="next-month">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                       <polyline points="9 18 15 12 9 6"></polyline>
+                   </svg>
+               </button>
+           </div>
+       </div>
+
+       <div id="calendar-month-year" class="calendar-title" style="margin-bottom: 16px; font-weight: 600; color: var(--accent-color);"></div>
+
+       <div class="calendar-grid" id="weekdays">
+           <!-- Weekday headers filled by JavaScript -->
+       </div>
+       <div class="calendar-grid" id="calendar-days">
+           <!-- Calendar days filled by JavaScript -->
+       </div>
+
+       <div class="calendar-info" id="selection-info">
+           <p>You have selected <span id="selected-count">0</span> day(s) off. You can select up to 5 days.</p>
+           <p id="selected-dates"></p>
+       </div>
+       
+       <div class="submit-btn-container">
+           <button id="submit-days-btn" class="btn btn-primary">
+               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                   <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                   <polyline points="22 4 12 14.01 9 11.01"></polyline>
+               </svg>
+               Submit Days Off
+           </button>
+       </div>
+   </div>
+
+   <div class="recent-activity">
+       <h2>Recent Activity</h2>
+       <div class="activity-item">
+           <div class="activity-content">
+               <div class="activity-icon">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                       <polyline points="14 2 14 8 20 8"></polyline>
+                       <line x1="16" y1="13" x2="8" y2="13"></line>
+                       <line x1="16" y1="17" x2="8" y2="17"></line>
+                       <polyline points="10 9 9 9 8 9"></polyline>
+                   </svg>
+               </div>
+               <div class="activity-text">
+                   <p>Shift swap approved with Charles Freidenreich</p>
+               </div>
+           </div>
+           <div class="activity-time">Today, 10:30 AM</div>
+       </div>
+       <div class="activity-item">
+           <div class="activity-content">
+               <div class="activity-icon">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                       <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                       <line x1="16" y1="2" x2="16" y2="6"></line>
+                       <line x1="8" y1="2" x2="8" y2="6"></line>
+                       <line x1="3" y1="10" x2="21" y2="10"></line>
+                   </svg>
+               </div>
+               <div class="activity-text">
+                   <p>New schedule published for next month</p>
+               </div>
+           </div>
+           <div class="activity-time">Yesterday</div>
+       </div>
+       <div class="activity-item">
+           <div class="activity-content">
+               <div class="activity-icon">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                       <circle cx="9" cy="7" r="4"></circle>
+                       <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                       <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                   </svg>
+               </div>
+               <div class="activity-text">
+                   <p>Time-off request submitted and pending approval</p>
+               </div>
+           </div>
+           <div class="activity-time">2 days ago</div>
+       </div>
+   </div>
+   
+
+</div>
+
+
+                <!-- Shifts Section -->
+                <div id="shifts-section" class="content-section">
+                    <div class="settings-header">
+                        <h2>Your Shifts</h2>
                     </div>
-                    <div class="main-header-actions">
-                        <button class="btn btn-primary" title="Request Time Off">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                            Request Time Off
-                        </button>
-                        <button class="btn btn-secondary" title="View Full Schedule">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                            View Schedule
-                        </button>
+
+                    <div class="stats-cards">
+                        <div class="card">
+                            <h3>This Week</h3>
+                            <p>5 shifts</p>
+                            <div class="trend">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                32 hours total
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Next Shift</h3>
+                            <p>Tomorrow</p>
+                            <div class="trend">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                9:00 AM - 5:00 PM
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Status</h3>
+                            <p>All Confirmed</p>
+                            <div class="trend">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                                No conflicts
+                            </div>
+                        </div>
                     </div>
-                </header>
 
-                <section class="stats-cards" aria-label="Quick Stats">
-                    <article class="card stat-card" tabindex="0" aria-label="Upcoming Shifts">
-                        <div class="stat-icon" aria-hidden="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect></svg>
-                        </div>
-                        <div class="stat-content">
-                            <h3>Upcoming Shifts</h3>
-                            <p class="stat-number">3</p>
-                            <div class="trend" title="Next shift">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                                Next shift: Tomorrow
+                    <div class="recent-activity">
+                        <h2>Upcoming Shifts</h2>
+                        
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <div class="activity-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="activity-text">
+                                    <p><strong>Morning Shift</strong></p>
+                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Counter Service</p>
+                                </div>
+                            </div>
+                            <div class="activity-time" style="text-align: right; min-width: 140px;">
+                                <div>Tomorrow</div>
+                                <div style="color: var(--text-secondary); font-size: 0.9em;">9:00 AM - 5:00 PM</div>
                             </div>
                         </div>
-                    </article>
-                    <article class="card stat-card" tabindex="0" aria-label="Hours This Week">
-                        <div class="stat-icon" aria-hidden="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"></path><circle cx="12" cy="12" r="10"></circle></svg>
-                        </div>
-                        <div class="stat-content">
-                            <h3>Hours This Week</h3>
-                            <p class="stat-number">24</p>
-                            <div class="trend" title="Hours remaining">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                                8 hours remaining
-                            </div>
-                        </div>
-                    </article>
-                    <article class="card stat-card" tabindex="0" aria-label="Time Off Balance">
-                        <div class="stat-icon" aria-hidden="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" stroke="#f472b6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3H12"></path><polyline points="22 12 12 12 12 2"></polyline></svg>
-                        </div>
-                        <div class="stat-content">
-                            <h3>Time Off Balance</h3>
-                            <p class="stat-number">12</p>
-                            <div class="trend" title="Days remaining">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                                Days remaining
-                            </div>
-                        </div>
-                    </article>
-                </section>
 
-                <section class="upcoming-shifts" aria-label="Upcoming Shifts">
-                    <div class="section-header">
-                        <h3>Upcoming Shifts</h3>
-                        <!-- Placeholder for admin: Add shift button or filters here -->
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <div class="activity-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="activity-text">
+                                    <p><strong>Afternoon Shift</strong></p>
+                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Barista Station</p>
+                                </div>
+                            </div>
+                            <div class="activity-time" style="text-align: right; min-width: 140px;">
+                                <div>Thursday</div>
+                                <div style="color: var(--text-secondary); font-size: 0.9em;">2:00 PM - 10:00 PM</div>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <div class="activity-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="activity-text">
+                                    <p><strong>Morning Shift</strong></p>
+                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Opening Duties</p>
+                                </div>
+                            </div>
+                            <div class="activity-time" style="text-align: right; min-width: 140px;">
+                                <div>Friday</div>
+                                <div style="color: var(--text-secondary); font-size: 0.9em;">7:00 AM - 3:00 PM</div>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <div class="activity-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="activity-text">
+                                    <p><strong>Weekend Shift</strong></p>
+                                    <p style="color: var(--text-secondary); font-size: 0.9em;">All Stations</p>
+                                </div>
+                            </div>
+                            <div class="activity-time" style="text-align: right; min-width: 140px;">
+                                <div>Saturday</div>
+                                <div style="color: var(--text-secondary); font-size: 0.9em;">10:00 AM - 6:00 PM</div>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <div class="activity-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="activity-text">
+                                    <p><strong>Evening Shift</strong></p>
+                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Closing Duties</p>
+                                </div>
+                            </div>
+                            <div class="activity-time" style="text-align: right; min-width: 140px;">
+                                <div>Sunday</div>
+                                <div style="color: var(--text-secondary); font-size: 0.9em;">4:00 PM - 10:00 PM</div>
+                            </div>
+                        </div>
                     </div>
-                    <ol class="shift-list" aria-label="List of upcoming shifts">
-                        <li class="shift-card" tabindex="0">
-                            <div class="shift-date">
-                                <span class="day">Tomorrow</span>
-                                <span class="time">9:00 AM - 5:00 PM</span>
-                            </div>
-                            <div class="shift-details">
-                                <span class="location">Main Store</span>
-                                <span class="role">Sales Associate</span>
-                            </div>
-                            <div class="shift-actions">
-                                <button class="btn btn-secondary btn-sm" title="Swap Shift">Swap</button>
-                                <button class="btn btn-primary btn-sm" title="Request Time Off">Time Off</button>
-                            </div>
-                        </li>
-                        <li class="shift-card" tabindex="0">
-                            <div class="shift-date">
-                                <span class="day">Thursday</span>
-                                <span class="time">12:00 PM - 8:00 PM</span>
-                            </div>
-                            <div class="shift-details">
-                                <span class="location">Main Store</span>
-                                <span class="role">Sales Associate</span>
-                            </div>
-                            <div class="shift-actions">
-                                <button class="btn btn-secondary btn-sm" title="Swap Shift">Swap</button>
-                                <button class="btn btn-primary btn-sm" title="Request Time Off">Time Off</button>
-                            </div>
-                        </li>
-                        <li class="shift-card" tabindex="0">
-                            <div class="shift-date">
-                                <span class="day">Saturday</span>
-                                <span class="time">10:00 AM - 6:00 PM</span>
-                            </div>
-                            <div class="shift-details">
-                                <span class="location">Main Store</span>
-                                <span class="role">Sales Associate</span>
-                            </div>
-                            <div class="shift-actions">
-                                <button class="btn btn-secondary btn-sm" title="Swap Shift">Swap</button>
-                                <button class="btn btn-primary btn-sm" title="Request Time Off">Time Off</button>
-                            </div>
-                        </li>
-                    </ol>
-                </section>
 
-                <!-- Placeholder: Add more dashboard widgets or admin features here -->
-            </main>
-
-            <div id="shifts-section" class="content-section hidden-section">
-                <div class="main-header">
-                    <h2>My Shifts</h2>
-                    <div class="header-actions">
-                        <button class="btn btn-primary" id="request-time-off">
+                    <div class="submit-btn-container">
+                        <button class="btn btn-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                <line x1="16" y1="2" x2="16" y2="6"></line>
-                                <line x1="8" y1="2" x2="8" y2="6"></line>
-                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                             </svg>
-                            Request Time Off
+                            Request Shift Swap
+                        </button>
+                    </div>
+                </div>        
+
+
+                <!-- Team Section -->
+                <div id="team-section" class="content-section">
+                    <div class="settings-header">
+                        <h2>Your Team</h2>
+                    </div>
+
+                    <div class="stats-cards">
+                        <div class="card">
+                            <h3>Team Size</h3>
+                            <p>12</p>
+                            <div class="trend">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                Active members
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>On Shift Today</h3>
+                            <p>6</p>
+                            <div class="trend">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                Currently working
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Manager</h3>
+                            <p>Sarah Chen</p>
+                            <div class="trend">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                                </svg>
+                                Store Manager
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recent-activity">
+                        <h2>Team Members</h2>
+                        
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <div class="activity-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
+                                <div class="activity-text">
+                                    <p><strong>Sarah Chen</strong></p>
+                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Store Manager</p>
+                                </div>
+                            </div>
+                            <div class="activity-time" style="text-align: right; min-width: 140px;">
+                                <div style="color: var(--accent-color);">Available</div>
+                                <div style="color: var(--text-secondary); font-size: 0.9em;">9:00 AM - 6:00 PM</div>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <div class="activity-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
+                                <div class="activity-text">
+                                    <p><strong>Michael Rodriguez</strong></p>
+                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Senior Barista</p>
+                                </div>
+                            </div>
+                            <div class="activity-time" style="text-align: right; min-width: 140px;">
+                                <div style="color: var(--accent-color);">On Shift</div>
+                                <div style="color: var(--text-secondary); font-size: 0.9em;">7:00 AM - 3:00 PM</div>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <div class="activity-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
+                                <div class="activity-text">
+                                    <p><strong>Emma Thompson</strong></p>
+                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Barista</p>
+                                </div>
+                            </div>
+                            <div class="activity-time" style="text-align: right; min-width: 140px;">
+                                <div style="color: var(--accent-color);">On Shift</div>
+                                <div style="color: var(--text-secondary); font-size: 0.9em;">10:00 AM - 6:00 PM</div>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <div class="activity-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
+                                <div class="activity-text">
+                                    <p><strong>David Kim</strong></p>
+                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Shift Supervisor</p>
+                                </div>
+                            </div>
+                            <div class="activity-time" style="text-align: right; min-width: 140px;">
+                                <div style="color: var(--text-secondary);">Off Today</div>
+                                <div style="color: var(--text-secondary); font-size: 0.9em;">Next: Tomorrow</div>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <div class="activity-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
+                                <div class="activity-text">
+                                    <p><strong>Lisa Wong</strong></p>
+                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Barista</p>
+                                </div>
+                            </div>
+                            <div class="activity-time" style="text-align: right; min-width: 140px;">
+                                <div style="color: var(--accent-color);">On Shift</div>
+                                <div style="color: var(--text-secondary); font-size: 0.9em;">2:00 PM - 10:00 PM</div>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <div class="activity-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
+                                <div class="activity-text">
+                                    <p><strong>Charles Freidenreich</strong></p>
+                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Junior Barista</p>
+                                </div>
+                            </div>
+                            <div class="activity-time" style="text-align: right; min-width: 140px;">
+                                <div style="color: var(--accent-color);">On Shift</div>
+                                <div style="color: var(--text-secondary); font-size: 0.9em;">11:00 AM - 7:00 PM</div>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <div class="activity-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
+                                <div class="activity-text">
+                                    <p><strong>Jessica Martinez</strong></p>
+                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Cashier</p>
+                                </div>
+                            </div>
+                            <div class="activity-time" style="text-align: right; min-width: 140px;">
+                                <div style="color: var(--text-secondary);">Off Today</div>
+                                <div style="color: var(--text-secondary); font-size: 0.9em;">Next: Thursday</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="submit-btn-container">
+                        <button class="btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22 6 12 13 2 6"></polyline>
+                            </svg>
+                            Contact Team Member
                         </button>
                     </div>
                 </div>
 
-                <div class="calendar-container">
-                    <div class="calendar-header">
-                        <button id="prev-month" class="btn btn-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="15 18 9 12 15 6"></polyline>
-                            </svg>
-                        </button>
-                        <h3 id="calendar-month-year">April 2024</h3>
-                        <button id="next-month" class="btn btn-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="9 18 15 12 9 6"></polyline>
-                            </svg>
-                        </button>
-                    </div>
 
-                    <div class="calendar-grid">
-                        <div id="weekdays" class="weekdays">
-                            <div>Sun</div>
-                            <div>Mon</div>
-                            <div>Tue</div>
-                            <div>Wed</div>
-                            <div>Thu</div>
-                            <div>Fri</div>
-                            <div>Sat</div>
+                <!-- Notes Section -->
+                <div id="notes-section" class="content-section">
+                    <div class="section-content">
+                        <div class="settings-header">
+                            <h2>Manager Notes</h2>
+                            <div class="notes-summary">
+                                <span class="new-notes-badge">3 new today</span>
+                            </div>
                         </div>
-                        <div id="calendar-days" class="calendar-days"></div>
-                    </div>
 
-                    <div class="calendar-footer">
-                        <div class="selection-info">
-                            <p>Selected days: <span id="selected-count">0</span></p>
-                            <p id="selected-dates">No dates selected yet.</p>
+                        <!-- Today's Notes -->
+                        <div class="notes-container">
+                            <div class="notes-group">
+                                <h3 class="notes-group-title">Today - June 11, 2025</h3>
+                                
+                                <div class="note-item urgent">
+                                    <div class="note-header">
+                                        <div class="note-icon urgent">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                            </svg>
+                                        </div>
+                                        <div class="note-meta">
+                                            <span class="note-priority urgent">Urgent</span>
+                                            <span class="note-time">2:30 PM</span>
+                                        </div>
+                                    </div>
+                                    <div class="note-content">
+                                        <p>Ice cream machine is completely broken. DO NOT attempt to use it. Technician coming tomorrow morning. Offer alternative desserts to customers.</p>
+                                    </div>
+                                </div>
+
+                                <div class="note-item important">
+                                    <div class="note-header">
+                                        <div class="note-icon important">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="note-meta important">
+                                            <span class="note-priority important">Important</span>
+                                            <span class="note-time">11:15 AM</span>
+                                        </div>
+                                    </div>
+                                    <div class="note-content">
+                                        <p>New coffee blend arrived this morning. Please familiarize yourselves with the brewing instructions posted by the espresso machine.</p>
+                                    </div>
+                                </div>
+
+                                <div class="note-item">
+                                    <div class="note-header">
+                                        <div class="note-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                                <polyline points="14 2 14 8 20 8"></polyline>
+                                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                            </svg>
+                                        </div>
+                                        <div class="note-meta">
+                                            <span class="note-priority">Info</span>
+                                            <span class="note-time">9:45 AM</span>
+                                        </div>
+                                    </div>
+                                    <div class="note-content">
+                                        <p>Reminder: Team meeting this Friday at 3 PM to discuss summer menu changes. Attendance is mandatory.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Previous Notes -->
+                            <div class="notes-group">
+                                <h3 class="notes-group-title">Yesterday - June 10, 2025</h3>
+                                
+                                <div class="note-item">
+                                    <div class="note-header">
+                                        <div class="note-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                                <polyline points="14 2 14 8 20 8"></polyline>
+                                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                            </svg>
+                                        </div>
+                                        <div class="note-meta">
+                                            <span class="note-priority">Info</span>
+                                            <span class="note-time">4:20 PM</span>
+                                        </div>
+                                    </div>
+                                    <div class="note-content">
+                                        <p>Great job on customer service today everyone! We received 3 positive reviews mentioning friendly staff.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="notes-group">
+                                <h3 class="notes-group-title">June 8, 2025</h3>
+                                
+                                <div class="note-item important">
+                                    <div class="note-header">
+                                        <div class="note-icon important">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="note-meta important">
+                                            <span class="note-priority important">Important</span>
+                                            <span class="note-time">1:10 PM</span>
+                                        </div>
+                                    </div>
+                                    <div class="note-content">
+                                        <p>New health inspection requirements: All food handling staff must wear gloves when preparing drinks with dairy alternatives.</p>
+                                    </div>
+                                </div>
+
+                                <div class="note-item">
+                                    <div class="note-header">
+                                        <div class="note-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                                <polyline points="14 2 14 8 20 8"></polyline>
+                                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                            </svg>
+                                        </div>
+                                        <div class="note-meta">
+                                            <span class="note-priority">Info</span>
+                                            <span class="note-time">10:30 AM</span>
+                                        </div>
+                                    </div>
+                                    <div class="note-content">
+                                        <p>Inventory count scheduled for this weekend. Extra hands needed for Saturday morning shift.</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <button id="submit-days-btn" class="btn btn-primary" disabled>Submit Time Off Request</button>
                     </div>
                 </div>
+                <!-- Notes CSS -->
+                <style>
+                    .notes-container {
+                        max-width: 800px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        margin: 0 auto; /* Center the container */
+
+                    }
+
+                    .settings-header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 24px;
+                        padding-bottom: 12px;
+                        border-bottom: 2px solid var(--border-color);
+                    }
+
+                    .notes-summary {
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                    }
+
+                    .new-notes-badge {
+                        background: var(--accent-color);
+                        color: white;
+                        padding: 4px 12px;
+                        border-radius: 20px;
+                        font-size: 12px;
+                        font-weight: 600;
+                    }
+
+                    .notes-group {
+                        margin-bottom: 32px;
+                        width: 100%;
+                    }
+
+                    .notes-group-title {
+                        font-size: 16px;
+                        font-weight: 600;
+                        color: var(--text-primary);
+                        margin-bottom: 16px;
+                        padding-left: 8px;
+                    }
+
+                    .note-item {
+                        background: var(--card-bg);
+                        border: 1px solid var(--border-color);
+                        border-radius: 8px;
+                        padding: 12px 16px;
+                        margin-bottom: 12px;
+                        transition: all 0.2s ease;
+                    }
+
+                    .note-item:hover {
+                        transform: translateY(-1px);
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                    }
+
+                    .note-item.urgent {
+                        background: rgba(231, 76, 60, 0.05);
+                    }
+
+
+
+                    .note-item.normal {
+                        border-left: 4px solid var(--accent-color);
+                    }
+
+                    .note-header {
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                        margin-bottom: 8px;
+                    }
+
+                    .note-icon {
+                        padding: 8px;
+                        border-radius: 6px;
+                        background: var(--bg-secondary);
+                    }
+
+                    .note-icon.urgent {
+                        background: rgba(231, 76, 60, 0.05);
+                        color: #e74c3c;
+                    }
+
+                    .note-icon.important {
+                        color: #f39c12;
+                    }
+
+
+                    .note-meta {
+                        display: flex;
+                        align-items: center;
+                        gap: 16px;
+                        flex: 1;
+                        min-width: 180px;
+                        padding: 6px 0;
+                    }
+
+                    .note-meta.important {
+                        color: #f39c12;
+                    }
+
+                    .note-priority {
+                        font-size: 12px;
+                        font-weight: 600;
+                        padding: 3px 10px;
+                        border-radius: 12px;
+                        background: var(--bg-secondary);
+                        color: var(--text-secondary);
+                    }
+
+                    .note-priority.urgent {
+                        background: rgba(231, 76, 60, 0.1);
+                        color: #e74c3c;
+                    }
+
+                    .note-priority.important {
+                        background: rgba(243, 156, 18, 0.1);
+                        color: #f39c12;
+                    }
+
+                    .note-time {
+                        font-size: 12px;
+                        color: var(--text-secondary);
+                        margin-left: auto;
+                    }
+
+                    .note-content {
+                        padding-left: 40px;
+                    }
+
+                    .note-content p {
+                        margin: 0;
+                        color: var(--text-primary);
+                        line-height: 1.5;
+                    }
+                </style>
+
+
+{% include 'myapp/db_settings.html' %}
+
             </div>
 
-            <div id="notes-section" class="content-section hidden-section">
-                <div class="main-header">
-                    <h2>My Notes</h2>
-                    <button class="btn btn-primary" id="add-note-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Add Note
-                    </button>
-                </div>
 
-                <div class="notes-container">
-                    <div class="note-card">
-                        <div class="note-header">
-                            <h3>Important Meeting Notes</h3>
-                            <span class="note-date">April 15, 2024</span>
-                        </div>
-                        <p class="note-content">Remember to prepare the quarterly sales report for the team meeting next week. Include performance metrics and customer feedback.</p>
-                        <div class="note-actions">
-                            <button class="btn btn-icon btn-sm edit-note">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                </svg>
-                            </button>
-                            <button class="btn btn-icon btn-sm delete-note">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="3 6 5 6 21 6"></polyline>
-                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="note-card">
-                        <div class="note-header">
-                            <h3>Training Schedule</h3>
-                            <span class="note-date">April 10, 2024</span>
-                        </div>
-                        <p class="note-content">Complete the new POS system training by the end of the month. Schedule practice sessions with the team.</p>
-                        <div class="note-actions">
-                            <button class="btn btn-icon btn-sm edit-note">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                </svg>
-                            </button>
-                            <button class="btn btn-icon btn-sm delete-note">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="3 6 5 6 21 6"></polyline>
-                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+            <div class="footer">
+                <p>&copy; 2025 Shifty Solutions. All rights reserved.</p>
             </div>
-            {% include 'myapp/db_settings.html' %}
         </div>
-
-        <div class="footer">
-            <p>© 2025 Shifty Solutions. All rights reserved.</p>
-        </div>
+        
     </div>
 
-    <script src="{% static 'myapp/js/dashboard.js' %}"></script>
+    
 </body>
+
+
 </html>
