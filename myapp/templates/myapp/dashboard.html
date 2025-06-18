@@ -645,12 +645,12 @@ updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
        <div class="calendar-header">
            <div class="calendar-title">Select Days Off (5 max)</div>
            <div class="calendar-nav">
-               <button id="prev-month">
+               <button id="prev-month" class="btn btn-icon">
                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                        <polyline points="15 18 9 12 15 6"></polyline>
                    </svg>
                </button>
-               <button id="next-month">
+               <button id="next-month" class="btn btn-icon">
                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                        <polyline points="9 18 15 12 9 6"></polyline>
                    </svg>
@@ -681,6 +681,31 @@ updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
                Submit Days Off
            </button>
        </div>
+   </div>
+
+   <!-- Loading Spinner -->
+   <div id="calendar-loading" class="loading-spinner hidden">
+       <div class="spinner"></div>
+       <p>Loading calendar...</p>
+   </div>
+
+   <!-- Error Message -->
+   <div id="calendar-error" class="error-message hidden">
+       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+           <circle cx="12" cy="12" r="10"></circle>
+           <line x1="12" y1="8" x2="12" y2="12"></line>
+           <line x1="12" y1="16" x2="12.01" y2="16"></line>
+       </svg>
+       <p>Failed to load calendar. Please try again.</p>
+   </div>
+
+   <!-- Success Message -->
+   <div id="calendar-success" class="success-message hidden">
+       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+           <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+           <polyline points="22 4 12 14.01 9 11.01"></polyline>
+       </svg>
+       <p>Days off submitted successfully!</p>
    </div>
 
    <div class="recent-activity">
@@ -746,10 +771,26 @@ updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
                         <h2>Your Shifts</h2>
                     </div>
 
+                    <!-- Loading Spinner -->
+                    <div id="shifts-loading" class="loading-spinner hidden">
+                        <div class="spinner"></div>
+                        <p>Loading shifts...</p>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div id="shifts-error" class="error-message hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        <p>Failed to load shifts. Please try again.</p>
+                    </div>
+
                     <div class="stats-cards">
                         <div class="card">
                             <h3>This Week</h3>
-                            <p>5 shifts</p>
+                            <p id="shifts-this-week">-</p>
                             <div class="trend">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -757,620 +798,526 @@ updateSelectionInfo(`${currentYear}-${currentMonth+1}`);
                                     <line x1="8" y1="2" x2="8" y2="6"></line>
                                     <line x1="3" y1="10" x2="21" y2="10"></line>
                                 </svg>
-                                32 hours total
+                                <span id="hours-this-week">-</span> hours total
                             </div>
                         </div>
                         <div class="card">
                             <h3>Next Shift</h3>
-                            <p>Tomorrow</p>
+                            <p id="next-shift-date">-</p>
                             <div class="trend">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="12" cy="12" r="10"></circle>
                                     <polyline points="12 6 12 12 16 14"></polyline>
                                 </svg>
-                                9:00 AM - 5:00 PM
+                                <span id="next-shift-time">-</span>
                             </div>
                         </div>
                         <div class="card">
                             <h3>Status</h3>
-                            <p>All Confirmed</p>
+                            <p id="shifts-status">-</p>
                             <div class="trend">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                                     <polyline points="22 4 12 14.01 9 11.01"></polyline>
                                 </svg>
-                                No conflicts
+                                <span id="shifts-conflicts">-</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="recent-activity">
-                        <h2>Upcoming Shifts</h2>
-                        
-                        <div class="activity-item">
-                            <div class="activity-content">
-                                <div class="activity-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <polyline points="12 6 12 12 16 14"></polyline>
-                                    </svg>
-                                </div>
-                                <div class="activity-text">
-                                    <p><strong>Morning Shift</strong></p>
-                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Counter Service</p>
-                                </div>
-                            </div>
-                            <div class="activity-time" style="text-align: right; min-width: 140px;">
-                                <div>Tomorrow</div>
-                                <div style="color: var(--text-secondary); font-size: 0.9em;">9:00 AM - 5:00 PM</div>
-                            </div>
-                        </div>
-
-                        <div class="activity-item">
-                            <div class="activity-content">
-                                <div class="activity-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <polyline points="12 6 12 12 16 14"></polyline>
-                                    </svg>
-                                </div>
-                                <div class="activity-text">
-                                    <p><strong>Afternoon Shift</strong></p>
-                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Barista Station</p>
-                                </div>
-                            </div>
-                            <div class="activity-time" style="text-align: right; min-width: 140px;">
-                                <div>Thursday</div>
-                                <div style="color: var(--text-secondary); font-size: 0.9em;">2:00 PM - 10:00 PM</div>
-                            </div>
-                        </div>
-
-                        <div class="activity-item">
-                            <div class="activity-content">
-                                <div class="activity-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <polyline points="12 6 12 12 16 14"></polyline>
-                                    </svg>
-                                </div>
-                                <div class="activity-text">
-                                    <p><strong>Morning Shift</strong></p>
-                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Opening Duties</p>
-                                </div>
-                            </div>
-                            <div class="activity-time" style="text-align: right; min-width: 140px;">
-                                <div>Friday</div>
-                                <div style="color: var(--text-secondary); font-size: 0.9em;">7:00 AM - 3:00 PM</div>
-                            </div>
-                        </div>
-
-                        <div class="activity-item">
-                            <div class="activity-content">
-                                <div class="activity-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <polyline points="12 6 12 12 16 14"></polyline>
-                                    </svg>
-                                </div>
-                                <div class="activity-text">
-                                    <p><strong>Weekend Shift</strong></p>
-                                    <p style="color: var(--text-secondary); font-size: 0.9em;">All Stations</p>
-                                </div>
-                            </div>
-                            <div class="activity-time" style="text-align: right; min-width: 140px;">
-                                <div>Saturday</div>
-                                <div style="color: var(--text-secondary); font-size: 0.9em;">10:00 AM - 6:00 PM</div>
-                            </div>
-                        </div>
-
-                        <div class="activity-item">
-                            <div class="activity-content">
-                                <div class="activity-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <polyline points="12 6 12 12 16 14"></polyline>
-                                    </svg>
-                                </div>
-                                <div class="activity-text">
-                                    <p><strong>Evening Shift</strong></p>
-                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Closing Duties</p>
-                                </div>
-                            </div>
-                            <div class="activity-time" style="text-align: right; min-width: 140px;">
-                                <div>Sunday</div>
-                                <div style="color: var(--text-secondary); font-size: 0.9em;">4:00 PM - 10:00 PM</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="submit-btn-container">
-                        <button class="btn btn-primary">
+                    <div class="shifts-actions">
+                        <button id="request-swap-btn" class="btn btn-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
                             </svg>
                             Request Shift Swap
                         </button>
                     </div>
-                </div>        
-
-
-                <!-- Team Section -->
-                <div id="team-section" class="content-section">
-                    <div class="settings-header">
-                        <h2>Your Team</h2>
-                    </div>
-
-                    <div class="stats-cards">
-                        <div class="card">
-                            <h3>Team Size</h3>
-                            <p>12</p>
-                            <div class="trend">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="9" cy="7" r="4"></circle>
-                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                </svg>
-                                Active members
-                            </div>
-                        </div>
-                        <div class="card">
-                            <h3>On Shift Today</h3>
-                            <p>6</p>
-                            <div class="trend">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                Currently working
-                            </div>
-                        </div>
-                        <div class="card">
-                            <h3>Manager</h3>
-                            <p>Sarah Chen</p>
-                            <div class="trend">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                                </svg>
-                                Store Manager
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="recent-activity">
-                        <h2>Team Members</h2>
+                        <h2>Upcoming Shifts</h2>
+                        <div id="upcoming-shifts">
+                            <!-- Shifts will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shift Swap Modal -->
+                <div id="shift-swap-modal" class="modal-overlay hidden">
+                    <div class="modal">
+                        <div class="modal-header">
+                            <h3>Request Shift Swap</h3>
+                            <button class="close-modal" data-modal-target="shift-swap-modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="shift-swap-form">
+                                <div class="form-group">
+                                    <label for="shift-to-swap">Select Shift to Swap</label>
+                                    <select class="form-control" id="shift-to-swap" required>
+                                        <option value="">Choose a shift...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="swap-reason">Reason for Swap</label>
+                                    <textarea class="form-control" id="swap-reason" rows="3" required placeholder="Please provide a reason for the swap request..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="preferred-dates">Preferred Dates (Optional)</label>
+                                    <input type="text" class="form-control" id="preferred-dates" placeholder="e.g., May 15-20">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-modal-target="shift-swap-modal">Cancel</button>
+                            <button class="btn btn-primary" id="submit-swap-request">Submit Request</button>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                // Shifts state
+                let upcomingShifts = [];
+                let currentWeekShifts = [];
+                let nextShift = null;
+
+                // Fetch shifts data
+                async function fetchShifts() {
+                    try {
+                        document.getElementById('shifts-loading').classList.remove('hidden');
+                        document.getElementById('shifts-error').classList.add('hidden');
                         
-                        <div class="activity-item">
+                        const response = await fetch('/api/shifts/');
+                        if (!response.ok) throw new Error('Failed to fetch shifts');
+                        
+                        const data = await response.json();
+                        upcomingShifts = data.shifts;
+                        
+                        // Calculate stats
+                        calculateShiftStats();
+                        
+                        // Update UI
+                        updateShiftsUI();
+                        
+                        // Populate shift swap modal
+                        populateShiftSwapModal();
+                    } catch (error) {
+                        console.error('Error fetching shifts:', error);
+                        showShiftsError('Failed to load shifts');
+                    } finally {
+                        document.getElementById('shifts-loading').classList.add('hidden');
+                    }
+                }
+
+                // Calculate shift statistics
+                function calculateShiftStats() {
+                    const now = new Date();
+                    const startOfWeek = new Date(now);
+                    startOfWeek.setDate(now.getDate() - now.getDay());
+                    startOfWeek.setHours(0, 0, 0, 0);
+                    
+                    const endOfWeek = new Date(startOfWeek);
+                    endOfWeek.setDate(startOfWeek.getDate() + 6);
+                    endOfWeek.setHours(23, 59, 59, 999);
+                    
+                    // Filter shifts for this week
+                    currentWeekShifts = upcomingShifts.filter(shift => {
+                        const shiftDate = new Date(shift.start_time);
+                        return shiftDate >= startOfWeek && shiftDate <= endOfWeek;
+                    });
+                    
+                    // Calculate total hours
+                    const totalHours = currentWeekShifts.reduce((total, shift) => {
+                        const start = new Date(shift.start_time);
+                        const end = new Date(shift.end_time);
+                        const hours = (end - start) / (1000 * 60 * 60);
+                        return total + hours;
+                    }, 0);
+                    
+                    // Find next shift
+                    nextShift = upcomingShifts.find(shift => new Date(shift.start_time) > now);
+                    
+                    // Update stats
+                    document.getElementById('shifts-this-week').textContent = `${currentWeekShifts.length} shifts`;
+                    document.getElementById('hours-this-week').textContent = `${Math.round(totalHours)} hours total`;
+                    
+                    if (nextShift) {
+                        const nextDate = new Date(nextShift.start_time);
+                        document.getElementById('next-shift-date').textContent = formatDate(nextDate);
+                        document.getElementById('next-shift-time').textContent = formatTimeRange(nextShift.start_time, nextShift.end_time);
+                    } else {
+                        document.getElementById('next-shift-date').textContent = 'No upcoming shifts';
+                        document.getElementById('next-shift-time').textContent = '';
+                    }
+                    
+                    // Check for conflicts
+                    const hasConflicts = upcomingShifts.some(shift => shift.has_conflict);
+                    document.getElementById('shifts-status').textContent = hasConflicts ? 'Has Conflicts' : 'All Confirmed';
+                    document.getElementById('shifts-conflicts').textContent = hasConflicts ? 'Conflicts found' : 'No conflicts';
+                }
+
+                // Update shifts UI
+                function updateShiftsUI() {
+                    const container = document.getElementById('upcoming-shifts');
+                    container.innerHTML = '';
+                    
+                    if (upcomingShifts.length === 0) {
+                        container.innerHTML = `
+                            <div class="empty-state">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                <p>No upcoming shifts scheduled</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    upcomingShifts.forEach(shift => {
+                        const shiftDate = new Date(shift.start_time);
+                        const shiftElement = document.createElement('div');
+                        shiftElement.className = `activity-item ${shift.has_conflict ? 'has-conflict' : ''}`;
+                        
+                        shiftElement.innerHTML = `
                             <div class="activity-content">
                                 <div class="activity-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
                                     </svg>
                                 </div>
                                 <div class="activity-text">
-                                    <p><strong>Sarah Chen</strong></p>
-                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Store Manager</p>
-                                </div>
-                            </div>
-                            <div class="activity-time" style="text-align: right; min-width: 140px;">
-                                <div style="color: var(--accent-color);">Available</div>
-                                <div style="color: var(--text-secondary); font-size: 0.9em;">9:00 AM - 6:00 PM</div>
-                            </div>
-                        </div>
-
-                        <div class="activity-item">
-                            <div class="activity-content">
-                                <div class="activity-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                </div>
-                                <div class="activity-text">
-                                    <p><strong>Michael Rodriguez</strong></p>
-                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Senior Barista</p>
-                                </div>
-                            </div>
-                            <div class="activity-time" style="text-align: right; min-width: 140px;">
-                                <div style="color: var(--accent-color);">On Shift</div>
-                                <div style="color: var(--text-secondary); font-size: 0.9em;">7:00 AM - 3:00 PM</div>
-                            </div>
-                        </div>
-
-                        <div class="activity-item">
-                            <div class="activity-content">
-                                <div class="activity-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                </div>
-                                <div class="activity-text">
-                                    <p><strong>Emma Thompson</strong></p>
-                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Barista</p>
-                                </div>
-                            </div>
-                            <div class="activity-time" style="text-align: right; min-width: 140px;">
-                                <div style="color: var(--accent-color);">On Shift</div>
-                                <div style="color: var(--text-secondary); font-size: 0.9em;">10:00 AM - 6:00 PM</div>
-                            </div>
-                        </div>
-
-                        <div class="activity-item">
-                            <div class="activity-content">
-                                <div class="activity-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                </div>
-                                <div class="activity-text">
-                                    <p><strong>David Kim</strong></p>
-                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Shift Supervisor</p>
-                                </div>
-                            </div>
-                            <div class="activity-time" style="text-align: right; min-width: 140px;">
-                                <div style="color: var(--text-secondary);">Off Today</div>
-                                <div style="color: var(--text-secondary); font-size: 0.9em;">Next: Tomorrow</div>
-                            </div>
-                        </div>
-
-                        <div class="activity-item">
-                            <div class="activity-content">
-                                <div class="activity-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                </div>
-                                <div class="activity-text">
-                                    <p><strong>Lisa Wong</strong></p>
-                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Barista</p>
-                                </div>
-                            </div>
-                            <div class="activity-time" style="text-align: right; min-width: 140px;">
-                                <div style="color: var(--accent-color);">On Shift</div>
-                                <div style="color: var(--text-secondary); font-size: 0.9em;">2:00 PM - 10:00 PM</div>
-                            </div>
-                        </div>
-
-                        <div class="activity-item">
-                            <div class="activity-content">
-                                <div class="activity-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                </div>
-                                <div class="activity-text">
-                                    <p><strong>Charles Freidenreich</strong></p>
-                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Junior Barista</p>
-                                </div>
-                            </div>
-                            <div class="activity-time" style="text-align: right; min-width: 140px;">
-                                <div style="color: var(--accent-color);">On Shift</div>
-                                <div style="color: var(--text-secondary); font-size: 0.9em;">11:00 AM - 7:00 PM</div>
-                            </div>
-                        </div>
-
-                        <div class="activity-item">
-                            <div class="activity-content">
-                                <div class="activity-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                </div>
-                                <div class="activity-text">
-                                    <p><strong>Jessica Martinez</strong></p>
-                                    <p style="color: var(--text-secondary); font-size: 0.9em;">Cashier</p>
-                                </div>
-                            </div>
-                            <div class="activity-time" style="text-align: right; min-width: 140px;">
-                                <div style="color: var(--text-secondary);">Off Today</div>
-                                <div style="color: var(--text-secondary); font-size: 0.9em;">Next: Thursday</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="submit-btn-container">
-                        <button class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                                <polyline points="22 6 12 13 2 6"></polyline>
-                            </svg>
-                            Contact Team Member
-                        </button>
-                    </div>
-                </div>
-
-
-                <!-- Notes Section -->
-                <div id="notes-section" class="content-section">
-                    <div class="section-content">
-                        <div class="settings-header">
-                            <h2>Manager Notes</h2>
-                            <div class="notes-summary">
-                                <span class="new-notes-badge">3 new today</span>
-                            </div>
-                        </div>
-
-                        <!-- Today's Notes -->
-                        <div class="notes-container">
-                            <div class="notes-group">
-                                <h3 class="notes-group-title">Today - June 11, 2025</h3>
-                                
-                                <div class="note-item urgent">
-                                    <div class="note-header">
-                                        <div class="note-icon urgent">
+                                    <p><strong>${shift.title}</strong></p>
+                                    <p style="color: var(--text-secondary); font-size: 0.9em;">${shift.location}</p>
+                                    <p style="color: var(--text-secondary); font-size: 0.9em;">
+                                        ${formatDate(shiftDate)} • ${formatTimeRange(shift.start_time, shift.end_time)}
+                                    </p>
+                                    ${shift.has_conflict ? `
+                                        <div class="conflict-badge">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                                                <line x1="12" y1="9" x2="12" y2="13"></line>
-                                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
                                             </svg>
+                                            Schedule Conflict
                                         </div>
-                                        <div class="note-meta">
-                                            <span class="note-priority urgent">Urgent</span>
-                                            <span class="note-time">2:30 PM</span>
-                                        </div>
-                                    </div>
-                                    <div class="note-content">
-                                        <p>Ice cream machine is completely broken. DO NOT attempt to use it. Technician coming tomorrow morning. Offer alternative desserts to customers.</p>
-                                    </div>
-                                </div>
-
-                                <div class="note-item important">
-                                    <div class="note-header">
-                                        <div class="note-icon important">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                                            </svg>
-                                        </div>
-                                        <div class="note-meta important">
-                                            <span class="note-priority important">Important</span>
-                                            <span class="note-time">11:15 AM</span>
-                                        </div>
-                                    </div>
-                                    <div class="note-content">
-                                        <p>New coffee blend arrived this morning. Please familiarize yourselves with the brewing instructions posted by the espresso machine.</p>
-                                    </div>
-                                </div>
-
-                                <div class="note-item">
-                                    <div class="note-header">
-                                        <div class="note-icon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                                <polyline points="14 2 14 8 20 8"></polyline>
-                                                <line x1="16" y1="13" x2="8" y2="13"></line>
-                                                <line x1="16" y1="17" x2="8" y2="17"></line>
-                                            </svg>
-                                        </div>
-                                        <div class="note-meta">
-                                            <span class="note-priority">Info</span>
-                                            <span class="note-time">9:45 AM</span>
-                                        </div>
-                                    </div>
-                                    <div class="note-content">
-                                        <p>Reminder: Team meeting this Friday at 3 PM to discuss summer menu changes. Attendance is mandatory.</p>
-                                    </div>
+                                    ` : ''}
                                 </div>
                             </div>
-
-                            <!-- Previous Notes -->
-                            <div class="notes-group">
-                                <h3 class="notes-group-title">Yesterday - June 10, 2025</h3>
-                                
-                                <div class="note-item">
-                                    <div class="note-header">
-                                        <div class="note-icon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                                <polyline points="14 2 14 8 20 8"></polyline>
-                                                <line x1="16" y1="13" x2="8" y2="13"></line>
-                                                <line x1="16" y1="17" x2="8" y2="17"></line>
-                                            </svg>
-                                        </div>
-                                        <div class="note-meta">
-                                            <span class="note-priority">Info</span>
-                                            <span class="note-time">4:20 PM</span>
-                                        </div>
-                                    </div>
-                                    <div class="note-content">
-                                        <p>Great job on customer service today everyone! We received 3 positive reviews mentioning friendly staff.</p>
-                                    </div>
-                                </div>
+                            <div class="activity-time">
+                                ${formatRelativeTime(shiftDate)}
                             </div>
+                        `;
+                        
+                        container.appendChild(shiftElement);
+                    });
+                }
 
-                            <div class="notes-group">
-                                <h3 class="notes-group-title">June 8, 2025</h3>
-                                
-                                <div class="note-item important">
-                                    <div class="note-header">
-                                        <div class="note-icon important">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                                            </svg>
-                                        </div>
-                                        <div class="note-meta important">
-                                            <span class="note-priority important">Important</span>
-                                            <span class="note-time">1:10 PM</span>
-                                        </div>
-                                    </div>
-                                    <div class="note-content">
-                                        <p>New health inspection requirements: All food handling staff must wear gloves when preparing drinks with dairy alternatives.</p>
-                                    </div>
-                                </div>
+                // Populate shift swap modal
+                function populateShiftSwapModal() {
+                    const select = document.getElementById('shift-to-swap');
+                    select.innerHTML = '<option value="">Choose a shift...</option>';
+                    
+                    upcomingShifts.forEach(shift => {
+                        const shiftDate = new Date(shift.start_time);
+                        const option = document.createElement('option');
+                        option.value = shift.id;
+                        option.textContent = `${formatDate(shiftDate)} • ${formatTimeRange(shift.start_time, shift.end_time)} - ${shift.title}`;
+                        select.appendChild(option);
+                    });
+                }
 
-                                <div class="note-item">
-                                    <div class="note-header">
-                                        <div class="note-icon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                                <polyline points="14 2 14 8 20 8"></polyline>
-                                                <line x1="16" y1="13" x2="8" y2="13"></line>
-                                                <line x1="16" y1="17" x2="8" y2="17"></line>
-                                            </svg>
-                                        </div>
-                                        <div class="note-meta">
-                                            <span class="note-priority">Info</span>
-                                            <span class="note-time">10:30 AM</span>
-                                        </div>
-                                    </div>
-                                    <div class="note-content">
-                                        <p>Inventory count scheduled for this weekend. Extra hands needed for Saturday morning shift.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Notes CSS -->
+                // Submit shift swap request
+                async function submitShiftSwap(event) {
+                    event.preventDefault();
+                    
+                    const shiftId = document.getElementById('shift-to-swap').value;
+                    const reason = document.getElementById('swap-reason').value;
+                    const preferredDates = document.getElementById('preferred-dates').value;
+                    
+                    if (!shiftId || !reason) {
+                        showShiftsError('Please fill in all required fields');
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch('/api/shifts/swap-request/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCookie('csrftoken')
+                            },
+                            body: JSON.stringify({
+                                shift_id: shiftId,
+                                reason: reason,
+                                preferred_dates: preferredDates
+                            })
+                        });
+                        
+                        if (!response.ok) throw new Error('Failed to submit swap request');
+                        
+                        // Close modal and show success
+                        document.getElementById('shift-swap-modal').classList.add('hidden');
+                        showShiftsSuccess('Shift swap request submitted successfully!');
+                        
+                        // Reset form
+                        document.getElementById('shift-swap-form').reset();
+                    } catch (error) {
+                        console.error('Error submitting shift swap:', error);
+                        showShiftsError('Failed to submit shift swap request');
+                    }
+                }
+
+                // Helper functions
+                function formatDate(date) {
+                    return date.toLocaleDateString('en-US', { 
+                        weekday: 'long',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                }
+
+                function formatTimeRange(start, end) {
+                    const startTime = new Date(start).toLocaleTimeString('en-US', {
+                        hour: 'numeric',
+                        minute: '2-digit'
+                    });
+                    const endTime = new Date(end).toLocaleTimeString('en-US', {
+                        hour: 'numeric',
+                        minute: '2-digit'
+                    });
+                    return `${startTime} - ${endTime}`;
+                }
+
+                function formatRelativeTime(date) {
+                    const now = new Date();
+                    const diff = date - now;
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    
+                    if (days === 0) return 'Today';
+                    if (days === 1) return 'Tomorrow';
+                    if (days < 7) return `In ${days} days`;
+                    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                }
+
+                function showShiftsError(message) {
+                    const errorElement = document.getElementById('shifts-error');
+                    errorElement.querySelector('p').textContent = message;
+                    errorElement.classList.remove('hidden');
+                    setTimeout(() => errorElement.classList.add('hidden'), 5000);
+                }
+
+                function showShiftsSuccess(message) {
+                    const successElement = document.createElement('div');
+                    successElement.className = 'success-message';
+                    successElement.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                        <p>${message}</p>
+                    `;
+                    
+                    document.querySelector('.shifts-actions').appendChild(successElement);
+                    setTimeout(() => successElement.remove(), 5000);
+                }
+
+                // Initialize shifts
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Set up shift swap modal
+                    const swapButton = document.getElementById('request-swap-btn');
+                    const swapModal = document.getElementById('shift-swap-modal');
+                    const closeButtons = swapModal.querySelectorAll('.close-modal, .btn-secondary');
+                    const submitButton = document.getElementById('submit-swap-request');
+                    
+                    swapButton.addEventListener('click', () => {
+                        swapModal.classList.remove('hidden');
+                    });
+                    
+                    closeButtons.forEach(button => {
+                        button.addEventListener('click', () => {
+                            swapModal.classList.add('hidden');
+                        });
+                    });
+                    
+                    submitButton.addEventListener('click', submitShiftSwap);
+                    
+                    // Load shifts
+                    fetchShifts();
+                });
+                </script>
+
                 <style>
-                    .notes-container {
-                        max-width: 800px;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        margin: 0 auto; /* Center the container */
+                /* Shifts Section Styles */
+                .shifts-actions {
+                    margin: 24px 0;
+                    display: flex;
+                    justify-content: flex-end;
+                }
 
-                    }
+                .activity-item {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    padding: 16px;
+                    background: var(--bg-tertiary);
+                    border-radius: var(--border-radius);
+                    margin-bottom: 12px;
+                }
 
-                    .settings-header {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        margin-bottom: 24px;
-                        padding-bottom: 12px;
-                        border-bottom: 2px solid var(--border-color);
-                    }
+                .activity-item.has-conflict {
+                    border-left: 4px solid var(--danger-color);
+                }
 
-                    .notes-summary {
-                        display: flex;
-                        align-items: center;
-                        gap: 12px;
-                    }
+                .activity-content {
+                    display: flex;
+                    gap: 16px;
+                    flex: 1;
+                }
 
-                    .new-notes-badge {
-                        background: var(--accent-color);
-                        color: white;
-                        padding: 4px 12px;
-                        border-radius: 20px;
-                        font-size: 12px;
-                        font-weight: 600;
-                    }
+                .activity-icon {
+                    flex-shrink: 0;
+                    width: 40px;
+                    height: 40px;
+                    background: var(--bg-secondary);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
 
-                    .notes-group {
-                        margin-bottom: 32px;
-                        width: 100%;
-                    }
+                .activity-text {
+                    flex: 1;
+                }
 
-                    .notes-group-title {
-                        font-size: 16px;
-                        font-weight: 600;
-                        color: var(--text-primary);
-                        margin-bottom: 16px;
-                        padding-left: 8px;
-                    }
+                .activity-text p {
+                    margin: 0;
+                }
 
-                    .note-item {
-                        background: var(--card-bg);
-                        border: 1px solid var(--border-color);
-                        border-radius: 8px;
-                        padding: 12px 16px;
-                        margin-bottom: 12px;
-                        transition: all 0.2s ease;
-                    }
+                .activity-text p + p {
+                    margin-top: 4px;
+                }
 
-                    .note-item:hover {
-                        transform: translateY(-1px);
-                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                    }
+                .activity-time {
+                    color: var(--text-secondary);
+                    font-size: 0.9em;
+                }
 
-                    .note-item.urgent {
-                        background: rgba(231, 76, 60, 0.05);
-                    }
+                .conflict-badge {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 4px;
+                    margin-top: 8px;
+                    padding: 4px 8px;
+                    background: rgba(244, 67, 54, 0.1);
+                    color: var(--danger-color);
+                    border-radius: var(--border-radius);
+                    font-size: 0.9em;
+                }
 
+                .empty-state {
+                    text-align: center;
+                    padding: 48px 24px;
+                    color: var(--text-secondary);
+                }
 
+                .empty-state svg {
+                    margin-bottom: 16px;
+                    color: var(--text-tertiary);
+                }
 
-                    .note-item.normal {
-                        border-left: 4px solid var(--accent-color);
-                    }
+                /* Modal Styles */
+                .modal-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.5);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 1000;
+                }
 
-                    .note-header {
-                        display: flex;
-                        align-items: center;
-                        gap: 12px;
-                        margin-bottom: 8px;
-                    }
+                .modal {
+                    background: var(--bg-secondary);
+                    border-radius: var(--border-radius);
+                    width: 100%;
+                    max-width: 500px;
+                    box-shadow: var(--shadow-lg);
+                }
 
-                    .note-icon {
-                        padding: 8px;
-                        border-radius: 6px;
-                        background: var(--bg-secondary);
-                    }
+                .modal-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 24px;
+                    border-bottom: 1px solid var(--bg-tertiary);
+                }
 
-                    .note-icon.urgent {
-                        background: rgba(231, 76, 60, 0.05);
-                        color: #e74c3c;
-                    }
+                .modal-header h3 {
+                    margin: 0;
+                    font-size: 1.25rem;
+                }
 
-                    .note-icon.important {
-                        color: #f39c12;
-                    }
+                .close-modal {
+                    background: none;
+                    border: none;
+                    color: var(--text-secondary);
+                    font-size: 24px;
+                    cursor: pointer;
+                    padding: 0;
+                }
 
+                .modal-body {
+                    padding: 24px;
+                }
 
-                    .note-meta {
-                        display: flex;
-                        align-items: center;
-                        gap: 16px;
-                        flex: 1;
-                        min-width: 180px;
-                        padding: 6px 0;
-                    }
+                .modal-footer {
+                    padding: 24px;
+                    border-top: 1px solid var(--bg-tertiary);
+                    display: flex;
+                    justify-content: flex-end;
+                    gap: 12px;
+                }
 
-                    .note-meta.important {
-                        color: #f39c12;
-                    }
+                .form-group {
+                    margin-bottom: 20px;
+                }
 
-                    .note-priority {
-                        font-size: 12px;
-                        font-weight: 600;
-                        padding: 3px 10px;
-                        border-radius: 12px;
-                        background: var(--bg-secondary);
-                        color: var(--text-secondary);
-                    }
+                .form-group label {
+                    display: block;
+                    margin-bottom: 8px;
+                    color: var(--text-secondary);
+                }
 
-                    .note-priority.urgent {
-                        background: rgba(231, 76, 60, 0.1);
-                        color: #e74c3c;
-                    }
+                .form-control {
+                    width: 100%;
+                    padding: 12px;
+                    background: var(--bg-tertiary);
+                    border: 1px solid transparent;
+                    border-radius: var(--border-radius);
+                    color: var(--text-primary);
+                    font-size: 1rem;
+                    transition: var(--transition);
+                }
 
-                    .note-priority.important {
-                        background: rgba(243, 156, 18, 0.1);
-                        color: #f39c12;
-                    }
+                .form-control:focus {
+                    outline: none;
+                    border-color: var(--accent-color);
+                }
 
-                    .note-time {
-                        font-size: 12px;
-                        color: var(--text-secondary);
-                        margin-left: auto;
-                    }
+                textarea.form-control {
+                    resize: vertical;
+                    min-height: 100px;
+                }
 
-                    .note-content {
-                        padding-left: 40px;
-                    }
-
-                    .note-content p {
-                        margin: 0;
-                        color: var(--text-primary);
-                        line-height: 1.5;
-                    }
+                .hidden {
+                    display: none !important;
+                }
                 </style>
 
 
