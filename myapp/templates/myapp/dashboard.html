@@ -354,6 +354,239 @@
         .hidden {
             display: none !important;
         }
+
+        /* Calendar Card Styles */
+        .calendar-card {
+            background-color: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .calendar-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .selection-badge {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .calendar-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .weekday {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            padding: 8px;
+        }
+
+        .calendar-days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-tertiary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            user-select: none;
+            position: relative;
+        }
+
+        .calendar-day:not(.disabled):not(.past):hover {
+            transform: scale(1.05);
+            background-color: rgba(126, 87, 194, 0.2);
+        }
+
+        .calendar-day.selected {
+            background-color: var(--accent-color);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .calendar-day.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: var(--bg-secondary);
+        }
+
+        .calendar-day.past {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: var(--bg-secondary);
+        }
+
+        .calendar-day.submitted {
+            background-color: rgba(244, 67, 54, 0.3);
+            cursor: default;
+        }
+
+        .selected-dates-container {
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+
+        .selected-dates-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            min-height: 32px;
+        }
+
+        .selected-date-tag {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .selected-date-tag:hover {
+            transform: scale(1.05);
+        }
+
+        .selected-date-tag button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            opacity: 0.8;
+            transition: opacity 0.2s ease;
+        }
+
+        .selected-date-tag button:hover {
+            opacity: 1;
+        }
+
+        .empty-state {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        .selection-info {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .submit-button {
+            width: 100%;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(126, 87, 194, 0.2);
+        }
+
+        .submit-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .button-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            z-index: 10;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .error-message {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: rgba(244, 67, 54, 0.1);
+            color: var(--danger-color);
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 16px;
+            font-size: 14px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
     </style>
 
     <!-- Navbar -->
@@ -821,71 +1054,54 @@
                     </div>
                 </div>
 
-                <div class="calendar">
+                <div class="calendar-card">
                     <div class="calendar-header">
-                        <div class="calendar-title">Select Days Off (5 max)</div>
-                        <div class="calendar-nav">
-                            <button id="prev-month" class="btn btn-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="15 18 9 12 15 6"></polyline>
-                                </svg>
-                            </button>
-                            <button id="next-month" class="btn btn-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="9 18 15 12 9 6"></polyline>
-                                </svg>
-                            </button>
+                        <h2 class="calendar-title">Select Days Off</h2>
+                        <div class="selection-badge">
+                            <span id="selected-count">0</span> / 5
                         </div>
                     </div>
 
-                    <div id="calendar-month-year" class="calendar-title" style="margin-bottom: 16px; font-weight: 600; color: var(--accent-color);"></div>
+                    <div class="calendar-grid">
+                        <div class="weekday">Sun</div>
+                        <div class="weekday">Mon</div>
+                        <div class="weekday">Tue</div>
+                        <div class="weekday">Wed</div>
+                        <div class="weekday">Thu</div>
+                        <div class="weekday">Fri</div>
+                        <div class="weekday">Sat</div>
+                        <div id="calendar-days" class="calendar-days-grid">
+                            <!-- Calendar days filled by JavaScript -->
+                        </div>
+                    </div>
 
-                    <div class="calendar-grid" id="weekdays">
-                        <!-- Weekday headers filled by JavaScript -->
-                    </div>
-                    <div class="calendar-grid" id="calendar-days">
-                        <!-- Calendar days filled by JavaScript -->
+                    <div class="selected-dates-container">
+                        <div id="selected-dates-list" class="selected-dates-list">
+                            <div class="empty-state">No dates selected</div>
+                        </div>
                     </div>
 
-                    <div class="calendar-info" id="selection-info">
-                        <p>You have selected <span id="selected-count">0</span> of 5 days off.</p>
-                        <div id="selected-dates-list" class="selected-dates-list"></div>
+                    <div class="selection-info">
+                        You've selected <span id="selection-count">0</span> of 5 days
                     </div>
-                    
-                    <div class="submit-btn-container">
-                        <button id="submit-days-btn" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                            </svg>
-                            Submit Days Off
-                        </button>
+
+                    <button id="submit-days-btn" class="submit-button">
+                        <span class="button-text">Submit Days Off</span>
+                        <div class="button-spinner hidden"></div>
+                    </button>
+
+                    <div id="calendar-error" class="error-message hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        <span class="error-text"></span>
                     </div>
                 </div>
 
-                <!-- Loading Spinner -->
-                <div id="calendar-loading" class="loading-spinner hidden">
+                <div id="calendar-loading" class="loading-overlay hidden">
                     <div class="spinner"></div>
-                    <p>Loading calendar...</p>
-                </div>
-
-                <!-- Error Message -->
-                <div id="calendar-error" class="error-message hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="12" y1="8" x2="12" y2="12"></line>
-                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                    </svg>
-                    <p>Failed to load calendar. Please try again.</p>
-                </div>
-
-                <!-- Success Message -->
-                <div id="calendar-success" class="success-message hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                    </svg>
-                    <p>Days off submitted successfully!</p>
                 </div>
 
                 <div class="recent-activity">
