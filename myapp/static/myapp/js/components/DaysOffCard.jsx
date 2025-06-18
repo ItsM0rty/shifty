@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isToday } from 'date-fns';
-import CalendarCell from './CalendarCell';
+import { format } from 'date-fns';
+import CalendarGrid from './CalendarGrid';
 import useDaysOff from '../hooks/useDaysOff';
 import './DaysOffCard.css';
 
@@ -15,19 +15,6 @@ const DaysOffCard = () => {
         submitDaysOff,
         isDateSelectable
     } = useDaysOff();
-
-    // Generate calendar days
-    const generateCalendarDays = () => {
-        const monthStart = startOfMonth(currentDate);
-        const monthEnd = endOfMonth(currentDate);
-        const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
-        
-        // Add empty cells for days before month start
-        const startDay = monthStart.getDay();
-        const emptyStartCells = Array(startDay).fill(null);
-        
-        return [...emptyStartCells, ...days];
-    };
 
     // Format date for display
     const formatDateForDisplay = (date) => {
@@ -53,43 +40,35 @@ const DaysOffCard = () => {
                 </div>
             </div>
 
-            {/* Calendar Grid */}
-            <div className="calendar-grid">
-                {/* Weekday headers */}
-                <div className="weekday">Sun</div>
-                <div className="weekday">Mon</div>
-                <div className="weekday">Tue</div>
-                <div className="weekday">Wed</div>
-                <div className="weekday">Thu</div>
-                <div className="weekday">Fri</div>
-                <div className="weekday">Sat</div>
-
-                {/* Calendar days */}
-                {generateCalendarDays().map((date, index) => {
-                    if (!date) {
-                        return <div key={`empty-${index}`} className="calendar-cell empty" />;
-                    }
-
-                    const dateString = format(date, 'yyyy-MM-dd');
-                    const isSelected = selectedDates.includes(dateString);
-                    const isSubmitted = approvedDaysOff.includes(dateString);
-                    const isDisabled = !isDateSelectable(dateString);
-                    const isPast = isPast(date);
-
-                    return (
-                        <CalendarCell
-                            key={dateString}
-                            day={date.getDate()}
-                            date={dateString}
-                            isSelected={isSelected}
-                            isDisabled={isDisabled}
-                            isPast={isPast}
-                            isSubmitted={isSubmitted}
-                            onClick={toggleDate}
-                        />
-                    );
-                })}
+            {/* Month Navigation */}
+            <div className="month-navigation">
+                <button
+                    type="button"
+                    onClick={() => navigateMonth(-1)}
+                    className="nav-button"
+                >
+                    ←
+                </button>
+                <h3 className="month-title">
+                    {format(currentDate, 'MMMM yyyy')}
+                </h3>
+                <button
+                    type="button"
+                    onClick={() => navigateMonth(1)}
+                    className="nav-button"
+                >
+                    →
+                </button>
             </div>
+
+            {/* Calendar Grid */}
+            <CalendarGrid
+                currentDate={currentDate}
+                selectedDates={selectedDates}
+                approvedDaysOff={approvedDaysOff}
+                onDateClick={toggleDate}
+                isDateSelectable={isDateSelectable}
+            />
 
             {/* Selected Dates */}
             <div className="selected-dates">
@@ -100,7 +79,7 @@ const DaysOffCard = () => {
                                 {formatDateForDisplay(date)}
                                 <button
                                     className="remove-date"
-                                    onClick={() => toggleDate(date)}
+                                    onClick={() => toggleDate(new Date(date))}
                                     type="button"
                                 >
                                     ×

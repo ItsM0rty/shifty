@@ -1,8 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { format, isPast, addDays, isAfter } from 'date-fns';
-
-const MAX_SELECTIONS = 5;
-const MAX_DAYS_AHEAD = 30;
+import { format, addDays, isBefore, isAfter } from 'date-fns';
 
 const useDaysOff = () => {
     const [selectedDates, setSelectedDates] = useState([]);
@@ -15,12 +12,10 @@ const useDaysOff = () => {
         try {
             setLoading(true);
             setError(null);
-            
             const response = await fetch('/api/days-off/approved/');
             if (!response.ok) throw new Error('Failed to fetch approved days off');
-            
             const data = await response.json();
-            setApprovedDaysOff(data);
+            setApprovedDaysOff(data.dates);
         } catch (err) {
             setError(err.message);
         } finally {
@@ -28,51 +23,26 @@ const useDaysOff = () => {
         }
     }, []);
 
-    // Load approved days off on mount
-    useEffect(() => {
-        fetchApprovedDaysOff();
-    }, [fetchApprovedDaysOff]);
-
-    // Toggle date selection
-    const toggleDate = useCallback((dateString) => {
-        setSelectedDates(prev => {
-            const index = prev.indexOf(dateString);
-            
-            if (index === -1) {
-                if (prev.length >= MAX_SELECTIONS) {
-                    setError(`You can only select up to ${MAX_SELECTIONS} days off`);
-                    return prev;
-                }
-                return [...prev, dateString];
-            }
-            
-            return prev.filter(date => date !== dateString);
-        });
-    }, []);
-
-    // Submit days off
+    // Submit selected days off
     const submitDaysOff = useCallback(async () => {
         if (selectedDates.length === 0) {
-            setError('Please select at least one day off');
+            setError('Please select at least one day');
             return;
         }
 
         try {
             setLoading(true);
             setError(null);
-            
             const response = await fetch('/api/days-off/submit/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')
                 },
-                body: JSON.stringify({ dates: selectedDates })
+                body: JSON.stringify({ dates: selectedDates }),
             });
-            
+
             if (!response.ok) throw new Error('Failed to submit days off');
-            
-            // Update approved days off
+            const data = await response.json();
             setApprovedDaysOff(prev => [...prev, ...selectedDates]);
             setSelectedDates([]);
         } catch (err) {
@@ -82,13 +52,37 @@ const useDaysOff = () => {
         }
     }, [selectedDates]);
 
-    // Check if date is selectable
-    const isDateSelectable = useCallback((date) => {
-        const dateObj = new Date(date);
-        const maxDate = addDays(new Date(), MAX_DAYS_AHEAD);
+    // Toggle date selection
+    const toggleDate = useCallback((date) => {
+        const dateString = format(date, 'yyyy-MM-dd');
         
-        return !isPast(dateObj) && !isAfter(dateObj, maxDate);
+        setSelectedDates(prev => {
+            if (prev.includes(dateString)) {
+                return prev.filter(d => d !== dateString);
+            }
+            
+            if (prev.length >= 5) {
+                setError('You can only select up to 5 days off');
+                return prev;
+            }
+            
+            return [...prev, dateString];
+        });
     }, []);
+
+    // Check if a date is selectable
+    const isDateSelectable = useCallback((dateString) => {
+        const date = new Date(dateString);
+        const today = new Date();
+        const thirtyDaysFromNow = addDays(today, 30);
+        
+        return !isBefore(date, today) && !isAfter(date, thirtyDaysFromNow);
+    }, []);
+
+    // Fetch approved days off on mount
+    useEffect(() => {
+        fetchApprovedDaysOff();
+    }, [fetchApprovedDaysOff]);
 
     return {
         selectedDates,
@@ -97,24 +91,9 @@ const useDaysOff = () => {
         error,
         toggleDate,
         submitDaysOff,
-        isDateSelectable
+        isDateSelectable,
+        fetchApprovedDaysOff
     };
 };
-
-// Helper function to get CSRF token
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
 
 export default useDaysOff; 

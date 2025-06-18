@@ -1,15 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const CalendarCell = ({
-    day,
-    date,
-    isSelected,
-    isDisabled,
-    isPast,
-    isSubmitted,
-    onClick
-}) => {
+const CalendarCell = ({ date, isDisabled, isSelected, isPast, isSubmitted, onClick }) => {
+    if (!date) {
+        return <td className="calendar-cell empty" />;
+    }
+
+    const handleClick = () => {
+        if (!isDisabled) {
+            onClick(date);
+        }
+    };
+
     const getCellClasses = () => {
         const classes = ['calendar-cell'];
         if (isSelected) classes.push('selected');
@@ -20,30 +22,32 @@ const CalendarCell = ({
     };
 
     return (
-        <button
-            className={getCellClasses()}
-            onClick={() => !isDisabled && !isPast && !isSubmitted && onClick(date)}
-            disabled={isDisabled || isPast || isSubmitted}
-            type="button"
-        >
-            {day}
-        </button>
+        <td className={getCellClasses()}>
+            <button
+                type="button"
+                onClick={handleClick}
+                disabled={isDisabled}
+                className="date-button"
+            >
+                {date.getDate()}
+            </button>
+        </td>
     );
 };
 
 CalendarCell.propTypes = {
-    day: PropTypes.number.isRequired,
-    date: PropTypes.string.isRequired,
-    isSelected: PropTypes.bool,
+    date: PropTypes.instanceOf(Date),
     isDisabled: PropTypes.bool,
+    isSelected: PropTypes.bool,
     isPast: PropTypes.bool,
     isSubmitted: PropTypes.bool,
     onClick: PropTypes.func.isRequired
 };
 
 CalendarCell.defaultProps = {
-    isSelected: false,
+    date: null,
     isDisabled: false,
+    isSelected: false,
     isPast: false,
     isSubmitted: false
 };

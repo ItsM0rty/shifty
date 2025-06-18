@@ -29,20 +29,100 @@
     font-weight: 500;
 }
 
+/* Month Navigation */
+.month-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-4);
+}
+
+.month-title {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    color: var(--text-1);
+}
+
+.nav-button {
+    background: var(--surface-3);
+    border: none;
+    color: var(--text-1);
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.nav-button:hover {
+    background: var(--surface-4);
+    transform: scale(1.05);
+}
+
 /* Calendar Grid */
 .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: var(--space-2);
+    width: 100%;
+    border-collapse: collapse;
     margin-bottom: var(--space-6);
 }
 
-.weekday {
+.calendar-grid th,
+.calendar-grid td {
+    padding: var(--space-2);
     text-align: center;
+}
+
+.calendar-grid th {
     font-size: var(--text-sm);
     color: var(--text-2);
-    padding: var(--space-2);
     font-weight: 500;
+    padding-bottom: var(--space-3);
+}
+
+.calendar-cell {
+    position: relative;
+    height: 40px;
+}
+
+.calendar-cell.empty {
+    background: none;
+}
+
+.date-button {
+    width: 100%;
+    height: 100%;
+    border: 2px solid transparent;
+    background: var(--surface-3);
+    color: var(--text-1);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-size: var(--text-sm);
+    font-weight: 500;
+}
+
+.date-button:hover:not(:disabled) {
+    border-color: var(--accent-1);
+    transform: scale(1.05);
+}
+
+.calendar-cell.selected .date-button {
+    background: var(--accent-1);
+    color: var(--accent-1-contrast);
+}
+
+.calendar-cell.disabled .date-button,
+.calendar-cell.past .date-button {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.calendar-cell.submitted .date-button {
+    background: var(--success-bg);
+    color: var(--success-text);
 }
 
 /* Selected Dates */
