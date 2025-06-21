@@ -312,6 +312,8 @@
                 calendar: {
                     currentDate: new Date(),
                     selectedDates: [],
+                    approvedDates: [],
+                    pendingDates: [],
                 }
             },
             init() {
@@ -354,6 +356,22 @@
                         }
                     });
                     this.render();
+                    // Load existing time-off requests
+                    fetch('/api/timeoff/')
+                        .then(r => r.ok ? r.json() : Promise.reject('Failed to load time off'))
+                        .then(data => {
+                            const approved = [];
+                            const pending = [];
+                            data.requests.forEach(req => {
+                                const range = App.Helpers.datesBetween(req.start_date, req.end_date);
+                                if (req.status === 'approved') approved.push(...range);
+                                else pending.push(...range);
+                            });
+                            App.state.calendar.approvedDates = approved;
+                            App.state.calendar.pendingDates = pending;
+                            this.render();
+                        })
+                        .catch(console.error);
                 },
                 render() {
                     this.renderDaysGrid();
@@ -361,7 +379,7 @@
                 },
                 renderDaysGrid() {
                     const { daysGrid } = this.elements;
-                    const { currentDate, selectedDates } = App.state.calendar;
+                    const { currentDate, selectedDates, approvedDates, pendingDates } = App.state.calendar;
                     const month = currentDate.getMonth();
                     const year = currentDate.getFullYear();
                     
@@ -382,6 +400,8 @@
                         const classes = ['calendar-day'];
                         if (cellDate < today) classes.push('past');
                         if (selectedDates.includes(dateString)) classes.push('selected');
+                        if (approvedDates.includes(dateString)) classes.push('approved');
+                        else if (pendingDates.includes(dateString)) classes.push('pending');
                         
                         const dayEl = `<div class="${classes.join(' ')}" data-date="${dateString}">${day}</div>`;
                         daysGrid.insertAdjacentHTML('beforeend', dayEl);
@@ -415,10 +435,44 @@
                 },
                 handleSubmit() {
                     const { selectedDates } = App.state.calendar;
-                    alert(`Request for ${selectedDates.length} day(s) off has been submitted.`);
-                    selectedDates.length = 0;
-                    this.render();
+                    if (selectedDates.length === 0) return;
+                    const sorted = [...selectedDates].sort();
+                    const payload = {
+                        start_date: sorted[0],
+                        end_date: sorted[sorted.length - 1],
+                    };
+                    fetch('/api/timeoff/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': App.Helpers.getCookie('csrftoken'),
+                        },
+                        body: JSON.stringify(payload)
+                    }).then(r => r.json().then(d => ({status: r.status, data: d})))
+                      .then(res => {
+                          if (res.status === 201) {
+                              alert('Request submitted!');
+                              App.state.calendar.selectedDates.length = 0;
+                              // Refresh list
+                              return fetch('/api/timeoff/').then(r=>r.json());
+                          } else {
+                              throw new Error('Error: ' + JSON.stringify(res.data));
+                          }
+                      })
+                      .then(data => {
+                          const approved=[];const pending=[];
+                          data.requests.forEach(req=>{
+                              const range=App.Helpers.datesBetween(req.start_date, req.end_date);
+                              if(req.status==='approved') approved.push(...range); else pending.push(...range);
+                          });
+                          App.state.calendar.approvedDates=approved;App.state.calendar.pendingDates=pending; this.render();
+                      })
+                      .catch(err=>{console.error(err); alert(err.message||'Unexpected error');});
                 }
+            },
+            Helpers: {
+                getCookie(name) { let c=null; if(document.cookie) document.cookie.split(';').forEach(cookie=>{cookie=cookie.trim(); if(cookie.startsWith(name+'=')) c=decodeURIComponent(cookie.split('=')[1]);}); return c; },
+                datesBetween(start,end){const out=[];let d=new Date(start); const e=new Date(end); while(d<=e){out.push(d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()); d.setDate(d.getDate()+1);} return out; }
             }
         };
         App.init();

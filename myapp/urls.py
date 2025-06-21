@@ -20,4 +20,6 @@ urlpatterns = [
     path('api/employees/', views.api_employee_list, name='api_employee_list'),
     path('api/shifts/', views.api_shift_list, name='api_shift_list'),
     path('api/shifts/bulk-save/', views.api_shift_bulk_save, name='api_shift_bulk_save'),
+    path('api/timeoff/', views.api_timeoff, name='api_timeoff'),
+    path('api/timeoff/<int:pk>/decision/', views.api_timeoff_decision, name='api_timeoff_decision'),
 ]

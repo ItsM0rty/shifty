@@ -12,6 +12,7 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.db import transaction
+from myapp.models import TimeOffRequest
 
 def home(request):
     """
@@ -403,3 +404,78 @@ def api_shift_bulk_save(request):
             created_ids.append(new_shift.id)
 
     return JsonResponse({'created': created_ids, 'updated': updated_ids}, status=201)
+
+@require_http_methods(["GET", "POST"])
+@login_required(login_url='/login')
+def api_timeoff(request):
+    """Employees: GET their requests, POST to create. Managers: GET pending requests."""
+    if request.method == 'GET':
+        if request.user.is_staff or getattr(request.user, 'is_manager', False):
+            # Managers see pending requests across employees
+            qs = TimeOffRequest.objects.filter(status='pending').select_related('user')
+        else:
+            qs = TimeOffRequest.objects.filter(user=request.user).select_related('user')
+        data = [
+            {
+                'id': t.id,
+                'user_id': t.user.id,
+                'user_name': t.user.get_full_name() or t.user.username,
+                'start_date': t.start_date.isoformat(),
+                'end_date': t.end_date.isoformat(),
+                'reason': t.reason,
+                'status': t.status,
+            }
+            for t in qs.order_by('-created_at')
+        ]
+        return JsonResponse({'requests': data}, status=200)
+
+    # POST - create new request (employee only)
+    import json
+    try:
+        payload = json.loads(request.body)
+    except json.JSONDecodeError:
+        return HttpResponseBadRequest("Invalid JSON")
+
+    start_date = payload.get('start_date')
+    end_date = payload.get('end_date')
+    reason = payload.get('reason', '')
+    if not (start_date and end_date):
+        return HttpResponseBadRequest("start_date and end_date are required")
+    try:
+        sd = datetime.strptime(start_date, "%Y-%m-%d").date()
+        ed = datetime.strptime(end_date, "%Y-%m-%d").date()
+    except ValueError:
+        return HttpResponseBadRequest("Dates must be YYYY-MM-DD")
+    if ed < sd:
+        return HttpResponseBadRequest("end_date must be after start_date")
+
+    req = TimeOffRequest.objects.create(user=request.user, start_date=sd, end_date=ed, reason=reason)
+    return JsonResponse({'id': req.id, 'status': req.status}, status=201)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+@login_required(login_url='/login')
+def api_timeoff_decision(request, pk):
+    """Managers approve/deny a time-off request."""
+    try:
+        req = TimeOffRequest.objects.get(pk=pk)
+    except TimeOffRequest.DoesNotExist:
+        return HttpResponseBadRequest("Request not found")
+
+    if not (request.user.is_staff or getattr(request.user, 'is_manager', False)):
+        return HttpResponseForbidden("Forbidden")
+
+    import json
+    try:
+        payload = json.loads(request.body)
+    except json.JSONDecodeError:
+        return HttpResponseBadRequest("Invalid JSON")
+
+    decision = payload.get('decision')  # 'approved' or 'denied'
+    if decision not in ['approved', 'denied']:
+        return HttpResponseBadRequest("Invalid decision value")
+
+    req.status = decision
+    req.save()
+    return JsonResponse({'id': req.id, 'status': req.status}, status=200)
