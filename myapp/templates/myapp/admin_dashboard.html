@@ -68,7 +68,7 @@
         <header class="dashboard-header">
             <h1>Manager Dashboard</h1>
             <div class="header-actions">
-                <a href="#" class="btn btn-danger">
+                <a href="{% url 'myapp:logout' %}" class="btn btn-danger">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                         <polyline points="16 17 21 12 16 7"></polyline>
@@ -135,7 +135,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="#" class="nav-link" data-section="timeoff">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
                                     <polyline points="13 2 13 9 20 9"></polyline>
@@ -587,6 +587,16 @@
                     </div>
                 </div>
 
+                <!-- Time Off Requests Section -->
+                <section id="timeoff-section" class="content-section">
+                    <div class="section-header"><h2>Time Off Requests</h2></div>
+                    <table class="data-table" id="timeoff-table">
+                        <thead>
+                            <tr><th>Employee</th><th>Date Range</th><th>Reason</th><th>Status</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody id="timeoff-table-body"><!-- Populated by JS --></tbody>
+                    </table>
+                </section>
 
                 {% include 'myapp/db_settings.html' %}
 

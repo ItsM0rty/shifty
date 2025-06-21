@@ -133,6 +133,10 @@ $(document).ready(function() {
       // Update active nav link
       $('.nav-link').removeClass('active');
       $(this).addClass('active');
+
+      if(section === 'timeoff') {
+          loadTimeOffRequests();
+      }
   });
   
   // Initialize first section as active
@@ -462,5 +466,47 @@ $(this).closest('.conflict-card').remove();
 });
 
 function to24(timeStr){const m=timeStr.match(/(\d+)(?::(\d+))?(AM|PM)/i);if(!m)return timeStr;let h=parseInt(m[1],10);const min=parseInt(m[2]||'0',10);const ampm=m[3].toUpperCase();if(ampm==='PM'&&h<12)h+=12;if(ampm==='AM'&&h===12)h=0;return `${h.toString().padStart(2,'0')}:${min.toString().padStart(2,'0')}`;}
+
+function loadTimeOffRequests(){
+     const tbody = $('#timeoff-table-body');
+     tbody.empty();
+     fetch('/api/timeoff/')
+       .then(r=>r.ok?r.json():Promise.reject('Failed'))
+       .then(data=>{
+          if(data.requests.length===0){
+              tbody.append('<tr><td colspan="5">No pending requests 🎉</td></tr>');
+          }
+          data.requests.forEach(req=>{
+             const row=`<tr data-id="${req.id}">
+                <td>${req.user_name}</td>
+                <td>${req.start_date} - ${req.end_date}</td>
+                <td>${req.reason||''}</td>
+                <td><span class="badge badge-pending">Pending</span></td>
+                <td>
+                   <button class="btn btn-success btn-sm timeoff-approve" data-id="${req.id}">Approve</button>
+                   <button class="btn btn-danger btn-sm timeoff-deny" data-id="${req.id}">Deny</button>
+                </td>
+             </tr>`;
+             tbody.append(row);
+          });
+       })
+       .catch(console.error);
+  }
+
+$(document).on('click','.timeoff-approve, .timeoff-deny',function(){
+      const id=$(this).data('id');
+      const decision=$(this).hasClass('timeoff-approve')?'approved':'denied';
+      fetch(`/api/timeoff/${id}/decision/`,{
+         method:'POST',
+         headers:{'Content-Type':'application/json','X-CSRFToken':getCookie('csrftoken')},
+         body: JSON.stringify({decision:decision})
+      }).then(r=>r.ok?r.json():Promise.reject('Error'))
+       .then(()=>{
+           $(`tr[data-id='${id}']`).remove();
+           if($('#timeoff-table-body tr').length===0){
+               $('#timeoff-table-body').append('<tr><td colspan="5">No pending requests 🎉</td></tr>');
+           }
+       }).catch(err=>{alert('Failed: '+err);});
+  });
 });
 

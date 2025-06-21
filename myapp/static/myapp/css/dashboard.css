@@ -446,6 +446,19 @@ body {
     font-size: 12px;
 }
 
+/* additional states for approved & pending time-off */
+.calendar-day.approved {
+    background-color: var(--success-color);
+    color: white;
+    cursor: default;
+}
+.calendar-day.pending {
+    background-color: var(--accent-color);
+    opacity: 0.6;
+    color: white;
+    cursor: default;
+}
+
 /* Responsive */
 @media (max-width: 992px) {
     .dashboard-content {
