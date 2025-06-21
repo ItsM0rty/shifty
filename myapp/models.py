@@ -13,6 +13,9 @@ class User(AbstractUser):
     hire_date = models.DateField(null=True, blank=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     
+    # Indicates if the user has been approved by a manager/admin
+    approved = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.username
 

@@ -202,18 +202,18 @@ def signup_view(request):
                 user = User.objects.create_user(
                     username=username,
                     email=email,
-                    password=password
+                    password=password,
+                    is_active=False  # cannot log in until approved
                 )
                 
                 # Set additional fields
                 user.phone_number = phone_number
                 user.company_code = company_code
+                user.approved = False
                 user.save()
                 
-                # Log the user in
-                login(request, user)
-                messages.success(request, "Account created successfully!")
-                return redirect('myapp:dashboard')
+                messages.info(request, "Account created. A manager must approve your signup before you can log in.")
+                return redirect('myapp:login')
             except Exception as e:
                 messages.error(request, f"Error creating account: {str(e)}")
     
@@ -479,3 +479,48 @@ def api_timeoff_decision(request, pk):
     req.status = decision
     req.save()
     return JsonResponse({'id': req.id, 'status': req.status}, status=200)
+
+# -------------------- Sign-up approval API --------------------
+
+@require_http_methods(["GET"])
+@login_required(login_url='/login')
+def api_pending_signups(request):
+    """List users awaiting approval (approved=False)"""
+    if not (request.user.is_staff or getattr(request.user, 'is_manager', False)):
+        return HttpResponseForbidden("Forbidden")
+
+    pending_qs = UserModel.objects.filter(approved=False).values('id', 'username', 'first_name', 'last_name', 'email', 'date_joined')
+    return JsonResponse({'pending': list(pending_qs)}, status=200)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+@login_required(login_url='/login')
+def api_signup_decision(request, pk):
+    """Approve or reject a pending signup."""
+    if not (request.user.is_staff or getattr(request.user, 'is_manager', False)):
+        return HttpResponseForbidden("Forbidden")
+
+    try:
+        user_obj = UserModel.objects.get(pk=pk, approved=False)
+    except UserModel.DoesNotExist:
+        return HttpResponseBadRequest("User not found or already decided")
+
+    import json
+    try:
+        payload = json.loads(request.body)
+    except json.JSONDecodeError:
+        return HttpResponseBadRequest("Invalid JSON")
+
+    decision = payload.get('decision')
+    if decision not in ['approve', 'reject']:
+        return HttpResponseBadRequest("Invalid decision value")
+
+    if decision == 'approve':
+        user_obj.approved = True
+        user_obj.is_active = True
+        user_obj.save()
+    else:
+        # Reject: delete the user
+        user_obj.delete()
+    return JsonResponse({'id': pk, 'status': decision}, status=200)

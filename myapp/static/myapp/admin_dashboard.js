@@ -163,25 +163,60 @@ const modalId = $(this).data('modal-target');
 $(`#${modalId}`).addClass('hidden');
 });
 
-// New Signups - Approve/Reject functionality
-$('.approve-btn, .reject-btn').click(function() {
-const isApprove = $(this).hasClass('approve-btn');
-const userId = $(this).data('id');
-const row = $(this).closest('tr');
+// ---------------- Pending signups ----------------
 
-if (isApprove) {
-row.find('.badge').removeClass('badge-pending').addClass('badge-approved').text('Approved');
-// In a real app, you would make an API call here
-console.log(`Approved user ID: ${userId}`);
-} else {
-row.find('.badge').removeClass('badge-pending').addClass('badge-rejected').text('Rejected');
-// In a real app, you would make an API call here
-console.log(`Rejected user ID: ${userId}`);
+function refreshPendingSignups(){
+   const tbody = $('#pending-signups-body');
+   if(tbody.length===0) return;
+   tbody.html('<tr><td colspan="6">Loading…</td></tr>');
+   fetch('/api/signups/')
+     .then(r=>r.ok?r.json():Promise.reject('Failed'))
+     .then(data=>{
+        tbody.empty();
+        if(!data.pending || data.pending.length===0){
+            tbody.append('<tr><td colspan="6">No pending signups 🎉</td></tr>');
+            return;
+        }
+        data.pending.forEach(u=>{
+           const fullName = (u.first_name||u.last_name)? `${u.first_name} ${u.last_name}`.trim():u.username;
+           const tr=`<tr data-id="${u.id}">
+                <td>${fullName}</td>
+                <td>${u.email}</td>
+                <td><span class="join-code">—</span></td>
+                <td>—</td>
+                <td><span class="badge badge-pending">Pending</span></td>
+                <td class="actions">
+                    <button class="btn btn-success btn-sm approve-btn" data-id="${u.id}">Approve</button>
+                    <button class="btn btn-danger btn-sm reject-btn" data-id="${u.id}">Reject</button>
+                </td>
+           </tr>`;
+           tbody.append(tr);
+        });
+     })
+     .catch(err=>{console.error(err); tbody.html('<tr><td colspan="6">Error loading data</td></tr>');});
 }
 
-// Disable buttons after action
-row.find('.approve-btn, .reject-btn').prop('disabled', true);
+// Approve / Reject actions
+$(document).on('click', '.approve-btn, .reject-btn', function(){
+   const isApprove=$(this).hasClass('approve-btn');
+   const id=$(this).data('id');
+   const row=$(this).closest('tr');
+   fetch(`/api/signups/${id}/decision/`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','X-CSRFToken':getCookie('csrftoken')},
+      body: JSON.stringify({decision: isApprove?'approve':'reject'})
+   }).then(r=>r.ok?r.json():Promise.reject('Error'))
+    .then(()=>{
+        row.remove();
+        if($('#pending-signups-body tr').length===0){
+           $('#pending-signups-body').append('<tr><td colspan="6">No pending signups 🎉</td></tr>');
+        }
+    }).catch(err=>{alert('Failed: '+err);});
 });
+
+// Load signups on page ready and when Dashboard tab shown
+refreshPendingSignups();
+$('.nav-link[data-section="dashboard"]').click(()=>refreshPendingSignups());
 
 // Shift Management - Drag and Drop functionality
 interact('.shift-slot').dropzone({

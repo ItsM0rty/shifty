@@ -22,4 +22,6 @@ urlpatterns = [
     path('api/shifts/bulk-save/', views.api_shift_bulk_save, name='api_shift_bulk_save'),
     path('api/timeoff/', views.api_timeoff, name='api_timeoff'),
     path('api/timeoff/<int:pk>/decision/', views.api_timeoff_decision, name='api_timeoff_decision'),
+    path('api/signups/', views.api_pending_signups, name='api_pending_signups'),
+    path('api/signups/<int:pk>/decision/', views.api_signup_decision, name='api_signup_decision'),
 ]
