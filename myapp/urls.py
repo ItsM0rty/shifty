@@ -15,6 +15,9 @@ urlpatterns = [
     path('signup/', views.signup_view, name='signup'),
     path('logout/', views.user_logout, name='logout'),
     path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
-path('test-static/', views.test_static, name='test_static'),
-path('static-test/', views.static_test, name='static_test'),
+    path('test-static/', views.test_static, name='test_static'),
+    path('static-test/', views.static_test, name='static_test'),
+    path('api/employees/', views.api_employee_list, name='api_employee_list'),
+    path('api/shifts/', views.api_shift_list, name='api_shift_list'),
+    path('api/shifts/bulk-save/', views.api_shift_bulk_save, name='api_shift_bulk_save'),
 ]

@@ -3,8 +3,15 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import logging
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, HttpResponseForbidden
 from myapp.models import User
+from myapp.models import Shift
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
+from datetime import datetime, timedelta
+from django.utils import timezone
+from django.contrib.auth import get_user_model
+from django.db import transaction
 
 def home(request):
     """
@@ -246,3 +253,159 @@ def static_test(request):
     """
     context = {'works': True}
     return render(request, 'myapp/static_test.html', context)
+
+UserModel = get_user_model()
+
+
+def _date_for_weekday(week_start: datetime.date, weekday_name: str):
+    """Return the date object in the same week as week_start corresponding to weekday_name."""
+    weekdays = {
+        'monday': 0,
+        'tuesday': 1,
+        'wednesday': 2,
+        'thursday': 3,
+        'friday': 4,
+        'saturday': 5,
+        'sunday': 6,
+    }
+    index = weekdays.get(weekday_name.lower())
+    if index is None:
+        raise ValueError(f"Invalid weekday name: {weekday_name}")
+    return week_start + timedelta(days=index)
+
+
+@require_http_methods(["GET"])
+@login_required(login_url='/login')
+def api_employee_list(request):
+    """Return a JSON list of all non-manager employees for the authenticated user's company."""
+    if not request.user.is_staff:
+        if not getattr(request.user, 'is_manager', False):
+            return HttpResponseForbidden("Forbidden")
+
+    employees = UserModel.objects.filter(is_manager=False).values('id', 'username', 'first_name', 'last_name', 'email')
+    return JsonResponse({"employees": list(employees)}, status=200)
+
+
+@require_http_methods(["GET"])
+@login_required(login_url='/login')
+def api_shift_list(request):
+    """Return shifts in a given date range. Requires ?start=YYYY-MM-DD&end=YYYY-MM-DD or ?week_start=YYYY-MM-DD"""
+    user = request.user
+    start_date_str = request.GET.get('start')
+    end_date_str = request.GET.get('end')
+    week_start_str = request.GET.get('week_start')
+
+    if week_start_str and not (start_date_str or end_date_str):
+        # calculate full week range (Monday-Sunday) based on supplied week_start (Monday expected)
+        try:
+            week_start = datetime.strptime(week_start_str, "%Y-%m-%d").date()
+        except ValueError:
+            return HttpResponseBadRequest("Invalid week_start format. Expected YYYY-MM-DD")
+        start_date = week_start
+        end_date = week_start + timedelta(days=6)
+    elif start_date_str and end_date_str:
+        try:
+            start_date = datetime.strptime(start_date_str, "%Y-%m-%d").date()
+            end_date = datetime.strptime(end_date_str, "%Y-%m-%d").date()
+        except ValueError:
+            return HttpResponseBadRequest("Invalid start or end date format. Expected YYYY-MM-DD")
+    else:
+        return HttpResponseBadRequest("Provide week_start or start & end query parameters")
+
+    qs = Shift.objects.filter(start_time__date__gte=start_date, end_time__date__lte=end_date)
+    if not (user.is_staff or getattr(user, 'is_manager', False)):
+        qs = qs.filter(user=user)
+
+    shifts_data = []
+    for shift in qs.select_related('user'):
+        shifts_data.append({
+            'id': shift.id,
+            'user_id': shift.user.id,
+            'user_name': shift.user.get_full_name() or shift.user.username,
+            'start_time': shift.start_time.isoformat(),
+            'end_time': shift.end_time.isoformat(),
+            'manual_override': shift.manual_override,
+            'status': shift.status,
+            'title': shift.title,
+        })
+
+    return JsonResponse({'shifts': shifts_data}, status=200)
+
+
+@csrf_exempt  # Front-end will include CSRF token later, but allow for now.
+@require_http_methods(["POST"])
+@login_required(login_url='/login')
+@transaction.atomic
+def api_shift_bulk_save(request):
+    """Bulk create or update shifts. Only staff can call."""
+    if not request.user.is_staff:
+        if not getattr(request.user, 'is_manager', False):
+            return HttpResponseForbidden("Forbidden")
+
+    import json
+    try:
+        payload = json.loads(request.body)
+    except json.JSONDecodeError:
+        return HttpResponseBadRequest("Invalid JSON body")
+
+    week_start_str = payload.get('week_start')
+    shifts = payload.get('shifts', [])
+    if not week_start_str or not shifts:
+        return HttpResponseBadRequest("Missing week_start or shifts list")
+
+    try:
+        week_start = datetime.strptime(week_start_str, "%Y-%m-%d").date()
+    except ValueError:
+        return HttpResponseBadRequest("Invalid week_start format; expected YYYY-MM-DD")
+
+    created_ids = []
+    updated_ids = []
+
+    for entry in shifts:
+        try:
+            user_id = entry['employee_id']
+            day = entry['day']  # e.g., "Monday"
+            start_time_str = entry['start']  # "09:00"
+            end_time_str = entry['end']  # "17:00"
+            manual_override = bool(entry.get('manual_override', False))
+            title = entry.get('title', 'Shift')
+        except KeyError:
+            return HttpResponseBadRequest("Shift entry missing required keys")
+
+        try:
+            user_obj = UserModel.objects.get(pk=user_id)
+        except UserModel.DoesNotExist:
+            return HttpResponseBadRequest(f"User {user_id} not found")
+
+        shift_date = _date_for_weekday(week_start, day)
+        try:
+            start_t = datetime.strptime(start_time_str, "%H:%M").time()
+            end_t = datetime.strptime(end_time_str, "%H:%M").time()
+        except ValueError:
+            return HttpResponseBadRequest("Invalid time format. Expected HH:MM")
+
+        start_dt = timezone.make_aware(datetime.combine(shift_date, start_t))
+        end_dt = timezone.make_aware(datetime.combine(shift_date, end_t))
+
+        # Upsert: if a shift already exists for user with overlapping times on that date, update it.
+        existing = Shift.objects.filter(user=user_obj, start_time__date=shift_date, title=title).first()
+        if existing:
+            existing.start_time = start_dt
+            existing.end_time = end_dt
+            existing.manual_override = manual_override
+            existing.status = 'scheduled'
+            existing.save()
+            updated_ids.append(existing.id)
+        else:
+            new_shift = Shift.objects.create(
+                user=user_obj,
+                start_time=start_dt,
+                end_time=end_dt,
+                title=title,
+                description='',
+                status='scheduled',
+                manual_override=manual_override
+            )
+            created_ids.append(new_shift.id)
+
+    return JsonResponse({'created': created_ids, 'updated': updated_ids}, status=201)

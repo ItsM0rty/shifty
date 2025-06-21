@@ -43,6 +43,9 @@ class Shift(models.Model):
     ]
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='scheduled')
     
+    # Indicates if this shift was manually overridden by a manager
+    manual_override = models.BooleanField(default=False)
+    
     def __str__(self):
         return f"{self.user.username}: {self.title} ({self.start_time.strftime('%Y-%m-%d %H:%M')})"
 

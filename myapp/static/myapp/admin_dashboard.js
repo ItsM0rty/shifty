@@ -363,27 +363,95 @@ function showConflictWarning(employee, day) {
 alert(`Conflict detected! ${employee} has a scheduling conflict on ${day}.`);
 }
 
+// --- Cached employee name -> id mapping ---
+let EMPLOYEE_MAP = {};
+
+// Fetch employees once page is ready (for managers)
+if (window.location.pathname.includes('admin-dashboard')) {
+  fetch('/api/employees/')
+    .then(r => r.ok ? r.json() : Promise.reject('Failed to load employees'))
+    .then(data => {
+      data.employees.forEach(emp => {
+        const fullName = emp.first_name || emp.last_name ? `${emp.first_name} ${emp.last_name}`.trim() : emp.username;
+        EMPLOYEE_MAP[fullName] = emp.id;
+      });
+    })
+    .catch(err => console.error(err));
+}
+
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
 // Save shifts
 $('#saveShifts').click(function() {
-// Collect all assigned shifts
-const shifts = [];
-$('.shift-slot.assigned').each(function() {
-const employee = $(this).data('employee');
-const day = $(this).data('day');
-const time = $(this).find('.draggable-shift').text();
+  const weekStartDateObj = (() => { const d=new Date(); const day=d.getDay(); const diff=d.getDate()-day+ (day===0? -6:1); return new Date(d.setDate(diff));})();
+  const weekStart = weekStartDateObj.toISOString().split('T')[0];
 
-if (employee && day && time) {
-shifts.push({
-    employee,
-    day,
-    time
-});
-}
-});
+  const shifts = [];
+  $('.shift-slot.assigned').each(function() {
+    const employeeName = $(this).data('employee');
+    const day = $(this).data('day');
+    const time = $(this).find('.draggable-shift').text();
 
-// In a real app, you would send this to your server
-console.log('Saving shifts:', shifts);
-alert('Shift changes saved successfully!');
+    if (employeeName && day && time) {
+      const [start, end] = time.split('-');
+      const empId = EMPLOYEE_MAP[employeeName] || null;
+      if (!empId) {
+        console.warn('Employee id not found for name', employeeName);
+        return; // skip
+      }
+      shifts.push({
+        employee_id: empId,
+        day: day,
+        start: to24(start),
+        end: to24(end),
+        manual_override: false,
+        title: 'Shift'
+      });
+    }
+  });
+
+  if (shifts.length === 0) {
+    alert('No shifts to save.');
+    return;
+  }
+
+  fetch('/api/shifts/bulk-save/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken'),
+    },
+    body: JSON.stringify({
+      week_start: weekStart,
+      shifts: shifts
+    })
+  })
+    .then(r => r.json().then(data => ({status: r.status, data: data})))
+    .then(res => {
+      if (res.status === 201) {
+        alert('Shifts saved successfully!');
+      } else {
+        alert('Error saving shifts: ' + JSON.stringify(res.data));
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Unexpected error saving shifts.');
+    });
 });
 
 // Conflict removal
@@ -392,5 +460,7 @@ if (confirm('Are you sure you want to remove this conflict?')) {
 $(this).closest('.conflict-card').remove();
 }
 });
+
+function to24(timeStr){const m=timeStr.match(/(\d+)(?::(\d+))?(AM|PM)/i);if(!m)return timeStr;let h=parseInt(m[1],10);const min=parseInt(m[2]||'0',10);const ampm=m[3].toUpperCase();if(ampm==='PM'&&h<12)h+=12;if(ampm==='AM'&&h===12)h=0;return `${h.toString().padStart(2,'0')}:${min.toString().padStart(2,'0')}`;}
 });
 
