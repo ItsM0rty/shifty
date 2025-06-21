@@ -11,21 +11,19 @@
 
     <style>
         :root {
-            --bg-primary: #121212;
+            --bg-primary: #131316;
             --bg-secondary: #1e1e1e;
-            --bg-tertiary: #2d2d2d;
+            --bg-tertiary: #2a2a2e;
             --bg-interactive: #383838;
             --border-color: #404040;
             --text-primary: #e0e0e0;
             --text-secondary: #a0a0a0;
-            --accent-primary: #7e57c2;
+            --accent-primary: #8a63d2;
             --accent-secondary: #9575cd;
             --danger-color: #ef5350;
             --success-color: #66bb6a;
-            --border-radius-sm: 6px;
             --border-radius-md: 12px;
             --border-radius-lg: 16px;
-            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             --font-sans: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
@@ -34,10 +32,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
         }
 
         body {
@@ -49,14 +43,9 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        h1, h2, h3 {
+        h1, h2 {
             font-weight: 600;
             line-height: 1.2;
-        }
-
-        a {
-            color: var(--accent-secondary);
-            text-decoration: none;
         }
 
         /* 2. Main Layout */
@@ -70,24 +59,29 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .dashboard-content {
             display: grid;
             grid-template-columns: 260px 1fr;
-            gap: 24px;
+            gap: 32px;
         }
 
         .dashboard-main {
             min-height: calc(100vh - 150px);
         }
 
-        .content-section {
-            display: none; /* Hidden by default */
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        
+        .section-header {
+            margin-bottom: 24px;
         }
-        .content-section.active {
-            display: block; /* Shown when active */
+        .section-header h2 {
+            font-size: 28px;
         }
 
         /* 3. Sidebar */
@@ -106,27 +100,11 @@
             gap: 12px;
             padding: 0 8px;
         }
+        .sidebar-header img { width: 40px; height: 40px; border-radius: 50%; }
+        .sidebar-header h2 { font-size: 16px; color: var(--text-primary); }
+        .sidebar-header p { font-size: 14px; color: var(--text-secondary); }
 
-        .sidebar-header img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-        }
-
-        .sidebar-header h2 {
-            font-size: 16px;
-            color: var(--text-primary);
-        }
-
-        .sidebar-header p {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        .dashboard-sidebar nav ul {
-            list-style: none;
-        }
-
+        .dashboard-sidebar nav ul { list-style: none; }
         .dashboard-sidebar nav a {
             display: flex;
             align-items: center;
@@ -147,12 +125,9 @@
             color: white;
             font-weight: 600;
         }
-        .dashboard-sidebar nav svg {
-            width: 20px;
-            height: 20px;
-        }
+        .dashboard-sidebar nav svg { width: 20px; height: 20px; }
 
-        /* 4. Reusable Components (Cards, Buttons, etc.) */
+        /* 4. Reusable Components */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -164,244 +139,140 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        .btn-primary {
-            background-color: var(--accent-primary);
-            color: white;
-        }
-        .btn-primary:hover {
-            background-color: var(--accent-secondary);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        .btn-secondary {
-            background-color: var(--bg-tertiary);
-            color: var(--text-primary);
-        }
-        .btn-secondary:hover {
-            background-color: var(--bg-interactive);
-        }
-        .btn-danger {
-            background-color: var(--danger-color);
-            color: white;
-        }
+        .btn-danger { background-color: #e53935; color: white; }
+        .btn-danger:hover { background-color: #d32f2f; }
 
-        .card {
+        /* 5. New Calendar Styling (to match image) */
+        .calendar-card {
             background-color: var(--bg-secondary);
             border-radius: var(--border-radius-lg);
-            padding: 24px;
-            box-shadow: var(--card-shadow);
+            padding: 24px 32px;
         }
-
-        .stats-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin-bottom: 24px;
-        }
-        .stats-cards .card h3 {
-            font-size: 16px;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-        }
-        .stats-cards .card .stat-number {
-            font-size: 36px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-        .stats-cards .card .trend {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-top: 16px;
-        }
-        .stats-cards .card .trend svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        .section-header {
-            margin-bottom: 24px;
-        }
-        .section-header h2 {
-            font-size: 28px;
-        }
-
-        .loading-spinner, .error-message, .success-message {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px 24px;
-            border-radius: var(--border-radius-lg);
-            margin-top: 24px;
-            flex-direction: column;
-            gap: 16px;
-            text-align: center;
-        }
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid var(--bg-tertiary);
-            border-top-color: var(--accent-primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .error-message { background-color: rgba(239, 83, 80, 0.1); color: var(--danger-color); }
-        .success-message { background-color: rgba(102, 187, 106, 0.1); color: var(--success-color); }
-        .error-message svg, .success-message svg { width: 32px; height: 32px; }
-
-        /* 5. Dashboard Section */
-        .activity-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .activity-item {
+        
+        .calendar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px;
-            background: var(--bg-tertiary);
-            border-radius: var(--border-radius-md);
+            margin-bottom: 32px;
         }
-        .activity-content { display: flex; align-items: center; gap: 16px; }
-        .activity-icon {
-            flex-shrink: 0; width: 40px; height: 40px;
-            background: var(--bg-interactive);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .activity-icon svg { width: 20px; height: 20px; }
-        .activity-time { font-size: 14px; color: var(--text-secondary); }
 
-        /* Calendar "Select Days Off" */
-        .calendar-card { position: relative; overflow: hidden; }
-        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        .calendar-title { font-size: 20px; }
+        .calendar-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
         .calendar-nav { display: flex; gap: 8px; }
         .calendar-nav button {
-            background-color: var(--bg-tertiary); border: none; color: var(--text-primary);
-            width: 36px; height: 36px; border-radius: 50%;
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s ease;
-        }
-        .calendar-nav button:hover { background-color: var(--accent-primary); color: white; }
-        .calendar-nav button:disabled { opacity: 0.5; cursor: not-allowed; background-color: var(--bg-tertiary); }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; text-align: center; }
-        .weekday { font-weight: 600; color: var(--text-secondary); font-size: 14px; padding-bottom: 8px; }
-        .calendar-day {
-            aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
-            border-radius: 50%; cursor: pointer; background-color: var(--bg-tertiary);
-            transition: all 0.2s ease; user-select: none; font-weight: 500;
-        }
-        .calendar-day:not(.disabled):not(.past):not(.submitted):hover { transform: scale(1.1); background-color: var(--bg-interactive); }
-        .calendar-day.today { border: 2px solid var(--accent-primary); }
-        .calendar-day.selected { background-color: var(--accent-primary); color: white; transform: scale(1.1); }
-        .calendar-day.disabled { background-color: transparent; color: var(--bg-tertiary); cursor: not-allowed; }
-        .calendar-day.past { color: var(--text-secondary); cursor: not-allowed; opacity: 0.6; }
-        .calendar-day.submitted { background-color: rgba(239, 83, 80, 0.4); color: var(--text-primary); cursor: not-allowed; }
-
-        .calendar-footer { margin-top: 24px; }
-        .selected-dates-container { min-height: 40px; margin-bottom: 16px; }
-        .selected-dates-list { display: flex; flex-wrap: wrap; gap: 8px; }
-        .selected-date-tag {
-            background-color: var(--bg-interactive); color: var(--text-primary); padding: 6px 12px;
-            border-radius: 20px; font-size: 14px; display: flex; align-items: center; gap: 8px;
-        }
-        .selected-date-tag button {
-            background: none; border: none; color: var(--text-secondary); padding: 0;
-            cursor: pointer; display: flex; align-items: center; transition: color 0.2s ease;
-        }
-        .selected-date-tag button:hover { color: var(--text-primary); }
-        .empty-state-text { color: var(--text-secondary); font-size: 14px; }
-        .submit-button {
-            width: 100%; font-size: 16px; padding: 12px 24px;
-        }
-        .submit-button:disabled { background-color: var(--bg-tertiary); opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: none; }
-        .button-spinner { width: 20px; height: 20px; border-width: 2px; }
-        .calendar-message { position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(30, 30, 30, 0.9); z-index: 10;
-        }
-        .hidden { display: none !important; }
-
-        /* 6. Shifts Section */
-        #upcoming-shifts .activity-item.has-conflict { border-left: 4px solid var(--danger-color); }
-        .conflict-badge {
-            display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
-            padding: 4px 10px; background: rgba(239, 83, 80, 0.15);
-            color: var(--danger-color); border-radius: var(--border-radius-md); font-size: 13px; font-weight: 500;
-        }
-
-        /* 7. Modal Styles */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.6); display: flex; align-items: center;
-            justify-content: center; z-index: 1000;
-        }
-        .modal {
-            background: var(--bg-secondary); border-radius: var(--border-radius-lg);
-            width: 100%; max-width: 500px; box-shadow: var(--card-shadow);
-        }
-        .modal-header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 24px; border-bottom: 1px solid var(--border-color);
-        }
-        .modal-header h3 { font-size: 20px; }
-        .close-modal { background: none; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer; }
-        .modal-body { padding: 24px; }
-        .modal-footer {
-            padding: 20px 24px; border-top: 1px solid var(--border-color);
-            display: flex; justify-content: flex-end; gap: 12px;
-        }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; color: var(--text-secondary); font-weight: 500;}
-        .form-control {
-            width: 100%; padding: 12px; background: var(--bg-tertiary);
-            border: 1px solid var(--border-color); border-radius: var(--border-radius-md);
-            color: var(--text-primary); font-size: 16px; transition: border-color 0.2s ease;
-        }
-        .form-control:focus { outline: none; border-color: var(--accent-primary); }
-        textarea.form-control { resize: vertical; min-height: 100px; }
-        
-        /* 8. Placeholder Pages */
-        .placeholder-content {
+            background-color: var(--bg-tertiary);
+            border: none;
+            color: var(--text-secondary);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .calendar-nav button:hover { background-color: var(--bg-interactive); color: var(--text-primary); }
+        .calendar-nav button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
             text-align: center;
-            padding: 60px 30px;
-            background-color: var(--bg-secondary);
-            border-radius: var(--border-radius-lg);
-            min-height: 400px;
-        }
-        .placeholder-content svg {
-            width: 64px;
-            height: 64px;
-            color: var(--accent-primary);
-            margin-bottom: 24px;
-        }
-        .placeholder-content h2 {
-            font-size: 24px;
-            color: var(--text-primary);
-            margin-bottom: 8px;
-        }
-        .placeholder-content p {
-            color: var(--text-secondary);
-            max-width: 400px;
         }
 
-        /* 9. Footer */
-        .footer {
-            text-align: center;
-            padding: 24px;
-            margin-top: 24px;
+        .weekday {
+            font-weight: 500;
             color: var(--text-secondary);
             font-size: 14px;
+            padding-bottom: 16px;
         }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-weight: 500;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+            user-select: none;
+            cursor: pointer;
+        }
+
+        .calendar-day:not(.disabled):not(.past):hover {
+            background-color: var(--bg-interactive);
+        }
+
+        .calendar-day.selected {
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+        
+        .calendar-day.disabled {
+            background-color: transparent;
+            cursor: default;
+        }
+
+        .calendar-day.past {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: transparent;
+        }
+
+        .calendar-footer {
+            margin-top: 32px;
+            text-align: center;
+        }
+        
+        .selection-info {
+            color: var(--text-secondary);
+            font-size: 14px;
+            min-height: 24px;
+            margin-bottom: 16px;
+        }
+
+        .submit-button {
+            width: 100%;
+            background-color: var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: 500;
+            padding: 14px 24px;
+            border: none;
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .submit-button:not(:disabled):hover {
+            background-color: var(--bg-interactive);
+            color: var(--text-primary);
+        }
+
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Other needed styles */
+        .hidden { display: none !important; }
+        .placeholder-content {
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; text-align: center; padding: 60px 30px;
+            background-color: var(--bg-secondary); border-radius: var(--border-radius-lg);
+            min-height: 400px;
+        }
+        .placeholder-content svg { width: 64px; height: 64px; color: var(--accent-primary); margin-bottom: 24px; }
+        .placeholder-content h2 { font-size: 24px; color: var(--text-primary); margin-bottom: 8px; }
+        .placeholder-content p { color: var(--text-secondary); max-width: 400px; }
 
     </style>
 </head>
@@ -464,34 +335,8 @@
                     <div class="section-header">
                         <h2>Welcome back, Suyash!</h2>
                     </div>
-                    <div class="stats-cards">
-                        <div class="card">
-                            <h3>Remaining This Week</h3>
-                            <p class="stat-number">3</p>
-                            <div class="trend">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                                Next: Monday, 9:00 AM
-                            </div>
-                        </div>
-                        <div class="card">
-                            <h3>Hours This Week</h3>
-                            <p class="stat-number">24</p>
-                            <div class="trend">
-                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
-                                +2 from last week
-                            </div>
-                        </div>
-                        <div class="card">
-                            <h3>Manager's Note</h3>
-                            <p style="min-height: 48px;">The ice cream machine is broken, please don't try using it.</p>
-                            <div class="trend">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                                Posted: 2 days ago
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card calendar-card" id="calendar-wrapper">
+                   
+                    <div class="calendar-card" id="calendar-wrapper">
                         <div class="calendar-header">
                             <h2 class="calendar-title" id="calendar-month-year"></h2>
                             <div class="calendar-nav">
@@ -511,60 +356,24 @@
                         <div class="calendar-grid" id="calendar-days"></div>
                         
                         <div class="calendar-footer">
-                            <div class="selected-dates-container">
-                                <div id="selected-dates-list" class="selected-dates-list">
-                                    <span class="empty-state-text">No dates selected for this month.</span>
-                                </div>
+                            <div class="selection-info" id="selection-info-text">
+                                No dates selected for this month.
                             </div>
-                            <button id="submit-days-btn" class="btn btn-primary submit-button" disabled>
-                                <span class="button-text">Submit Days Off Request</span>
-                                <div class="spinner button-spinner hidden"></div>
+                            <button id="submit-days-btn" class="submit-button" disabled>
+                                Submit Days Off Request
                             </button>
                         </div>
-                        
-                        <div id="calendar-message-area" class="calendar-message hidden"></div>
                     </div>
                 </section>
 
-                <!-- Shifts Section -->
+                <!-- Placeholder Sections -->
                 <section id="shifts-section" class="content-section">
-                    <div class="section-header">
+                    <div class="placeholder-content">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                         <h2>Your Shifts</h2>
-                    </div>
-
-                    <div id="shifts-content">
-                        <!-- Content will be loaded by JavaScript -->
-                    </div>
-
-                    <!-- Shift Swap Modal -->
-                    <div id="shift-swap-modal" class="modal-overlay hidden">
-                        <div class="modal">
-                            <div class="modal-header">
-                                <h3>Request Shift Swap</h3>
-                                <button class="close-modal">×</button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="shift-swap-form">
-                                    <div class="form-group">
-                                        <label for="shift-to-swap">Select Shift to Swap</label>
-                                        <select class="form-control" id="shift-to-swap" required></select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="swap-reason">Reason for Swap</label>
-                                        <textarea class="form-control" id="swap-reason" rows="3" required placeholder="e.g., Doctor's appointment"></textarea>
-                                    </div>
-                                    <div id="swap-request-error" class="error-message hidden" style="padding:15px; margin-top:0; margin-bottom:15px;"></div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary close-modal">Cancel</button>
-                                <button type="submit" form="shift-swap-form" class="btn btn-primary" id="submit-swap-request">Submit Request</button>
-                            </div>
-                        </div>
+                        <p>This feature is coming soon! You'll be able to view your schedule, see upcoming shifts, and manage shift swaps here.</p>
                     </div>
                 </section>
-
-                <!-- Team Section -->
                 <section id="team-section" class="content-section">
                     <div class="placeholder-content">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
@@ -572,8 +381,6 @@
                         <p>This feature is coming soon! You'll be able to view team member profiles and contact information here.</p>
                     </div>
                 </section>
-
-                <!-- Notes Section -->
                 <section id="notes-section" class="content-section">
                     <div class="placeholder-content">
                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
@@ -581,17 +388,11 @@
                         <p>This feature is under construction. Soon you'll be able to view and share important notes with your manager and team.</p>
                     </div>
                 </section>
-
-                <!-- Settings Section -->
                 <section id="settings-section" class="content-section">
                      {% include 'myapp/db_settings.html' %}
                 </section>
 
             </main>
-        </div>
-
-        <div class="footer">
-            <p>© 2025 Shifty Solutions. All rights reserved.</p>
         </div>
     </div>
 
@@ -599,398 +400,142 @@
     document.addEventListener('DOMContentLoaded', () => {
     
         const App = {
-            // State for different parts of the application
             state: {
-                shifts: {
-                    loaded: false,
-                    data: [],
-                },
                 calendar: {
                     currentDate: new Date(),
                     selectedDates: [],
-                    // Storing submitted dates by "YYYY-M" key
                     // In a real app, this would be fetched from a server
-                    submittedDates: { "2024-4": ["2024-5-20", "2024-5-22"] },
-                    maxSelections: 5,
+                    submittedDates: { "2025-4": ["2025-5-20", "2025-5-22"] }, // Note: year/month are 0-indexed in JS Dates
                 }
             },
     
-            // Initialize the application
             init() {
                 this.initNavigation();
-                this.Dashboard.init();
+                this.Calendar.init();
             },
     
-            // --- 1. NAVIGATION ---
             initNavigation() {
                 const navLinks = document.querySelectorAll('.nav-link');
                 navLinks.forEach(link => {
                     link.addEventListener('click', (e) => {
                         e.preventDefault();
                         const targetSectionId = link.getAttribute('data-section');
-    
-                        // Update active link
                         navLinks.forEach(l => l.classList.remove('active'));
                         link.classList.add('active');
-    
-                        // Show target section
                         document.querySelectorAll('.content-section').forEach(section => {
                             section.classList.toggle('active', section.id === targetSectionId);
                         });
-    
-                        // Lazy-load content for sections that need it
-                        if (targetSectionId === 'shifts-section' && !this.state.shifts.loaded) {
-                            this.Shifts.init();
-                        }
                     });
                 });
             },
     
-            // --- 2. DASHBOARD & CALENDAR MODULE ---
-            Dashboard: {
-                init() {
-                    this.Calendar.init();
-                },
-    
-                Calendar: {
-                    elements: {
-                        wrapper: document.getElementById('calendar-wrapper'),
-                        monthYear: document.getElementById('calendar-month-year'),
-                        daysGrid: document.getElementById('calendar-days'),
-                        prevBtn: document.getElementById('prev-month'),
-                        nextBtn: document.getElementById('next-month'),
-                        selectedList: document.getElementById('selected-dates-list'),
-                        submitBtn: document.getElementById('submit-days-btn'),
-                        messageArea: document.getElementById('calendar-message-area'),
-                    },
-    
-                    init() {
-                        const { prevBtn, nextBtn, submitBtn, selectedList } = this.elements;
-                        prevBtn.addEventListener('click', () => this.changeMonth(-1));
-                        nextBtn.addEventListener('click', () => this.changeMonth(1));
-                        submitBtn.addEventListener('click', () => this.handleSubmit());
-                        selectedList.addEventListener('click', (e) => {
-                            if (e.target.closest('.remove-date-btn')) {
-                                const dateToRemove = e.target.closest('.remove-date-btn').dataset.date;
-                                this.toggleDateSelection(dateToRemove);
-                            }
-                        });
-    
-                        this.render();
-                    },
-    
-                    render() {
-                        const { currentDate, submittedDates, maxSelections } = App.state.calendar;
-                        const month = currentDate.getMonth();
-                        const year = currentDate.getFullYear();
-                        const monthKey = `${year}-${month}`;
-    
-                        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                        this.elements.monthYear.textContent = `${monthNames[month]} ${year}`;
-    
-                        const submittedForMonth = submittedDates[monthKey] || [];
-                        if (submittedForMonth.length > 0) {
-                            this.showMessage('success', `You have already submitted ${submittedForMonth.length} day(s) off for this month.`, false);
-                        } else {
-                            this.hideMessage();
-                        }
-    
-                        this.renderDaysGrid();
-                        this.updateSelectedUI();
-                        this.updateNavButtons();
-                    },
-    
-                    renderDaysGrid() {
-                        const { daysGrid } = this.elements;
-                        const { currentDate, selectedDates, submittedDates } = App.state.calendar;
-                        const month = currentDate.getMonth();
-                        const year = currentDate.getFullYear();
-                        const monthKey = `${year}-${month}`;
-    
-                        daysGrid.innerHTML = '';
-                        const firstDayOfMonth = new Date(year, month, 1).getDay();
-                        const daysInMonth = new Date(year, month + 1, 0).getDate();
-                        const today = new Date();
-                        today.setHours(0, 0, 0, 0);
-    
-                        // Add blank days for layout
-                        for (let i = 0; i < firstDayOfMonth; i++) {
-                            daysGrid.insertAdjacentHTML('beforeend', '<div class="calendar-day disabled"></div>');
-                        }
-    
-                        // Add days of the month
-                        for (let day = 1; day <= daysInMonth; day++) {
-                            const dayEl = document.createElement('div');
-                            dayEl.classList.add('calendar-day');
-                            dayEl.textContent = day;
-    
-                            const cellDate = new Date(year, month, day);
-                            const dateString = `${year}-${month}-${day}`;
-                            dayEl.dataset.date = dateString;
-    
-                            const isSubmitted = (submittedDates[monthKey] || []).includes(dateString);
-                            const isSelected = selectedDates.includes(dateString);
-                            const isPast = cellDate < today;
-    
-                            if (isPast) dayEl.classList.add('past');
-                            if (isSubmitted) dayEl.classList.add('submitted');
-                            if (isSelected) dayEl.classList.add('selected');
-                            if (cellDate.getTime() === today.getTime()) dayEl.classList.add('today');
-                            if (!isPast && !isSubmitted) {
-                                dayEl.addEventListener('click', () => this.toggleDateSelection(dateString));
-                            }
-    
-                            daysGrid.appendChild(dayEl);
-                        }
-                    },
-    
-                    toggleDateSelection(dateString) {
-                        const { selectedDates, maxSelections } = App.state.calendar;
-                        const index = selectedDates.indexOf(dateString);
-    
-                        if (index > -1) {
-                            selectedDates.splice(index, 1);
-                        } else {
-                            if (selectedDates.length < maxSelections) {
-                                selectedDates.push(dateString);
-                            } else {
-                                this.showMessage('error', `You can select a maximum of ${maxSelections} days.`, true, 2000);
-                            }
-                        }
-                        this.renderDaysGrid();
-                        this.updateSelectedUI();
-                    },
-    
-                    updateSelectedUI() {
-                        const { selectedList, submitBtn } = this.elements;
-                        const { selectedDates } = App.state.calendar;
-                        selectedList.innerHTML = '';
-    
-                        if (selectedDates.length > 0) {
-                            selectedDates.sort().forEach(dateString => {
-                                const date = new Date(dateString.split('-').join('/'));
-                                const formattedDate = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-                                selectedList.insertAdjacentHTML('beforeend', `
-                                    <div class="selected-date-tag">
-                                        ${formattedDate}
-                                        <button class="remove-date-btn" data-date="${dateString}">×</button>
-                                    </div>
-                                `);
-                            });
-                            submitBtn.disabled = false;
-                            submitBtn.querySelector('.button-text').textContent = `Submit ${selectedDates.length} Day(s)`;
-                        } else {
-                            selectedList.innerHTML = '<span class="empty-state-text">No dates selected for this month.</span>';
-                            submitBtn.disabled = true;
-                            submitBtn.querySelector('.button-text').textContent = 'Submit Days Off Request';
-                        }
-                    },
-    
-                    changeMonth(direction) {
-                        App.state.calendar.currentDate.setMonth(App.state.calendar.currentDate.getMonth() + direction);
-                        this.render();
-                    },
-    
-                    updateNavButtons() {
-                        const today = new Date();
-                        const isCurrentMonth = App.state.calendar.currentDate.getFullYear() === today.getFullYear() &&
-                                             App.state.calendar.currentDate.getMonth() === today.getMonth();
-                        this.elements.prevBtn.disabled = isCurrentMonth;
-                    },
-    
-                    handleSubmit() {
-                        const { submitBtn } = this.elements;
-                        const buttonText = submitBtn.querySelector('.button-text');
-                        const spinner = submitBtn.querySelector('.spinner');
-                        
-                        submitBtn.disabled = true;
-                        buttonText.classList.add('hidden');
-                        spinner.classList.remove('hidden');
-    
-                        // Simulate API call
-                        setTimeout(() => {
-                            const { currentDate, selectedDates, submittedDates } = App.state.calendar;
-                            const monthKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}`;
-                            submittedDates[monthKey] = [...selectedDates];
-                            selectedDates.length = 0; // Clear selections
-    
-                            buttonText.classList.remove('hidden');
-                            spinner.classList.add('hidden');
-                            
-                            this.render();
-                            this.showMessage('success', 'Your time-off request has been submitted successfully!', true, 3000);
-                        }, 1500);
-                    },
-                    
-                    showMessage(type, message, autoHide = true, duration = 3000) {
-                        this.elements.messageArea.innerHTML = `
-                            <div class="${type}-message" style="width:100%; height: 100%; border-radius:0;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    ${type === 'success' ? '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>' : '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>'}
-                                </svg>
-                                <p>${message}</p>
-                            </div>`;
-                        this.elements.messageArea.classList.remove('hidden');
-                        if (autoHide) {
-                            setTimeout(() => this.hideMessage(), duration);
-                        }
-                    },
-    
-                    hideMessage() {
-                        this.elements.messageArea.classList.add('hidden');
-                    }
-                }
-            },
-    
-            // --- 3. SHIFTS MODULE ---
-            Shifts: {
+            Calendar: {
                 elements: {
-                    content: document.getElementById('shifts-content'),
-                    modal: document.getElementById('shift-swap-modal'),
-                    swapForm: document.getElementById('shift-swap-form'),
-                    swapSelect: document.getElementById('shift-to-swap'),
-                    swapError: document.getElementById('swap-request-error'),
+                    monthYear: document.getElementById('calendar-month-year'),
+                    daysGrid: document.getElementById('calendar-days'),
+                    prevBtn: document.getElementById('prev-month'),
+                    nextBtn: document.getElementById('next-month'),
+                    submitBtn: document.getElementById('submit-days-btn'),
+                    selectionInfo: document.getElementById('selection-info-text'),
                 },
     
-                async init() {
-                    this.renderLoading();
-                    
-                    // In a real app, this would be an API call: await fetch('/api/shifts/')
-                    // For this demo, we simulate a fetch.
-                    try {
-                        const shiftsData = await this.mockFetchShifts();
-                        App.state.shifts.data = shiftsData;
-                        App.state.shifts.loaded = true;
-                        this.render();
-                        this.initModal();
-                    } catch (error) {
-                        this.renderError(error.message);
-                    }
+                init() {
+                    this.elements.prevBtn.addEventListener('click', () => this.changeMonth(-1));
+                    this.elements.nextBtn.addEventListener('click', () => this.changeMonth(1));
+                    this.elements.submitBtn.addEventListener('click', () => this.handleSubmit());
+                    this.elements.daysGrid.addEventListener('click', (e) => {
+                        const dayElement = e.target.closest('.calendar-day');
+                        if (dayElement && !dayElement.classList.contains('disabled') && !dayElement.classList.contains('past')) {
+                            this.toggleDateSelection(dayElement.dataset.date);
+                        }
+                    });
+                    this.render();
                 },
     
                 render() {
-                    const shifts = App.state.shifts.data;
-                    const now = new Date();
-                    const startOfWeek = new Date(now);
-                    startOfWeek.setDate(now.getDate() - now.getDay());
-                    startOfWeek.setHours(0,0,0,0);
-    
-                    const thisWeekShifts = shifts.filter(s => new Date(s.start_time) >= startOfWeek);
-                    const hoursThisWeek = thisWeekShifts.reduce((acc, s) => acc + s.hours, 0);
-                    const nextShift = shifts.find(s => new Date(s.start_time) > now);
-    
-                    this.elements.content.innerHTML = `
-                        <div class="stats-cards">
-                            <div class="card">
-                                <h3>Shifts This Week</h3>
-                                <p class="stat-number">${thisWeekShifts.length}</p>
-                                <div class="trend">${hoursThisWeek} hours total</div>
-                            </div>
-                            <div class="card">
-                                <h3>Next Shift</h3>
-                                <p class="stat-number">${nextShift ? new Date(nextShift.start_time).toLocaleDateString('en-US', {weekday: 'short', day: 'numeric'}) : 'None'}</p>
-                                <div class="trend">${nextShift ? new Date(nextShift.start_time).toLocaleTimeString('en-US', {hour: 'numeric', minute:'2-digit'}) : '-'}</div>
-                            </div>
-                            <div class="card">
-                                <h3>Conflicts</h3>
-                                <p class="stat-number" style="color: ${shifts.some(s=>s.has_conflict) ? 'var(--danger-color)' : 'var(--success-color)'}">
-                                    ${shifts.filter(s => s.has_conflict).length}
-                                </p>
-                                <div class="trend">Found in schedule</div>
-                            </div>
-                        </div>
-    
-                        <div style="display: flex; justify-content: flex-end; margin: 24px 0;">
-                            <button class="btn btn-primary" id="request-swap-btn">Request Shift Swap</button>
-                        </div>
-    
-                        <div class="card">
-                            <h3 style="margin-bottom:16px;">Upcoming Shifts</h3>
-                            <div class="activity-list" id="upcoming-shifts">
-                                ${shifts.length > 0 ? shifts.map(this.createShiftItem).join('') : '<p class="empty-state-text">No upcoming shifts.</p>'}
-                            </div>
-                        </div>`;
-                    
-                    document.getElementById('request-swap-btn').addEventListener('click', () => this.elements.modal.classList.remove('hidden'));
-                },
-                
-                initModal() {
-                    const { modal, swapForm, swapSelect } = this.elements;
-                    modal.querySelectorAll('.close-modal').forEach(el => el.addEventListener('click', () => modal.classList.add('hidden')));
-                    
-                    swapSelect.innerHTML = App.state.shifts.data
-                        .filter(s => new Date(s.start_time) > new Date())
-                        .map(s => `<option value="${s.id}">${new Date(s.start_time).toLocaleString()} - ${s.title}</option>`)
-                        .join('');
-                    
-                    swapForm.addEventListener('submit', (e) => this.handleSwapSubmit(e));
+                    this.renderDaysGrid();
+                    this.updateUI();
                 },
     
-                handleSwapSubmit(event) {
-                    event.preventDefault();
-                    this.elements.swapError.classList.add('hidden');
-                    const reason = this.elements.swapForm.querySelector('#swap-reason').value;
+                renderDaysGrid() {
+                    const { daysGrid } = this.elements;
+                    const { currentDate, selectedDates, submittedDates } = App.state.calendar;
+                    const month = currentDate.getMonth();
+                    const year = currentDate.getFullYear();
     
-                    if (!reason.trim()) {
-                        this.elements.swapError.textContent = 'A reason is required.';
-                        this.elements.swapError.classList.remove('hidden');
-                        return;
+                    daysGrid.innerHTML = '';
+                    const firstDayOfMonth = new Date(year, month, 1).getDay();
+                    const daysInMonth = new Date(year, month + 1, 0).getDate();
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+    
+                    for (let i = 0; i < firstDayOfMonth; i++) {
+                        daysGrid.insertAdjacentHTML('beforeend', '<div class="calendar-day disabled"></div>');
                     }
     
-                    // Simulate submission
-                    console.log('Swap Request Submitted:', {
-                        shift_id: this.elements.swapSelect.value,
-                        reason: reason
-                    });
+                    for (let day = 1; day <= daysInMonth; day++) {
+                        const cellDate = new Date(year, month, day);
+                        const dateString = `${year}-${month + 1}-${day}`; // Use 1-based month for data
+                        
+                        const classes = ['calendar-day'];
+                        if (cellDate < today) classes.push('past');
+                        if (selectedDates.includes(dateString)) classes.push('selected');
     
-                    this.elements.modal.classList.add('hidden');
-                    swapForm.reset();
-                    // You could show a success toast message here
+                        const dayEl = `<div class="${classes.join(' ')}" data-date="${dateString}">${day}</div>`;
+                        daysGrid.insertAdjacentHTML('beforeend', dayEl);
+                    }
                 },
     
-                createShiftItem(shift) {
-                    const startTime = new Date(shift.start_time);
-                    return `
-                        <div class="activity-item ${shift.has_conflict ? 'has-conflict' : ''}">
-                            <div class="activity-content">
-                                <div class="activity-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
-                                <div class="activity-text">
-                                    <p><strong>${shift.title}</strong></p>
-                                    <p style="color: var(--text-secondary); font-size: 0.9em;">
-                                        ${startTime.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
-                                    </p>
-                                    ${shift.has_conflict ? `<div class="conflict-badge">Schedule Conflict</div>` : ''}
-                                </div>
-                            </div>
-                            <div class="activity-time">${startTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}</div>
-                        </div>
-                    `;
+                toggleDateSelection(dateString) {
+                    const { selectedDates } = App.state.calendar;
+                    const index = selectedDates.indexOf(dateString);
+    
+                    if (index > -1) {
+                        selectedDates.splice(index, 1);
+                    } else {
+                        // No max limit check anymore
+                        selectedDates.push(dateString);
+                    }
+                    this.render();
                 },
     
-                renderLoading() {
-                    this.elements.content.innerHTML = `<div class="loading-spinner"><div class="spinner"></div><p>Loading shifts...</p></div>`;
+                updateUI() {
+                    const { currentDate, selectedDates } = App.state.calendar;
+                    const month = currentDate.getMonth();
+                    const year = currentDate.getFullYear();
+                    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                    
+                    this.elements.monthYear.textContent = `${monthNames[month]} ${year}`;
+                    
+                    if (selectedDates.length > 0) {
+                        this.elements.selectionInfo.textContent = `${selectedDates.length} day(s) selected for this month.`;
+                        this.elements.submitBtn.disabled = false;
+                    } else {
+                        this.elements.selectionInfo.textContent = 'No dates selected for this month.';
+                        this.elements.submitBtn.disabled = true;
+                    }
+                    
+                    // Disable previous month button if it's the current month
+                    const today = new Date();
+                    const isCurrentMonth = year === today.getFullYear() && month === today.getMonth();
+                    this.elements.prevBtn.disabled = isCurrentMonth;
                 },
     
-                renderError(message) {
-                    this.elements.content.innerHTML = `<div class="error-message"><p>${message}</p></div>`;
+                changeMonth(direction) {
+                    App.state.calendar.currentDate.setMonth(App.state.calendar.currentDate.getMonth() + direction);
+                    this.render();
                 },
     
-                // This function simulates fetching data from an API
-                mockFetchShifts() {
-                    return new Promise((resolve, reject) => {
-                        setTimeout(() => {
-                             const today = new Date();
-                             const shifts = [
-                                { id: 1, title: 'Opening Shift', start_time: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2, 8, 0), hours: 8, has_conflict: false },
-                                { id: 2, title: 'Mid Shift', start_time: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 3, 12, 0), hours: 6, has_conflict: true },
-                                { id: 3, title: 'Closing Shift', start_time: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 5, 16, 0), hours: 8, has_conflict: false },
-                                { id: 4, title: 'Opening Shift', start_time: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 8, 8, 0), hours: 8, has_conflict: false },
-                            ];
-                            resolve(shifts);
-                            // To test error state: reject(new Error('Failed to load shifts from server.'));
-                        }, 1000);
-                    });
-                },
+                handleSubmit() {
+                    const { selectedDates } = App.state.calendar;
+                    console.log('Submitting selected dates:', selectedDates);
+                    alert(`Request for ${selectedDates.length} day(s) off has been submitted.`);
+                    
+                    // Here you would typically send the data to a server.
+                    // After a successful submission, you might want to clear the selection.
+                    selectedDates.length = 0;
+                    this.render();
+                }
             }
         };
     
