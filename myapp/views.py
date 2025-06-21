@@ -405,8 +405,8 @@ def api_shift_bulk_save(request):
 
     return JsonResponse({'created': created_ids, 'updated': updated_ids}, status=201)
 
-@require_http_methods(["GET", "POST"])
 @login_required(login_url='/login')
+@csrf_exempt
 def api_timeoff(request):
     """Employees: GET their requests, POST to create. Managers: GET pending requests."""
     if request.method == 'GET':
