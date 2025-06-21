@@ -379,6 +379,9 @@ if (window.location.pathname.includes('admin-dashboard')) {
         const fullName = emp.first_name || emp.last_name ? `${emp.first_name} ${emp.last_name}`.trim() : emp.username;
         EMPLOYEE_MAP[fullName] = emp.id;
       });
+
+      // After employees are loaded build the schedule grid for the current week
+      buildScheduleGrid();
     })
     .catch(err => console.error(err));
 }
@@ -508,5 +511,49 @@ $(document).on('click','.timeoff-approve, .timeoff-deny',function(){
            }
        }).catch(err=>{alert('Failed: '+err);});
   });
+
+// Build schedule grid rows dynamically and populate with existing shifts
+function buildScheduleGrid() {
+  const calendar = $('.shift-calendar');
+  const headerRow = calendar.find('.calendar-header');
+  // Remove any existing employee rows
+  calendar.find('.calendar-row').remove();
+
+  const employeeNames = Object.keys(EMPLOYEE_MAP);
+  employeeNames.forEach(name => {
+      const row = $('<div/>').addClass('calendar-row');
+      row.append(`<div class="employee-name">${name}</div>`);
+      const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+      days.forEach(day => {
+          row.append(`<div class="shift-slot" data-employee="${name}" data-day="${day}"></div>`);
+      });
+      calendar.append(row);
+  });
+
+  // Now load existing shifts for this week and place them
+  const weekStartDateObj = (() => { const d=new Date(); const day=d.getDay(); const diff=d.getDate()-day+ (day===0? -6:1); return new Date(d.setDate(diff));})();
+  const weekStart = weekStartDateObj.toISOString().split('T')[0];
+  const weekEndDate = new Date(weekStartDateObj.getTime() + 6*24*60*60*1000).toISOString().split('T')[0];
+
+  fetch(`/api/shifts/?start=${weekStart}&end=${weekEndDate}`)
+    .then(r=>r.ok?r.json():Promise.reject('Failed shift load'))
+    .then(data => {
+        data.shifts.forEach(s => {
+            const empName = Object.keys(EMPLOYEE_MAP).find(key => EMPLOYEE_MAP[key] === s.user_id);
+            if (!empName) return;
+            const startDt = new Date(s.start_time);
+            const endDt = new Date(s.end_time);
+            const dayName = startDt.toLocaleDateString('en-US',{weekday:'long'});
+            const slot = $(`.shift-slot[data-employee="${empName}"][data-day="${dayName}"]`);
+            if(slot.length){
+               slot.addClass('assigned');
+               const startStr = startDt.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+               const endStr = endDt.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+               slot.html(`<div class="draggable-shift" draggable="true">${startStr}-${endStr}</div>`);
+            }
+        });
+    })
+    .catch(console.error);
+}
 });
 

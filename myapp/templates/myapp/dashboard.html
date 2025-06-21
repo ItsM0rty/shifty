@@ -295,7 +295,25 @@
                 </section>
                 
                 <!-- Other Sections -->
-                <section id="shifts-section" class="content-section"><div class="placeholder-content"><h2>Shifts</h2><p>This feature is coming soon.</p></div></section>
+                <section id="shifts-section" class="content-section">
+                    <div class="section-header"><h2>My Upcoming Shifts</h2></div>
+                    <div class="calendar-card" style="padding: 0 0 24px 0;">
+                        <table style="width:100%; border-collapse: collapse;" class="shifts-table">
+                            <thead>
+                                <tr style="text-align:left; border-bottom: 1px solid var(--border-color);">
+                                    <th style="padding:12px 8px;">Date</th>
+                                    <th style="padding:12px 8px;">Day</th>
+                                    <th style="padding:12px 8px;">Start</th>
+                                    <th style="padding:12px 8px;">End</th>
+                                    <th style="padding:12px 8px;">Title</th>
+                                </tr>
+                            </thead>
+                            <tbody id="shifts-table-body">
+                                <tr><td colspan="5" style="padding: 16px; text-align:center; color: var(--text-secondary);">Loading…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
                 <section id="team-section" class="content-section"><div class="placeholder-content"><h2>Team</h2><p>This feature is coming soon.</p></div></section>
                 <section id="notes-section" class="content-section"><div class="placeholder-content"><h2>Notes</h2><p>This feature is coming soon.</p></div></section>
                 <section id="settings-section" class="content-section"><div class="placeholder-content"><h2>Settings</h2><p>This feature is coming soon.</p></div></section>
@@ -473,9 +491,56 @@
             Helpers: {
                 getCookie(name) { let c=null; if(document.cookie) document.cookie.split(';').forEach(cookie=>{cookie=cookie.trim(); if(cookie.startsWith(name+'=')) c=decodeURIComponent(cookie.split('=')[1]);}); return c; },
                 datesBetween(start,end){const out=[];let d=new Date(start); const e=new Date(end); while(d<=e){out.push(d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()); d.setDate(d.getDate()+1);} return out; }
+            },
+            Shifts: {
+                load() {
+                    const tbody = document.getElementById('shifts-table-body');
+                    if (!tbody) return;
+                    tbody.innerHTML = '<tr><td colspan="5" style="padding:16px; text-align:center; color: var(--text-secondary);">Loading…</td></tr>';
+
+                    const today = new Date();
+                    const start = today.toISOString().split('T')[0];
+                    const ahead = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
+                    const end = ahead.toISOString().split('T')[0];
+
+                    fetch(`/api/shifts/?start=${start}&end=${end}`)
+                        .then(r => r.ok ? r.json() : Promise.reject('Failed to load shifts'))
+                        .then(data => {
+                            tbody.innerHTML = '';
+                            if (!data.shifts || data.shifts.length === 0) {
+                                tbody.innerHTML = '<tr><td colspan="5" style="padding:16px; text-align:center; color: var(--text-secondary);">No upcoming shifts.</td></tr>';
+                                return;
+                            }
+                            data.shifts.sort((a,b)=> new Date(a.start_time) - new Date(b.start_time));
+                            data.shifts.forEach(shift => {
+                                const startDt = new Date(shift.start_time);
+                                const endDt = new Date(shift.end_time);
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td style="padding:8px 6px;">${startDt.toLocaleDateString()}</td>
+                                    <td style="padding:8px 6px;">${startDt.toLocaleDateString('en-US',{weekday:'long'})}</td>
+                                    <td style="padding:8px 6px;">${startDt.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</td>
+                                    <td style="padding:8px 6px;">${endDt.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</td>
+                                    <td style="padding:8px 6px;">${shift.title || 'Shift'}</td>`;
+                                tbody.appendChild(row);
+                            });
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            tbody.innerHTML = '<tr><td colspan="5" style="padding:16px; text-align:center; color: var(--text-secondary);">Error loading shifts.</td></tr>';
+                        });
+                }
             }
         };
         App.init();
+
+        // Load shifts when the Shifts section is first shown
+        document.querySelector('.dashboard-sidebar nav').addEventListener('click', (e) => {
+            const link = e.target.closest('.nav-link');
+            if (link && link.dataset.section === 'shifts-section') {
+                App.Shifts.load();
+            }
+        });
     });
     </script>
 </body>
