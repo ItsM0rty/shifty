@@ -115,42 +115,36 @@ def dashboard(request):
             messages.error(request, "Database connection issue. Please try again later.")
             return render(request, 'myapp/error.html', {'error': 'Database connection failed'}, status=500)
 
-        # Provide all required context variables with sample data
+        # Provide all required context variables dynamically
+        now = timezone.now()
+        start_of_week = now - timedelta(days=now.weekday())  # Monday
+        end_of_week = start_of_week + timedelta(days=7)
+
+        qs_week = Shift.objects.filter(user=request.user, start_time__gte=start_of_week, start_time__lt=end_of_week)
+
+        # Hours this week
+        hours_this_week = sum((s.end_time - s.start_time).total_seconds() for s in qs_week) / 3600 if qs_week.exists() else 0
+
+        # Upcoming shifts (next 5)
+        upcoming_qs = Shift.objects.filter(user=request.user, start_time__gte=now).order_by('start_time')[:5]
+        upcoming_shifts = [
+            {
+                'title': s.title,
+                'day': s.start_time.strftime('%A'),
+                'time': f"{s.start_time.strftime('%I:%M %p').lstrip('0')} - {s.end_time.strftime('%I:%M %p').lstrip('0')}"
+            }
+            for s in upcoming_qs
+        ]
+
+        # Remaining shifts this week (scheduled but not started)
+        remaining_shifts = qs_week.filter(start_time__gte=now).count()
+
         context = {
             'user': request.user,
-            'remaining_shifts': 3,
-            'next_shift_time': 'Friday, 9:00 AM',
-            'hours_this_week': 24,
-            'hours_trend': '+2 from last week',
-            'manager_note': 'Great job this week!',
-            'note_timestamp': '2024-06-01 10:00',
-            'recent_activities': [
-                {'icon': '<i class="fas fa-check-circle"></i>', 'text': 'Completed shift on Monday', 'time': '2 days ago'},
-                {'icon': '<i class="fas fa-calendar-plus"></i>', 'text': 'Requested day off', 'time': '1 day ago'},
-            ],
-            'shifts_this_week': 5,
-            'total_hours': 40,
-            'next_shift_day': 'Friday',
-            'shift_status': 'On Track',
-            'shift_status_detail': 'No issues',
-            'upcoming_shifts': [
-                {'title': 'Morning Shift', 'role': 'Barista', 'day': 'Friday', 'time': '9:00 AM - 1:00 PM'},
-                {'title': 'Evening Shift', 'role': 'Barista', 'day': 'Saturday', 'time': '4:00 PM - 8:00 PM'},
-            ],
-            'team_size': 8,
-            'on_shift_today': 3,
-            'manager_name': 'Alex Smith',
-            'team_members': [
-                {'name': 'Jane Doe', 'role': 'Barista', 'status': 'On Shift', 'schedule': '9:00 AM - 1:00 PM'},
-                {'name': 'John Roe', 'role': 'Cashier', 'status': 'Off', 'schedule': 'None'},
-            ],
-            'new_notes_count': 1,
-            'notes': [
-                {'date': '2024-06-01', 'notes': [
-                    {'icon': '<i class="fas fa-exclamation"></i>', 'priority': 'urgent', 'time': '09:00', 'content': 'Remember to check inventory.'},
-                    {'icon': '<i class="fas fa-info-circle"></i>', 'priority': 'important', 'time': '10:00', 'content': 'Team meeting at 2 PM.'},
-                ]}
-            ],
+            'remaining_shifts': remaining_shifts,
+            'hours_this_week': round(hours_this_week, 1),
+            'upcoming_shifts': upcoming_shifts,
+            # Simple fields to avoid template errors
             'days': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
             'time_slots': ['Morning', 'Afternoon', 'Evening'],
         }

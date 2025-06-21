@@ -83,10 +83,9 @@
             <!-- Sidebar -->
             <aside class="dashboard-sidebar">
                 <div class="sidebar-header">
-                    <img src="/api/placeholder/100/100" alt="Manager Avatar">
                     <div>
-                        <h2>Charles Freidein</h2>
-                        <p>Store Manager</p>
+                        <h2>{{ request.user.get_full_name|default:request.user.username }}</h2>
+                        <p>Manager</p>
                     </div>
                 </div>
                 <nav>

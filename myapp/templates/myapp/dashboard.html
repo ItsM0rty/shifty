@@ -248,10 +248,9 @@
             <!-- Sidebar -->
             <aside class="dashboard-sidebar">
                 <div class="sidebar-header">
-                    <img src="https://i.pravatar.cc/80?u=suyash" alt="User Avatar">
                     <div>
-                        <h2>Suyash Bhattarai</h2>
-                        <p>Junior Barista</p>
+                        <h2>{{ user.get_full_name|default:user.username }}</h2>
+                        <p>{{ user.position|default:"Employee" }}</p>
                     </div>
                 </div>
                 <nav>
@@ -270,7 +269,7 @@
                 <!-- Dashboard Section -->
                 <section id="dashboard-section" class="content-section active">
                     <div class="section-header">
-                        <h2>Welcome back, Suyash!</h2>
+                        <h2>Welcome back, {{ user.first_name|default:user.username }}!</h2>
                     </div>
                    
                     <div class="calendar-card" id="calendar-wrapper">
