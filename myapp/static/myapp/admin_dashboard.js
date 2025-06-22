@@ -1,23 +1,23 @@
 $(document).ready(function() {
   // Initialize drag and drop functionality
-  $(".shift-slot").sortable({
-    connectWith: ".shift-slot",
-    items: ".shift-assignment",
-    placeholder: "shift-placeholder",
-    start: function(event, ui) {
-      $(ui.item).addClass("dragging");
-    },
-    stop: function(event, ui) {
-      $(ui.item).removeClass("dragging");
+  // $(".shift-slot").sortable({
+  //   connectWith: ".shift-slot",
+  //   items: ".shift-assignment",
+  //   placeholder: "shift-placeholder",
+  //   start: function(event, ui) {
+  //     $(ui.item).addClass("dragging");
+  //   },
+  //   stop: function(event, ui) {
+  //     $(ui.item).removeClass("dragging");
       
-      // Get employee and day data
-      const employee = ui.item.attr("data-employee");
-      const day = $(this).attr("data-day");
+  //     // Get employee and day data
+  //     const employee = ui.item.attr("data-employee");
+  //     const day = $(this).attr("data-day");
       
-      // Check for conflicts
-      checkForConflicts(employee, day);
-    }
-  });
+  //     // Check for conflicts
+  //     checkForConflicts(employee, day);
+  //   }
+  // });
 
   
   // Add new shift assignment
@@ -335,12 +335,10 @@ const conflictCard = `
 <div class="conflict-card">
 <div class="conflict-employees">
     <div class="employee-badge">
-        <img src="/api/placeholder/50/50" alt="${employee1}">
         <span>${employee1}</span>
     </div>
     <span class="vs-badge">VS</span>
     <div class="employee-badge">
-        <img src="/api/placeholder/50/50" alt="${employee2}">
         <span>${employee2}</span>
     </div>
 </div>
