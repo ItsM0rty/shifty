@@ -146,6 +146,10 @@ $(document).ready(function() {
   $('#dashboard-section').addClass('active');
   $('.nav-link[data-section="dashboard"]').addClass('active');
 
+  // Load data automatically when page loads
+  loadTimeOffRequests();
+  loadTeamData();
+
 // Tab switching functionality
 $('.tab-btn').click(function() {
 const tabId = $(this).data('tab');
