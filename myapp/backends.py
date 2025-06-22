@@ -23,8 +23,16 @@ class EmailBackend(ModelBackend):
         except UserModel.DoesNotExist:
             return None
 
-        if user.check_password(password):
-            return user
+        # Respect inactive or unapproved flags
+        if not (user.is_active and getattr(user, 'approved', True)):
+            return None
+
+        try:
+            if user.check_password(password):
+                return user
+        except Exception:
+            # In case of unusable password etc.
+            return None
 
         return None
 
