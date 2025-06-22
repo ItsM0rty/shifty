@@ -147,8 +147,13 @@ $(document).ready(function() {
   $('.nav-link[data-section="dashboard"]').addClass('active');
 
   // Load data automatically when page loads
-  loadTimeOffRequests();
-  loadTeamData();
+  console.log('Admin dashboard initialized, loading data...');
+  setTimeout(() => {
+    console.log('Loading time-off requests...');
+    loadTimeOffRequests();
+    console.log('Loading team data...');
+    loadTeamData();
+  }, 100);
 
 // Tab switching functionality
 $('.tab-btn').click(function() {
@@ -511,11 +516,18 @@ $(this).closest('.conflict-card').remove();
 function to24(timeStr){const m=timeStr.match(/(\d+)(?::(\d+))?(AM|PM)/i);if(!m)return timeStr;let h=parseInt(m[1],10);const min=parseInt(m[2]||'0',10);const ampm=m[3].toUpperCase();if(ampm==='PM'&&h<12)h+=12;if(ampm==='AM'&&h===12)h=0;return `${h.toString().padStart(2,'0')}:${min.toString().padStart(2,'0')}`;}
 
 function loadTimeOffRequests(){
+     console.log('loadTimeOffRequests called');
      const tbody = $('#timeoff-table-body');
+     console.log('timeoff-table-body element found:', tbody.length);
      tbody.empty();
+     console.log('Making API call to /api/timeoff/');
      fetch('/api/timeoff/')
-       .then(r=>r.ok?r.json():Promise.reject('Failed'))
+       .then(r=>{
+         console.log('API response received:', r.status, r.ok);
+         return r.ok?r.json():Promise.reject('Failed');
+       })
        .then(data=>{
+          console.log('API data received:', data);
           if(data.requests.length===0){
               tbody.append('<tr><td colspan="5">No pending requests 🎉</td></tr>');
           }
@@ -533,7 +545,9 @@ function loadTimeOffRequests(){
              tbody.append(row);
           });
        })
-       .catch(console.error);
+       .catch(err=>{
+         console.error('loadTimeOffRequests error:', err);
+       });
   }
 
 $(document).on('click','.timeoff-approve, .timeoff-deny',function(){
@@ -597,12 +611,19 @@ function buildScheduleGrid() {
 }
 
 function loadTeamData() {
+    console.log('loadTeamData called');
     const tbody = $('#team-table-body');
+    console.log('team-table-body element found:', tbody.length);
     tbody.empty().append('<tr><td colspan="5" style="text-align:center;">Loading...</td></tr>');
 
+    console.log('Making API call to /api/team-data/');
     fetch('/api/team-data/')
-        .then(r => r.ok ? r.json() : Promise.reject('Failed to load team data'))
+        .then(r => {
+          console.log('Team API response received:', r.status, r.ok);
+          return r.ok ? r.json() : Promise.reject('Failed to load team data');
+        })
         .then(data => {
+            console.log('Team API data received:', data);
             tbody.empty();
             if (!data.team || data.team.length === 0) {
                 tbody.append('<tr><td colspan="5" style="text-align:center;">No team members found.</td></tr>');
@@ -625,7 +646,7 @@ function loadTeamData() {
             });
         })
         .catch(err => {
-            console.error(err);
+            console.error('loadTeamData error:', err);
             tbody.empty().append('<tr><td colspan="5" style="text-align:center;">Error loading team data.</td></tr>');
         });
 }
