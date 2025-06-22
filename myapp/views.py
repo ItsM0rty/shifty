@@ -415,14 +415,11 @@ def api_timeoff(request):
             qs = TimeOffRequest.objects.filter(user=request.user).select_related('user')
         else:
             # Managers see pending requests for users in their company
-            if not request.user.company_code:
-                # Manager has no company code, so they can't see any requests.
-                return JsonResponse({'requests': []}, status=200)
-            
-            qs = TimeOffRequest.objects.filter(
-                status='pending',
-                user__company_code=request.user.company_code
-            ).select_related('user')
+            qs_filter = {'status': 'pending'}
+            if request.user.company_code:
+                qs_filter['user__company_code'] = request.user.company_code
+
+            qs = TimeOffRequest.objects.filter(**qs_filter).select_related('user')
         
         data = [
             {
@@ -543,15 +540,15 @@ def api_team_data(request):
     if not (request.user.is_staff or getattr(request.user, 'is_manager', False)):
         return HttpResponseForbidden("Forbidden")
 
-    if not request.user.company_code:
-        return JsonResponse({'team': []})
+    team_filter = {
+        'is_manager': False,
+        'is_staff': False,
+        'approved': True,
+    }
+    if request.user.company_code:
+        team_filter['company_code'] = request.user.company_code
 
-    team_members = UserModel.objects.filter(
-        company_code=request.user.company_code,
-        is_manager=False,
-        is_staff=False,
-        approved=True
-    ).order_by('first_name', 'last_name')
+    team_members = UserModel.objects.filter(**team_filter).order_by('first_name', 'last_name')
 
     now = timezone.now()
     start_of_week = now - timedelta(days=now.weekday())
