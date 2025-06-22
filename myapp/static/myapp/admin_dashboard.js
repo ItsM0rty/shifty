@@ -137,6 +137,9 @@ $(document).ready(function() {
       if(section === 'timeoff') {
           loadTimeOffRequests();
       }
+      if(section === 'team') {
+          loadTeamData();
+      }
   });
   
   // Initialize first section as active
@@ -589,6 +592,40 @@ function buildScheduleGrid() {
         });
     })
     .catch(console.error);
+}
+
+function loadTeamData() {
+    const tbody = $('#team-table-body');
+    tbody.empty().append('<tr><td colspan="5" style="text-align:center;">Loading...</td></tr>');
+
+    fetch('/api/team-data/')
+        .then(r => r.ok ? r.json() : Promise.reject('Failed to load team data'))
+        .then(data => {
+            tbody.empty();
+            if (!data.team || data.team.length === 0) {
+                tbody.append('<tr><td colspan="5" style="text-align:center;">No team members found.</td></tr>');
+                return;
+            }
+
+            data.team.forEach(member => {
+                const row = `
+                    <tr data-id="${member.id}">
+                        <td>${member.name}</td>
+                        <td>${member.email}</td>
+                        <td>${member.shifts_this_week}</td>
+                        <td>${member.hours_this_week}</td>
+                        <td class="actions">
+                            <button class="btn btn-secondary btn-sm">View</button>
+                        </td>
+                    </tr>
+                `;
+                tbody.append(row);
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            tbody.empty().append('<tr><td colspan="5" style="text-align:center;">Error loading team data.</td></tr>');
+        });
 }
 });
 

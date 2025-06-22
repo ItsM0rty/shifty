@@ -533,3 +533,46 @@ def api_signup_decision(request, pk):
         # Reject: delete the user
         user_obj.delete()
     return JsonResponse({'id': pk, 'status': decision}, status=200)
+
+@require_http_methods(["GET"])
+@login_required(login_url='/login')
+def api_team_data(request):
+    """
+    For managers, return data about their team, including hours for the week.
+    """
+    if not (request.user.is_staff or getattr(request.user, 'is_manager', False)):
+        return HttpResponseForbidden("Forbidden")
+
+    if not request.user.company_code:
+        return JsonResponse({'team': []})
+
+    team_members = UserModel.objects.filter(
+        company_code=request.user.company_code,
+        is_manager=False,
+        is_staff=False,
+        approved=True
+    ).order_by('first_name', 'last_name')
+
+    now = timezone.now()
+    start_of_week = now - timedelta(days=now.weekday())
+    start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
+    end_of_week = start_of_week + timedelta(days=7)
+
+    team_data = []
+    for member in team_members:
+        qs_week = Shift.objects.filter(
+            user=member,
+            start_time__gte=start_of_week,
+            start_time__lt=end_of_week
+        )
+        hours_this_week = sum((s.end_time - s.start_time).total_seconds() for s in qs_week) / 3600 if qs_week.exists() else 0
+        
+        team_data.append({
+            'id': member.id,
+            'name': member.get_full_name() or member.username,
+            'email': member.email,
+            'hours_this_week': round(hours_this_week, 1),
+            'shifts_this_week': qs_week.count()
+        })
+    
+    return JsonResponse({'team': team_data})
