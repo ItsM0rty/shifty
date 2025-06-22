@@ -410,11 +410,20 @@ def api_shift_bulk_save(request):
 def api_timeoff(request):
     """Employees: GET their requests, POST to create. Managers: GET pending requests."""
     if request.method == 'GET':
-        if request.user.is_staff or getattr(request.user, 'is_manager', False):
-            # Managers see pending requests across employees
-            qs = TimeOffRequest.objects.filter(status='pending').select_related('user')
-        else:
+        if not (request.user.is_staff or getattr(request.user, 'is_manager', False)):
+            # Employees see their own requests
             qs = TimeOffRequest.objects.filter(user=request.user).select_related('user')
+        else:
+            # Managers see pending requests for users in their company
+            if not request.user.company_code:
+                # Manager has no company code, so they can't see any requests.
+                return JsonResponse({'requests': []}, status=200)
+            
+            qs = TimeOffRequest.objects.filter(
+                status='pending',
+                user__company_code=request.user.company_code
+            ).select_related('user')
+        
         data = [
             {
                 'id': t.id,
