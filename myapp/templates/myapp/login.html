@@ -137,10 +137,8 @@
       {% endfor %}
     </div>
     {% endif %}
-
     <div class="auth-illustration">
-      <img src="{% static 'myapp/images/login-illustration.svg' %}" alt="Login"
-        onerror="this.src='{% static 'myapp/images/error.png' %}'">
+      <img src="{% static 'myapp/images/login-illustration.svg' %}" alt="Login" onerror="this.src='{% static 'myapp/images/error.png' %}'" />
       <h2>Welcome Back!</h2>
       <p>Streamline your coffee shop's shift management</p>
     </div>
@@ -165,9 +163,7 @@
           <div class="input-with-icon">
             <i class="fas fa-lock input-icon"></i>
             <input type="password" id="password" name="password" required placeholder="••••••••">
-            <span class="toggle-password"
-              style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%);"><i
-                class="fas fa-eye"></i></span>
+            <span class="toggle-password"><i class="fas fa-eye"></i></span>
           </div>
         </div>
 
