@@ -114,13 +114,36 @@
       margin-bottom: 1rem;
     }
   }
+
+  /* Minimal floating alert for login errors */
+  .alert {
+    position: fixed;
+    top: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 280px;
+    max-width: 90vw;
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    border-radius: 8px;
+    padding: 12px 24px;
+    z-index: 9999;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    font-size: 1rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 </style>
 {% endblock %}
 
 {% if messages %}
-<div class="alert alert-danger">
+<div class="alert">
+  <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i>
   {% for message in messages %}
-  {{ message }}
+    {{ message }}
   {% endfor %}
 </div>
 {% endif %}
@@ -131,9 +154,10 @@
   <div class="auth-container">
     <!-- Display messages inside the content block -->
     {% if messages %}
-    <div class="alert alert-danger">
+    <div class="alert">
+      <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i>
       {% for message in messages %}
-      {{ message }}
+        {{ message }}
       {% endfor %}
     </div>
     {% endif %}
@@ -194,6 +218,18 @@
     } else {
       passwordInput.type = 'password';
       icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+  });
+
+  // Auto-fade and remove alert after 3 seconds
+  document.addEventListener('DOMContentLoaded', function() {
+    const alert = document.querySelector('.alert');
+    if (alert) {
+      setTimeout(() => {
+        alert.style.transition = 'opacity 0.5s';
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 500);
+      }, 3000);
     }
   });
 </script>
